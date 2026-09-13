@@ -1,0 +1,14 @@
+# 임시 및 로그 파일
+*.log
+null
+nul
+
+# OS 생성 파일
+.DS_Store
+Thumbs.db
+
+# 로컬 개발 및 배포 환경설정
+.env
+.netlify/
+dist/
+node_modules/

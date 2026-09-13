@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>수학탐정단: 암호 연구소 탈출 미션 v2</title>
+  <meta name="description" content="수학체험전 부스용 정적 웹 기반 미니게임. 시저 암호, 좌표 암호, 이진수 암호, 수열 금고 문제를 풀며 수학적 원리를 이해하고 탐정 인증서를 획득하세요!">
+  
+  <!-- Google Fonts - Orbit & Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Orbit&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="main-title"><span class="highlight">수학탐정단</span> : 암호 연구소 탈출 v2</h1>
+    </header>
+
+    <main class="app-main">
+      <!-- 1. 시작 화면 -->
+      <section id="screen-start" class="screen-section">
+        <div class="card glass">
+          <h2>🕵️‍♂️ 탐정 등록 및 난이도 선택</h2>
+          <p class="description">암호 연구소에 오신 것을 환영합니다. 탐정 이름을 등록하고 도전할 난이도를 선택해 주세요.</p>
+          
+          <div class="input-group">
+            <label for="player-name-input">탐정 이름</label>
+            <input type="text" id="player-name-input" placeholder="이름을 입력하세요 (미입력 시 '수학탐정')" maxlength="12">
+          </div>
+
+          <div class="difficulty-group">
+            <label>도전 난이도</label>
+            <div class="difficulty-buttons">
+              <button type="button" class="diff-btn" data-difficulty="easy">쉬움 (초등 3~4)</button>
+              <button type="button" class="diff-btn active" data-difficulty="normal">보통 (초등 4~6)</button>
+              <button type="button" class="diff-btn" data-difficulty="hard">어려움 (초등 5이상)</button>
+            </div>
+          </div>
+
+          <div class="action-group">
+            <button type="button" id="start-btn" class="primary-btn pulse">미션 시작하기 🚀</button>
+          </div>
+        </div>
+
+        <!-- 시작 화면용 로컬 랭킹 -->
+        <div class="card glass ranking-card">
+          <h2>🏆 실시간 명예의 전당</h2>
+          <div id="start-leaderboard-container">
+            <p class="ranking-sub">현재 선택된 난이도의 TOP 10 기록입니다.</p>
+            <div class="table-wrapper">
+              <table class="ranking-table">
+                <thead>
+                  <tr>
+                    <th>순위</th>
+                    <th>이름</th>
+                    <th>난이도</th>
+                    <th>기록</th>
+                  </tr>
+                </thead>
+                <tbody id="ranking-rows">
+                  <!-- JS로 렌더링됨 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. 게임 플레이 화면 -->
+      <section id="screen-game" class="screen-section hidden">
+        <div class="status-panel glass">
+          <div class="status-item">
+            <span class="label">난이도:</span>
+            <span id="game-difficulty-display" class="value neon-text">보통</span>
+          </div>
+          <div class="status-item">
+            <span class="label">진행 시간:</span>
+            <span class="value timer-display neon-text">00:00</span>
+          </div>
+        </div>
+
+        <!-- 진행률 바 -->
+        <div class="progress-container">
+          <div id="progress-bar" class="progress-bar"></div>
+          <span id="progress-text" class="progress-text">진행률: 0%</span>
+        </div>
+
+        <!-- 문제 카드 -->
+        <article class="question-card glass">
+          <h2 id="stage-title">단계별 암호</h2>
+          
+          <div id="question-card-content" class="question-content">
+            <!-- JS로 다양한 유형의 문제 렌더링 -->
+          </div>
+
+          <!-- 답변 입력 및 버튼 -->
+          <div class="answer-section">
+            <div class="input-wrapper">
+              <input type="text" id="answer-input" placeholder="정답을 입력하세요" autocomplete="off">
+              <button type="button" id="submit-btn" class="submit-btn">확인</button>
+            </div>
+            
+            <div class="game-actions">
+              <button type="button" id="hint-btn" class="secondary-btn">💡 힌트 보기</button>
+            </div>
+            
+            <div id="answer-feedback" class="feedback-msg"></div>
+          </div>
+
+          <!-- 힌트 상자 -->
+          <div id="hint-box" class="hint-box hidden">
+            <p class="hint-title">🔍 힌트</p>
+            <p id="hint-text" class="hint-text">여기에 힌트 내용이 들어갑니다.</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- 3. 결과 및 인증서 화면 -->
+      <section id="screen-result" class="screen-section hidden">
+        <!-- 인쇄 영역으로 특별 지정될 인증서 -->
+        <div id="certificate" class="certificate-card">
+          <div class="cert-border">
+            <div class="cert-inner">
+              <div class="cert-header">
+                <span class="cert-logo">🎓</span>
+                <h2 class="cert-title">수학탐정 인증서</h2>
+              </div>
+              <div class="cert-body">
+                <p class="cert-congratulations">축하합니다!</p>
+                <p class="cert-name-label">성명: <strong id="cert-name">홍길동</strong> 탐정</p>
+                <div class="cert-details">
+                  <p>도전 난이도: <span id="cert-difficulty">보통</span></p>
+                  <p>탈출 소요 시간: <span id="cert-time">02:41</span></p>
+                </div>
+                <p class="cert-text">
+                  위 탐정은 시저 암호, 좌표 암호, 이진수 암호, 수열 금고를 해결하여<br>
+                  암호 연구소 탈출 미션을 성공적으로 완료하였음을 인증합니다.
+                </p>
+              </div>
+              <div class="cert-footer">
+                <p id="cert-date" class="cert-date">2026년 05월 29일</p>
+                <p class="cert-org">수학탐정단 암호 연구소 본부</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 동작 버튼들 (인쇄 시 숨겨짐) -->
+        <div class="result-actions no-print">
+          <button type="button" id="print-btn" class="primary-btn green-btn">🖨️ 인증서 인쇄하기</button>
+          <button type="button" id="restart-btn" class="secondary-btn restart-btn">🔄 처음으로 돌아가기</button>
+        </div>
+
+        <!-- 결과 화면 랭킹 리스트 (인쇄 시 숨겨짐) -->
+        <div class="card glass ranking-card no-print">
+          <div class="ranking-header">
+            <h2 id="ranking-difficulty-title">보통 난이도 TOP 10</h2>
+            <button type="button" id="clear-rank-btn" class="danger-btn">🗑️ 기록 초기화</button>
+          </div>
+          
+          <div class="rank-tabs">
+            <button type="button" class="rank-tab-btn" data-difficulty="easy">쉬움</button>
+            <button type="button" class="rank-tab-btn active" data-difficulty="normal">보통</button>
+            <button type="button" class="rank-tab-btn" data-difficulty="hard">어려움</button>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="ranking-table">
+              <thead>
+                <tr>
+                  <th>순위</th>
+                  <th>이름</th>
+                  <th>난이도</th>
+                  <th>기록</th>
+                </tr>
+              </thead>
+              <tbody id="ranking-rows-result">
+                <!-- script.js에서 동적으로 채워넣을 부분 (랭킹 테이블 재사용) -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer no-print">
+      <p>&copy; 2026 수학탐정단. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

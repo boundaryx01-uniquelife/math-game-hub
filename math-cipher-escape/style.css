@@ -1,0 +1,892 @@
+/* 수학탐정단: 암호 연구소 탈출 미션 v2 - style.css */
+
+/* 기본 리셋 및 공통 스타일 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: linear-gradient(135deg, #070b19 0%, #0f172a 100%);
+  color: #f8fafc;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 40px);
+}
+
+.app-header {
+  text-align: center;
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+
+.main-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: -0.05rem;
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.main-title .highlight {
+  color: #3b82f6;
+  background: linear-gradient(to right, #60a5fa, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 900;
+}
+
+.app-main {
+  flex-grow: 1;
+}
+
+/* 유틸리티 */
+.hidden {
+  display: none !important;
+}
+
+/* 글라스모피즘 카드 스타일 */
+.card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+}
+
+.card h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  border-left: 5px solid #3b82f6;
+  padding-left: 10px;
+  color: #f1f5f9;
+}
+
+.card .description {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* 입력 폼 */
+.input-group {
+  margin-bottom: 25px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #cbd5e1;
+  font-size: 1rem;
+}
+
+.input-group input[type="text"] {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.input-group input[type="text"]:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  outline: none;
+}
+
+/* 난이도 그룹 */
+.difficulty-group {
+  margin-bottom: 30px;
+}
+
+.difficulty-group label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #cbd5e1;
+}
+
+.difficulty-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.diff-btn {
+  padding: 15px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.5);
+  color: #94a3b8;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.diff-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #fff;
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.diff-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+/* 버튼 정의 */
+.primary-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(to right, #3b82f6, #1d4ed8);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(29, 78, 216, 0.6);
+  filter: brightness(1.1);
+}
+
+.primary-btn.green-btn {
+  background: linear-gradient(to right, #10b981, #047857);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.primary-btn.green-btn:hover {
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.secondary-btn {
+  padding: 12px 25px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  color: #cbd5e1;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.danger-btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.danger-btn:hover {
+  background: #dc2626;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* 펄스 애니메이션 */
+.pulse {
+  animation: pulse-ani 2s infinite;
+}
+
+@keyframes pulse-ani {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 게임 진행바 & 상단 패널 */
+.status-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-item .label {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.status-item .value {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.neon-text {
+  color: #06b6d4;
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+  font-family: 'Orbit', sans-serif;
+}
+
+/* 진행바 */
+.progress-container {
+  position: relative;
+  width: 100%;
+  height: 24px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  margin-bottom: 25px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(to right, #06b6d4, #3b82f6);
+  transition: width 0.5s ease-in-out;
+  z-index: 1;
+}
+
+.progress-text {
+  position: relative;
+  z-index: 2;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* 문제 카드 구역 */
+.question-card {
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+}
+
+.question-card h2 {
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+  border-left: 5px solid #06b6d4;
+  padding-left: 10px;
+}
+
+.question-content {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.cipher-box {
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 12px;
+  border: 1px dashed rgba(6, 182, 212, 0.3);
+  margin-bottom: 20px;
+}
+
+.cipher-title {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.cipher-text {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 0.3rem;
+  margin: 10px 0;
+}
+
+.rule-box {
+  width: 100%;
+  background: rgba(30, 41, 59, 0.4);
+  padding: 15px 20px;
+  border-radius: 10px;
+  border-left: 4px solid #3b82f6;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.rule-box strong {
+  color: #60a5fa;
+}
+
+.sub-rule {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-top: 5px;
+}
+
+/* 2단계 좌표 격자 테이블 */
+.grid-container {
+  width: 100%;
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.grid-title {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.grid-table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.grid-table th, .grid-table td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.grid-table th {
+  background: rgba(30, 41, 59, 0.8);
+  color: #3b82f6;
+  font-weight: 700;
+}
+
+.grid-table tbody th {
+  color: #06b6d4;
+}
+
+.grid-table td {
+  color: #fff;
+  font-weight: 700;
+  min-width: 45px;
+}
+
+/* 정답 입력 영역 */
+.answer-section {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.input-wrapper input {
+  flex-grow: 1;
+  padding: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.6);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.input-wrapper input:focus {
+  border-color: #06b6d4;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+  outline: none;
+}
+
+.submit-btn {
+  padding: 0 30px;
+  border: none;
+  border-radius: 10px;
+  background: #06b6d4;
+  color: #0f172a;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: #22d3ee;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.5);
+  transform: translateY(-1px);
+}
+
+.game-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+/* 진동 애니메이션 (오답 시) */
+.shake {
+  animation: shake-ani 0.5s;
+}
+
+@keyframes shake-ani {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* 피드백 메시지 */
+.feedback-msg {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-height: 27px;
+  margin-top: 10px;
+}
+
+.success-msg {
+  color: #10b981;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+  animation: pulse-ani 1s infinite;
+}
+
+.error-msg {
+  color: #ef4444;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+}
+
+/* 힌트 박스 */
+.hint-box {
+  margin-top: 20px;
+  background: rgba(234, 179, 8, 0.15);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.hint-title {
+  font-weight: 700;
+  color: #facc15;
+  margin-bottom: 5px;
+  font-size: 0.95rem;
+}
+
+.hint-text {
+  color: #e2e8f0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* 랭킹 테이블 */
+.ranking-card {
+  padding: 25px;
+}
+
+.ranking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.ranking-sub {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.ranking-table th, .ranking-table td {
+  padding: 12px 15px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ranking-table th {
+  background: rgba(30, 41, 59, 0.8);
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.ranking-table td {
+  color: #cbd5e1;
+}
+
+.ranking-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* 메달 클래스 */
+.rank-gold {
+  background: rgba(234, 179, 8, 0.1);
+}
+.rank-gold td:first-child {
+  color: #facc15;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+}
+
+.rank-silver {
+  background: rgba(148, 163, 184, 0.08);
+}
+.rank-silver td:first-child {
+  color: #cbd5e1;
+  font-weight: 900;
+}
+
+.rank-bronze {
+  background: rgba(180, 83, 9, 0.06);
+}
+.rank-bronze td:first-child {
+  color: #fb923c;
+  font-weight: 900;
+}
+
+.no-record {
+  color: #94a3b8 !important;
+  font-style: italic;
+  padding: 25px 0 !important;
+}
+
+/* 랭킹 탭 (결과 화면용) */
+.rank-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.rank-tab-btn {
+  padding: 8px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(30, 41, 59, 0.5);
+  color: #94a3b8;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rank-tab-btn:hover, .rank-tab-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+
+/* 결과화면 버튼 세트 */
+.result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.restart-btn {
+  font-size: 1.1rem;
+  padding: 16px;
+}
+
+/* 인증서 (Certificate) 디자인 - 최고급 스타일 */
+.certificate-card {
+  background: #fff;
+  color: #1e293b;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.cert-border {
+  border: 6px double #1e3a8a;
+  border-radius: 14px;
+  padding: 30px 20px;
+}
+
+.cert-inner {
+  border: 1px solid #93c5fd;
+  border-radius: 10px;
+  padding: 30px 15px;
+  text-align: center;
+  background: radial-gradient(circle, #f8fafc 0%, #eff6ff 100%);
+  position: relative;
+}
+
+.cert-header {
+  margin-bottom: 35px;
+}
+
+.cert-logo {
+  font-size: 3.5rem;
+  display: block;
+  margin-bottom: 10px;
+  animation: pulse-ani 3s infinite;
+}
+
+.cert-title {
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #1e3a8a;
+  letter-spacing: 0.15rem;
+}
+
+.cert-body {
+  margin-bottom: 35px;
+}
+
+.cert-congratulations {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+.cert-name-label {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 25px;
+  color: #0f172a;
+}
+
+.cert-name-label strong {
+  font-weight: 900;
+  color: #1e3a8a;
+  border-bottom: 2px solid #2563eb;
+  padding: 0 10px 3px 10px;
+}
+
+.cert-details {
+  display: inline-flex;
+  gap: 25px;
+  background: #fff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 10px 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cert-details p {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.cert-details span {
+  color: #1e3a8a;
+  font-weight: 900;
+}
+
+.cert-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #334155;
+  font-weight: 500;
+}
+
+.cert-footer {
+  margin-top: 40px;
+}
+
+.cert-date {
+  font-size: 1.05rem;
+  color: #475569;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.cert-org {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e3a8a;
+  letter-spacing: 0.05rem;
+}
+
+/* 푸터 */
+.app-footer {
+  text-align: center;
+  padding: 20px 0;
+  color: #64748b;
+  font-size: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* --- 반응형 레이아웃 --- */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+  .app-container {
+    min-height: calc(100vh - 20px);
+  }
+  .main-title {
+    font-size: 1.8rem;
+  }
+  .card {
+    padding: 20px;
+  }
+  .cert-border {
+    padding: 15px 10px;
+  }
+  .cert-title {
+    font-size: 1.8rem;
+  }
+  .cert-name-label {
+    font-size: 1.3rem;
+  }
+  .cert-text {
+    font-size: 0.95rem;
+  }
+  .result-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .difficulty-buttons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .status-panel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 18px;
+  }
+  .cipher-text {
+    font-size: 1.7rem;
+    letter-spacing: 0.15rem;
+  }
+  .input-wrapper {
+    flex-direction: column;
+  }
+  .submit-btn {
+    padding: 12px;
+    font-size: 1.05rem;
+  }
+}
+
+/* --- 인쇄 전용 스타일 --- */
+@media print {
+  /* 인쇄 시 배경 및 글자색 보정 */
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+  }
+  
+  .app-container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* 인쇄하지 않을 화면 요소들 숨김 */
+  .no-print, 
+  .app-header, 
+  .app-footer,
+  .screen-section:not(#screen-result),
+  #screen-result > .no-print {
+    display: none !important;
+  }
+  
+  #screen-result {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 인증서 카드 외곽 및 효과 리셋 */
+  .certificate-card {
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  .cert-inner {
+    background: #fff !important;
+  }
+  
+  .cert-border {
+    border: 6px double #1e3a8a !important;
+  }
+  
+  /* 페이지 여백 */
+  @page {
+    size: A4 portrait;
+    margin: 1.5cm;
+  }
+}
