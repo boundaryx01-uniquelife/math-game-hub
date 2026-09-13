@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>확률 구슬 챌린지: 3D 갈톤보드 실험실</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 최상단 허브 복귀 헤더 바 -->
+  <header class="game-nav-bar">
+    <a href="../../index.html" class="btn-hub-back">
+      <span class="icon">🏠</span> 수학 게임 허브로
+    </a>
+    <div class="game-badge">갈톤 메이커: 3D 실물 연동 갈톤보드</div>
+  </header>
+
+  <div class="app-container">
+    <!-- 헤더 -->
+    <header class="app-header">
+      <div class="mission-tag">REAL 3D PRINTED GALTON LAB</div>
+      <h1 class="main-title">확률 구슬 챌린지</h1>
+      <p class="subtitle">실물 3D 갈톤보드와 100% 동일한 구조에서 정규분포를 실험해보세요!</p>
+    </header>
+
+    <!-- 메인 시뮬레이션 카드 -->
+    <main class="sim-main-card">
+      <!-- 상단 컨트롤 & 상태 바 -->
+      <div class="sim-control-bar">
+        <div class="control-group">
+          <label>구슬 개수:</label>
+          <div class="pill-group" id="ball-count-group">
+            <button class="btn-pill" data-count="150">150개</button>
+            <button class="btn-pill active" data-count="300">300개 (실물 기본)</button>
+            <button class="btn-pill" data-count="600">600개</button>
+          </div>
+        </div>
+
+        <div class="control-group action-group">
+          <button id="btn-start-drop" class="btn btn-primary btn-run">
+            <span>🔮 실험 시작</span>
+          </button>
+          <button id="btn-reset-sim" class="btn btn-secondary btn-run hidden">
+            <span>🔄 다시 실험</span>
+          </button>
+        </div>
+
+        <div class="control-group">
+          <button id="btn-sound-toggle" class="btn-icon" title="효과음 켜기/끄기">
+            <span id="sound-icon">🔊</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 실물 3D 갈톤보드 스탠드형 Canvas 뷰포트 -->
+      <div class="galton-stand-frame">
+        <div class="stand-pillar stand-pillar-left"></div>
+        <div class="stand-pillar stand-pillar-right"></div>
+        <div class="canvas-wrapper">
+          <canvas id="galton-canvas" width="460" height="580"></canvas>
+          <div id="sim-status-overlay" class="sim-status-overlay">
+            <div class="status-chip">
+              낙하 완료: <span id="dropped-count" class="mono">0</span> / <span id="total-target-count" class="mono">300</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 웹 분포 예측 패널 -->
+      <section class="predict-main-section">
+        <div class="panel-guide">
+          <span class="guide-icon">💡</span>
+          <span>총 16개 슬롯 중 <strong>중앙(8, 9번)과 양쪽 끝</strong>에 구슬이 어떤 비율(%)로 쌓일지 예측해 보세요!</span>
+        </div>
+
+        <!-- 16개 슬롯 예측 바 -->
+        <div class="predict-sliders-container" id="predict-sliders-grid">
+          <!-- JS 동적 생성 -->
+        </div>
+
+        <div class="predict-summary-row">
+          <div class="sum-status">
+            예측 합계: <strong id="predict-total-pct" class="mono text-success">100%</strong>
+            <span id="predict-warn-msg" class="text-warn hidden">(합계 100%를 맞춰보세요)</span>
+          </div>
+          <div class="preset-btn-group">
+            <button id="btn-quick-normal" class="btn btn-sm btn-outline">✨ 정규분포 곡선 적용</button>
+            <button id="btn-quick-flat" class="btn btn-sm btn-outline">균등분포 적용</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 🏆 결과 분석 모달 -->
+  <div id="modal-result" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-result-content">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <span class="modal-icon">🏆</span>
+          <h3>확률 예측 결과 분석</h3>
+        </div>
+        <button class="btn-modal-close" data-close="modal-result">&times;</button>
+      </div>
+
+      <div class="result-score-box">
+        <div class="score-main">
+          <span class="score-label">내 예측 정확도 점수</span>
+          <div class="score-number-row">
+            <strong id="res-score-val" class="mono">95</strong>
+            <span class="score-unit">점 / 100점</span>
+          </div>
+          <div id="res-grade-badge" class="grade-badge">🌟 특급 확률 마스터</div>
+        </div>
+      </div>
+
+      <!-- 비교 그래프 시각화 뷰 -->
+      <div class="comparison-container">
+        <h4 class="comp-title">📊 예측 분포 vs 실제 실험 분포 비교</h4>
+        <div class="comp-legend">
+          <span class="legend-item"><span class="color-box color-pred"></span> 내 예측</span>
+          <span class="legend-item"><span class="color-box color-real"></span> 실제 결과</span>
+          <span class="legend-item"><span class="color-box color-theo"></span> 이론적 가우스 곡선</span>
+        </div>
+        <div class="chart-bars-wrapper" id="result-chart-bars">
+          <!-- JS 동적 생성 -->
+        </div>
+      </div>
+
+      <!-- 수학 교육적 해설 -->
+      <div class="math-explain-box">
+        <h4>💡 수학적 원리: 중심극한정리 & 이항분포</h4>
+        <p>
+          작은 쇠구슬들이 12단계의 핀을 지나며 매 순간 좌/우 50%의 독립시행을 거칩니다.
+          시행 횟수가 많아질수록 <strong>가운데(7번) 슬롯으로 도달하는 조합의 수 $\binom{12}{6}$가 가장 많아져 완벽한 종 모양(정규분포 곡선)</strong>이 완성됩니다!
+        </p>
+      </div>
+
+      <div class="modal-footer" style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="../sequence/index.html" class="btn btn-primary btn-large" style="text-decoration: none;">
+          <span>다음 작전 ➔ 3단계 수열 금고 스피드런 도전</span> ⚡
+        </a>
+        <div style="display: flex; gap: 8px; width: 100%;">
+          <button id="btn-save-ranking" class="btn btn-secondary" style="flex: 1;">
+            <span>🏅 랭킹 등록</span>
+          </button>
+          <button class="btn btn-secondary" data-close="modal-result" style="flex: 1;">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

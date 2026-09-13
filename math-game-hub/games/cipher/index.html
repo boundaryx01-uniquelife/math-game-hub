@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>수학탐정단: 암호 연구소 탈출 미션</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 최상단 허브 복귀 헤더 바 -->
+  <header class="game-nav-bar">
+    <a href="../../index.html" class="btn-hub-back">
+      <span class="icon">🏠</span> 수학 게임 허브로
+    </a>
+    <div class="game-badge">코드 브레이커: 암호 연구소 탈출</div>
+  </header>
+
+  <div class="app-container">
+    <!-- 헤더 -->
+    <header class="app-header">
+      <div class="mission-tag">MATH DETECTIVE MISSION</div>
+      <h1 class="main-title">수학탐정단: 암호 연구소 탈출</h1>
+      <p class="subtitle">시저, 좌표, 이진수, 수열 암호를 풀고 연구소를 탈출하세요!</p>
+    </header>
+
+    <!-- 1. 시작 화면 -->
+    <section id="screen-start" class="screen card active">
+      <div class="mission-intro">
+        <div class="story-box">
+          <p>🚨 <strong>경보 발령!</strong> 암호 연구소의 보안 잠금장치가 작동했습니다.</p>
+          <p>수학적 규칙과 논리를 활용해 4개의 보안 룸을 통과하고 탈출하세요!</p>
+        </div>
+
+        <div class="input-group">
+          <label for="player-name">수학탐정 요원 이름 (닉네임)</label>
+          <input type="text" id="player-name" placeholder="이름을 입력하세요 (예: 홍길동)" maxlength="10" autocomplete="off" />
+        </div>
+
+        <div class="difficulty-group">
+          <label>미션 난이도 선택</label>
+          <div class="difficulty-buttons">
+            <button type="button" class="btn-diff active" data-diff="easy">
+              <span class="diff-title">🌱 쉬움</span>
+              <span class="diff-desc">초급 탐정 (3~4분)</span>
+            </button>
+            <button type="button" class="btn-diff" data-diff="normal">
+              <span class="diff-title">⭐ 보통</span>
+              <span class="diff-desc">정규 탐정 (5~6분)</span>
+            </button>
+            <button type="button" class="btn-diff" data-diff="hard">
+              <span class="diff-title">🔥 어려움</span>
+              <span class="diff-desc">엘리트 탐정 (7~8분)</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button id="btn-start" class="btn btn-primary btn-large">
+            <span>미션 시작하기</span> 🚀
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 게임 진행 화면 -->
+    <section id="screen-game" class="screen card hidden">
+      <!-- 게임 상단 상태 바 -->
+      <div class="status-bar">
+        <div class="status-item agent-info">
+          <span class="label">요원:</span>
+          <span id="display-agent-name" class="val">-</span>
+        </div>
+        <div class="status-item timer-box">
+          <span class="label">⏱️ 경과 시간:</span>
+          <span id="game-timer" class="val mono">00:00</span>
+        </div>
+        <div class="status-item diff-info">
+          <span class="label">난이도:</span>
+          <span id="display-diff" class="badge">보통</span>
+        </div>
+      </div>
+
+      <!-- 진행 단계 인디케이터 (스텝 바) -->
+      <div class="step-indicator">
+        <div class="step-item active" data-step="1">
+          <span class="step-num">1</span>
+          <span class="step-name">시저 암호</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="2">
+          <span class="step-num">2</span>
+          <span class="step-name">좌표 암호</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="3">
+          <span class="step-num">3</span>
+          <span class="step-name">이진수 암호</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step-item" data-step="4">
+          <span class="step-num">4</span>
+          <span class="step-name">수열 암호</span>
+        </div>
+      </div>
+
+      <!-- 메인 문제 영역 -->
+      <div class="problem-container">
+        <!-- 룸 번호 및 제목 -->
+        <div class="room-header">
+          <span id="room-badge" class="room-badge">ROOM 1</span>
+          <h2 id="room-title" class="room-title">보안 1구역: 시저 암호 해독</h2>
+        </div>
+
+        <!-- 안내 설명 -->
+        <p id="room-desc" class="room-desc">알파벳이 일정한 규칙에 따라 밀려있습니다.</p>
+
+        <!-- 동적 단서 및 문제 박스 -->
+        <div id="cipher-display-box" class="cipher-display-box">
+          <!-- JS로 동적 렌더링 -->
+        </div>
+
+        <!-- 힌트 아코디언 -->
+        <div class="hint-box">
+          <button id="btn-toggle-hint" class="btn-hint-toggle">💡 힌트 보기</button>
+          <div id="hint-content" class="hint-content hidden">
+            <!-- 동적 힌트 -->
+          </div>
+        </div>
+
+        <!-- 정답 입력 영역 -->
+        <form id="form-answer" class="answer-box">
+          <div class="input-with-btn">
+            <input type="text" id="input-answer" placeholder="암호 해독 정답을 입력하세요" autocomplete="off" />
+            <button type="submit" class="btn btn-primary">확인 (ENTER)</button>
+          </div>
+          <div id="feedback-msg" class="feedback-msg"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 3. 결과 및 인증서 화면 -->
+    <section id="screen-result" class="screen card hidden">
+      <div class="result-container">
+        <div class="success-banner">
+          <div class="banner-icon">🏆</div>
+          <h2>연구소 탈출 성공!</h2>
+          <p>모든 보안 암호를 완벽히 해독하여 미션을 완료했습니다.</p>
+        </div>
+
+        <!-- 출력용 공식 인증서 -->
+        <div id="certificate" class="certificate-card">
+          <div class="cert-border">
+            <div class="cert-header">
+              <span class="cert-badge">MATH DETECTIVE CERTIFICATE</span>
+              <h3 class="cert-title">수학탐정 마스터 인증서</h3>
+            </div>
+            
+            <div class="cert-body">
+              <p class="cert-text">
+                위 요원은 <strong>수학탐정단 암호 연구소</strong>의 모든 보안 미션을 우수한 수학적 추론력으로 해결하였음을 공식 인증합니다.
+              </p>
+              
+              <div class="cert-details">
+                <div class="cert-row">
+                  <span class="d-label">요원 이름 :</span>
+                  <strong id="cert-agent-name" class="d-val">홍길동</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="d-label">도전 난이도 :</span>
+                  <strong id="cert-diff" class="d-val">보통</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="d-label">탈출 완료 시간 :</span>
+                  <strong id="cert-time" class="d-val mono">02:45</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="d-label">발급 번호 :</span>
+                  <span id="cert-code" class="d-val mono">MD-2026-0903</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cert-footer">
+              <div class="cert-stamp">수학체험전<br>인증 완료</div>
+              <div class="cert-org">코드 브레이커 & 갈톤 메이커 수학연구소</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 하단 액션 버튼 -->
+        <div class="result-actions">
+          <a href="../probability/index.html" class="btn btn-primary btn-large">
+            <span>다음 작전 ➔ 2단계 확률 구슬 챌린지 도전</span> 🔮
+          </a>
+          <button id="btn-print" class="btn btn-secondary">
+            <span>🖨️ 인증서 인쇄 / 이미지 저장</span>
+          </button>
+          <button id="btn-restart" class="btn btn-secondary">
+            <span>🔄 다른 문제로 다시 도전</span>
+          </button>
+          <a href="../../index.html" class="btn btn-secondary">
+            <span>🏠 수학 게임 허브로</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="../../data/procedural_generator.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

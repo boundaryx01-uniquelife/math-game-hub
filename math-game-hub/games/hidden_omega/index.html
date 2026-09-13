@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오메가 프로토콜: 마스터 코드브레이커 (최고난도 엑스트라 미션)</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 최상단 허브 복귀 헤더 바 -->
+  <header class="game-nav-bar">
+    <a href="../../index.html" class="btn-hub-back">
+      <span class="icon">🏠</span> 수학 게임 허브로
+    </a>
+    <div class="omega-badge">🔥 EXTRA HARD: OMEGA PROTOCOL</div>
+  </header>
+
+  <div class="app-container">
+    <!-- 헤더 -->
+    <header class="app-header">
+      <div class="omega-tag">CLASSIFIED BLACK LEVEL CHALLENGE</div>
+      <h1 class="main-title">오메가 프로토콜: 마스터 코드브레이커</h1>
+      <p class="subtitle">수학 영재와 엘리트 탐정을 위한 5대 심층 수학 관문 (예상 소요시간: 5~10분)</p>
+    </header>
+
+    <!-- 1. 시작 화면 -->
+    <section id="screen-start" class="screen card active">
+      <div class="omega-intro">
+        <div class="omega-symbol">Ω</div>
+        <h2>최고 보안 레벨 오메가 코어 잠금</h2>
+        <p class="intro-desc">
+          이 챌린지는 일반 암호보다 훨씬 깊은 수학적 사고력을 요구합니다.<br>
+          <strong>비제네르 암호, 3차원 입체 좌표, 논리 게이트 회로, 파스칼 조합, 조건부 확률</strong>의<br>
+          5대 관문을 돌파하고 <strong>'오메가 마스터 골드 인증서'</strong>를 획득하세요!
+        </p>
+
+        <div class="input-group">
+          <label for="player-name">엘리트 요원 닉네임</label>
+          <input type="text" id="player-name" placeholder="이름을 입력하세요" maxlength="10" autocomplete="off" />
+        </div>
+
+        <div class="gate-preview-list">
+          <div class="gate-preview-item">
+            <span class="g-num">Gate 1</span>
+            <span class="g-name">비제네르 다중 치환 암호</span>
+          </div>
+          <div class="gate-preview-item">
+            <span class="g-num">Gate 2</span>
+            <span class="g-name">3차원 입체 공간 좌표 (X,Y,Z)</span>
+          </div>
+          <div class="gate-preview-item">
+            <span class="g-num">Gate 3</span>
+            <span class="g-name">논리 게이트 회로망 (AND/OR/XOR)</span>
+          </div>
+          <div class="gate-preview-item">
+            <span class="g-num">Gate 4</span>
+            <span class="g-name">파스칼 삼각형 & 복합 수열</span>
+          </div>
+          <div class="gate-preview-item">
+            <span class="g-num">Gate 5</span>
+            <span class="g-name">몬티홀 조건부 확률 챔버</span>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button id="btn-start" class="btn btn-omega btn-large">
+            <span>오메가 프로토콜 개시</span> ⚡
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 게임 진행 화면 -->
+    <section id="screen-game" class="screen card hidden">
+      <!-- 상태 바 -->
+      <div class="omega-status-bar">
+        <div class="status-item">
+          <span class="label">엘리트 요원:</span>
+          <span id="display-name" class="val">-</span>
+        </div>
+        <div class="status-item timer-box">
+          <span class="label">⏱️ 작전 시간:</span>
+          <span id="game-timer" class="val mono">00:00</span>
+        </div>
+        <div class="status-item gate-info">
+          <span class="label">진행 상황:</span>
+          <span id="display-gate-progress" class="badge-omega">GATE 1 / 5</span>
+        </div>
+      </div>
+
+      <!-- 5단계 관문 인디케이터 -->
+      <div class="omega-stepper">
+        <div class="omega-step active" data-step="1">1. 비제네르</div>
+        <div class="omega-step" data-step="2">2. 3D 좌표</div>
+        <div class="omega-step" data-step="3">3. 논리 회로</div>
+        <div class="omega-step" data-step="4">4. 파스칼</div>
+        <div class="omega-step" data-step="5">5. 확률 역설</div>
+      </div>
+
+      <!-- 메인 문제 영역 -->
+      <div class="omega-problem-card">
+        <div class="problem-header">
+          <span class="gate-pill" id="gate-pill">GATE 1</span>
+          <h2 id="gate-title" class="gate-title">비제네르 암호 해독</h2>
+        </div>
+
+        <p id="gate-desc" class="gate-desc">키워드(Key)의 각 글자에 따라 서로 다른 칸수만큼 이동하는 다중 치환 암호입니다.</p>
+
+        <!-- 동적 캔버스 및 문제 뷰 -->
+        <div id="gate-display-box" class="gate-display-box">
+          <!-- JS 동적 렌더링 -->
+        </div>
+
+        <!-- 힌트 박스 -->
+        <div class="hint-box">
+          <button id="btn-toggle-hint" class="btn-hint-toggle">💡 수학적 실마리(Hint) 열기</button>
+          <div id="hint-content" class="hint-content hidden">
+            <!-- 힌트 내용 -->
+          </div>
+        </div>
+
+        <!-- 정답 입력 -->
+        <form id="form-answer" class="answer-box">
+          <div class="input-with-btn">
+            <input type="text" id="input-answer" placeholder="정답을 입력하세요" autocomplete="off" />
+            <button type="submit" class="btn btn-omega">관문 돌파 (ENTER)</button>
+          </div>
+          <div id="feedback-msg" class="feedback-msg"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 3. 골드 마스터 인증서 화면 -->
+    <section id="screen-result" class="screen card hidden">
+      <div class="result-container">
+        <div class="gold-banner">
+          <div class="banner-icon">👑</div>
+          <h2>오메가 프로토콜 완전 정복!</h2>
+          <p>수학체험전 최고 난이도의 5대 관문을 모두 돌파한 최상위 수학 탐정입니다.</p>
+        </div>
+
+        <!-- 골드 공식 인증서 -->
+        <div id="certificate" class="certificate-gold">
+          <div class="cert-gold-border">
+            <div class="cert-header">
+              <span class="cert-badge-gold">OMEGA PROTOCOL MASTER CERTIFICATE</span>
+              <h3 class="cert-title-gold">오메가 마스터 골드 인증서</h3>
+            </div>
+            
+            <div class="cert-body">
+              <p class="cert-text">
+                위 요원은 비제네르 암호, 3D 공간 좌표, 논리 회로망, 파스칼 조합, 확률 역설로 이루어진 <strong>수학 연구소 최고 난이도 오메가 프로토콜</strong>을 탁월한 수학적 직관과 논리로 완전 해독하였음을 공식 인증합니다.
+              </p>
+              
+              <div class="cert-details-gold">
+                <div class="cert-row">
+                  <span class="d-label">요원 닉네임 :</span>
+                  <strong id="cert-agent-name" class="d-val">홍길동</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="d-label">도전 코스 :</span>
+                  <strong class="d-val text-gold">오메가 엑스트라 (5대 관문)</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="d-label">최종 돌파 시간 :</span>
+                  <strong id="cert-time" class="d-val mono text-gold">06:24</strong>
+                </div>
+                <div class="cert-row">
+                  <span class="d-label">마스터 코드 :</span>
+                  <span id="cert-code" class="d-val mono">OMG-GOLD-7782</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="cert-footer">
+              <div class="cert-stamp-gold">OMEGA<br>GOLD<br>MASTER</div>
+              <div class="cert-org">코드 브레이커 & 갈톤 메이커 수학연구소</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button id="btn-print" class="btn btn-secondary">
+            <span>🖨️ 골드 인증서 인쇄 / 저장</span>
+          </button>
+          <button id="btn-restart" class="btn btn-omega">
+            <span>🔄 다시 도전하기</span>
+          </button>
+          <a href="../../index.html" class="btn btn-secondary">
+            <span>🏠 허브 랭킹 확인하기</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

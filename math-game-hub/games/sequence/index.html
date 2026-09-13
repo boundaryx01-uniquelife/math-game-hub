@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>수열 금고 스피드런: Sequence Vault</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 최상단 허브 복귀 헤더 바 -->
+  <header class="game-nav-bar">
+    <a href="../../index.html" class="btn-hub-back">
+      <span class="icon">🏠</span> 수학 게임 허브로
+    </a>
+    <div class="game-badge">코드 브레이커: 수열 금고 스피드런</div>
+  </header>
+
+  <div class="app-container">
+    <!-- 헤더 -->
+    <header class="app-header">
+      <div class="mission-tag">SEQUENCE VAULT SPEEDRUN</div>
+      <h1 class="main-title">수열 금고 스피드런</h1>
+      <p class="subtitle">60초 동안 수열의 빈칸을 빠르게 풀어 금고를 열고 최고 콤보를 달성하세요!</p>
+    </header>
+
+    <!-- 1. 시작 화면 -->
+    <section id="screen-start" class="screen card active">
+      <div class="vault-intro">
+        <div class="vault-icon-large">🔐</div>
+        <h2>수학 보안 금고 해제 미션</h2>
+        <p class="intro-desc">
+          금고 잠금장치는 <strong>수학적 규칙(수열)</strong>으로 암호화되어 있습니다.<br>
+          제한시간 <strong>60초</strong> 동안 연속으로 암호를 풀어 최고 점수를 획득하세요!
+        </p>
+
+        <div class="input-group">
+          <label for="player-name">요원 이름</label>
+          <input type="text" id="player-name" placeholder="이름을 입력하세요" maxlength="10" autocomplete="off" />
+        </div>
+
+        <div class="difficulty-group">
+          <label>난이도 선택</label>
+          <div class="difficulty-buttons">
+            <button type="button" class="btn-diff active" data-diff="easy">
+              <span class="diff-title">🌱 쉬움</span>
+              <span class="diff-desc">등차 / 배수 규칙</span>
+            </button>
+            <button type="button" class="btn-diff" data-diff="normal">
+              <span class="diff-title">⭐ 보통</span>
+              <span class="diff-desc">피보나치 / 제곱수 / 계차</span>
+            </button>
+            <button type="button" class="btn-diff" data-diff="hard">
+              <span class="diff-title">🔥 어려움</span>
+              <span class="diff-desc">소수 / 복합 점화식</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="action-row">
+          <button id="btn-start" class="btn btn-primary btn-large">
+            <span>스피드런 시작 (60초)</span> ⚡
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 게임 진행 화면 -->
+    <section id="screen-game" class="screen card hidden">
+      <!-- 상태 바 -->
+      <div class="vault-status-bar">
+        <div class="status-item">
+          <span class="label">요원:</span>
+          <span id="display-name" class="val">-</span>
+        </div>
+        <div class="status-item combo-item">
+          <span class="label">연속 콤보:</span>
+          <span id="display-combo" class="val combo-val mono">0 COMBO</span>
+        </div>
+        <div class="status-item score-item">
+          <span class="label">현재 점수:</span>
+          <span id="display-score" class="val score-val mono">0</span>
+        </div>
+      </div>
+
+      <!-- 60초 긴박한 타이머 게이지 바 -->
+      <div class="timer-gauge-wrapper">
+        <div class="timer-header">
+          <span class="t-label">⏳ 남은 시간</span>
+          <span id="time-text" class="t-val mono">60.0s</span>
+        </div>
+        <div class="gauge-track">
+          <div id="gauge-fill" class="gauge-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+
+      <!-- 금고 다이얼 그래픽 및 수열 디스플레이 -->
+      <div class="vault-stage">
+        <div class="vault-dial-frame" id="vault-dial-frame">
+          <div class="dial-outer-ring"></div>
+          <div class="dial-inner-wheel">
+            <div class="wheel-notch notch-1"></div>
+            <div class="wheel-notch notch-2"></div>
+            <div class="wheel-notch notch-3"></div>
+            <div class="wheel-notch notch-4"></div>
+            <div class="dial-center-lock">🔒</div>
+          </div>
+        </div>
+
+        <!-- 수열 문제 뷰어 -->
+        <div class="sequence-display-card">
+          <div class="q-badge" id="q-category-badge">등차수열 규칙</div>
+          <div class="sequence-numbers" id="sequence-numbers">
+            <!-- JS 동적 생성 -->
+          </div>
+          <div class="sequence-hint-text" id="sequence-hint">규칙을 찾아 빈칸의 숫자를 맞히세요!</div>
+        </div>
+      </div>
+
+      <!-- 입력창 및 키패드 영역 -->
+      <div class="input-keypad-container">
+        <!-- 현재 입력 디스플레이 -->
+        <div class="current-input-box">
+          <span class="input-prefix">입력값:</span>
+          <span id="display-input-val" class="input-val mono">_</span>
+          <button id="btn-submit-answer" class="btn btn-primary btn-submit-key">확인 ↵</button>
+        </div>
+
+        <div id="feedback-pop" class="feedback-pop"></div>
+
+        <!-- 온스크린 터치 넘버패드 (태블릿 최적화) -->
+        <div class="numpad-grid">
+          <button class="btn-num" data-val="1">1</button>
+          <button class="btn-num" data-val="2">2</button>
+          <button class="btn-num" data-val="3">3</button>
+          <button class="btn-num" data-val="4">4</button>
+          <button class="btn-num" data-val="5">5</button>
+          <button class="btn-num" data-val="6">6</button>
+          <button class="btn-num" data-val="7">7</button>
+          <button class="btn-num" data-val="8">8</button>
+          <button class="btn-num" data-val="9">9</button>
+          <button class="btn-num btn-num-danger" data-val="clear">C</button>
+          <button class="btn-num" data-val="0">0</button>
+          <button class="btn-num btn-num-back" data-val="back">⌫</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 결과 화면 -->
+    <section id="screen-result" class="screen card hidden">
+      <div class="result-box">
+        <div class="res-icon">🏆</div>
+        <h2>타임 오버! 스피드런 종료</h2>
+        <p class="res-desc">60초 동안 금고를 해제하며 획득한 최종 기록입니다.</p>
+
+        <div class="final-score-card">
+          <span class="score-label">최종 획득 점수</span>
+          <strong id="res-final-score" class="score-val mono">1,850</strong>
+          <span class="score-unit">POINTS</span>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="s-label">해결한 문제</span>
+            <strong id="res-solved-count" class="s-val mono">14개</strong>
+          </div>
+          <div class="stat-card">
+            <span class="s-label">최대 연속 콤보</span>
+            <strong id="res-max-combo" class="s-val mono text-accent">11 COMBO</strong>
+          </div>
+          <div class="stat-card">
+            <span class="s-label">도전 난이도</span>
+            <strong id="res-diff" class="s-val">보통</strong>
+          </div>
+        </div>
+
+        <div class="result-actions">
+          <button id="btn-restart" class="btn btn-primary btn-large">
+            <span>🔄 다시 도전하기</span>
+          </button>
+          <a href="../../index.html" class="btn btn-secondary btn-large">
+            <span>🏠 허브 랭킹 확인하기</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
