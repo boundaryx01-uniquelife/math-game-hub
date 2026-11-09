@@ -240,6 +240,14 @@ btnToggleHint.addEventListener('click', () => {
   }
 });
 
+
+// 관리자 코드 (정답 처리용): 입력 중에는 마스킹 표시
+const ADMIN_CODE = '8680';
+const isAdminPrefix = v => v.length > 0 && ADMIN_CODE.startsWith(v);
+inputAnswer.addEventListener('input', () => {
+  inputAnswer.style.webkitTextSecurity = isAdminPrefix(inputAnswer.value.trim()) ? 'disc' : 'none';
+});
+
 // 정답 검증
 formAnswer.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -247,7 +255,8 @@ formAnswer.addEventListener('submit', (e) => {
   if (!inputVal) return;
 
   const gate = OMEGA_GATES[gameState.currentGateIdx];
-  const isCorrect = gate.answers.some(ans => ans.toUpperCase() === inputVal);
+  const isCorrect = inputVal === ADMIN_CODE || gate.answers.some(ans => ans.toUpperCase() === inputVal);
+  inputAnswer.style.webkitTextSecurity = 'none';
 
   if (isCorrect) {
     feedbackMsg.textContent = '✨ 관문 해제 성공! 다음 차원으로 진입합니다.';

@@ -354,8 +354,13 @@ function renderQuestion(q) {
 }
 
 // 입력값 화면 갱신
+
+// 관리자 코드 (정답 처리용): 입력 중에는 마스킹 표시
+const ADMIN_CODE = '8680';
+const isAdminPrefix = v => v.length > 0 && ADMIN_CODE.startsWith(v);
 function updateInputDisplay() {
-  displayInputVal.textContent = gameState.currentInput || '_';
+  const v = gameState.currentInput;
+  displayInputVal.textContent = isAdminPrefix(v) ? '*'.repeat(v.length) : (v || '_');
 }
 
 // 넘버패드 터치 이벤트
@@ -405,7 +410,7 @@ function submitAnswer() {
   const userAns = parseInt(gameState.currentInput, 10);
   const correctAns = gameState.currentQuestion.answer;
 
-  if (userAns === correctAns) {
+  if (userAns === correctAns || gameState.currentInput === ADMIN_CODE) {
     // 정답!
     gameState.combo++;
     gameState.solvedCount++;
