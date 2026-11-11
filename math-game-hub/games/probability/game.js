@@ -642,13 +642,16 @@ function showAnalysisResult() {
     resultChartBars.appendChild(group);
   }
 
+  simState.recordSavedForRun = false;
+  saveGaltonRecord();
   modalResult.classList.remove('hidden');
 }
 
-// 랭킹 저장
-btnSaveRanking.addEventListener('click', () => {
+// 기록 저장: 결과가 나오면 자동으로 저장합니다.
+// (예전에는 [랭킹 등록] 버튼을 눌러야만 저장되어, 그냥 닫으면 다음 단계가 열리지 않았습니다.)
+function saveGaltonRecord() {
+  if (simState.recordSavedForRun) return true;
   const playerName = localStorage.getItem('math_hub_current_player') || '수학탐정';
-  
   const record = {
     gameId: 'galton_drop',
     gameTitle: '확률 구슬 챌린지',
@@ -659,17 +662,26 @@ btnSaveRanking.addEventListener('click', () => {
     clearTimeSeconds: 1000 - simState.lastScore,
     timestamp: Date.now()
   };
-
   try {
     const raw = localStorage.getItem('math_hub_records');
-    const records = raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    const records = Array.isArray(parsed) ? parsed : [];
     records.push(record);
     localStorage.setItem('math_hub_records', JSON.stringify(records));
-    alert(`'${playerName}' 요원의 확률 예측 점수(${simState.lastScore}점)가 명예의 전당에 등록되었습니다!`);
-    modalResult.classList.add('hidden');
+    simState.recordSavedForRun = true;
+    return true;
   } catch (e) {
     console.error('랭킹 등록 실패:', e);
+    return false;
   }
+}
+
+btnSaveRanking.addEventListener('click', () => {
+  const ok = saveGaltonRecord();
+  if (window.MathHubUI) {
+    window.MathHubUI.toast(ok ? `${simState.lastScore}점이 명예의 전당에 기록되었습니다!` : '기록을 저장하지 못했습니다.', ok ? 'ok' : 'warn');
+  }
+  modalResult.classList.add('hidden');
 });
 
 closeButtons.forEach(btn => {

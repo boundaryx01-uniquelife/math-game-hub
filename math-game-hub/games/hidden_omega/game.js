@@ -62,7 +62,7 @@ const OMEGA_GATES = [
     `,
     hint1: '3차원 좌표 (X, Y, Z)는 세 수가 한 세트예요. 위의 [3D 큐브 좌표 데이터]에서 어떤 좌표가 어떤 글자를 가리키는지 먼저 짝을 맞춰 보세요.',
     hint2: '질문의 좌표를 쓰인 순서대로 하나씩 읽어요. 첫 번째는 (2,3,1), 두 번째는 (3,1,2), 세 번째는 (1,1,1), 마지막은 (1,2,3)이에요. 각 좌표를 데이터 목록에서 찾아 옆에 적힌 글자를 읽으세요.',
-    answers: ['DOEC', 'DOCE'],
+    answers: ['DOEC'],
     steps: [
       '[3D 큐브 좌표 데이터]에 좌표와 글자가 짝지어 있어요: (1,2,3)=C, (3,1,2)=O, (2,3,1)=D, (1,1,1)=E',
       '질문에 나온 좌표를 순서대로 목록에서 찾아요: (2,3,1) → D, (3,1,2) → O, (1,1,1) → E, (1,2,3) → C',
@@ -217,7 +217,7 @@ window.addEventListener('DOMContentLoaded', () => {
 btnStart.addEventListener('click', async () => {
   const name = inputPlayerName.value.trim();
   if (!name) {
-    alert('요원 닉네임을 입력해주세요!');
+    window.MathHubUI.toast('요원 닉네임을 입력해 주세요!', 'warn');
     inputPlayerName.focus();
     return;
   }

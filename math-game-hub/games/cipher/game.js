@@ -166,7 +166,7 @@ diffButtons.forEach(btn => {
 btnStart.addEventListener('click', async () => {
   const name = inputPlayerName.value.trim();
   if (!name) {
-    alert('수학탐정 요원 이름을 입력해주세요!');
+    window.MathHubUI.toast('요원 이름을 입력해 주세요!', 'warn');
     inputPlayerName.focus();
     return;
   }
