@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>체험 학습지 정답</title>
+<style>
+:root{--ink:#111;--soft:#f0f0f0;--line:#8a8a8a;--accent:#1f4e9e;--bg:#e8ebf0;--paper:#fff}
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;font-size:10.5pt;line-height:1.38;word-break:keep-all;overflow-wrap:break-word;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;padding:10px 12px;background:rgba(255,255,255,.94);border-bottom:1px solid #cfd4dc;font-size:15px}
+.toolbar button,.toolbar a{font:inherit;font-weight:700;padding:9px 16px;border-radius:8px;border:1.5px solid var(--accent);background:var(--accent);color:#fff;text-decoration:none;cursor:pointer;min-height:40px}
+.toolbar a{background:#fff;color:var(--accent)}
+.toolbar .tip{color:#555;font-size:13px}
+.page{width:210mm;margin:14px auto 28px;background:var(--paper);padding:9mm 10mm;box-shadow:0 4px 18px rgba(30,40,60,.18);border-radius:2px}
+h1,h2,h3,p{margin:0}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:6mm;border-bottom:2.2pt solid var(--ink);padding-bottom:1.6mm}
+.head h1{font-size:17pt;line-height:1.2;letter-spacing:-.01em}
+.head h1 small{font-size:11pt;font-weight:700;color:var(--accent);margin-left:2mm}
+.head .lead{font-size:10.5pt;color:#222;text-align:right;max-width:88mm}
+.idline{display:flex;gap:4mm;margin-top:2.2mm;font-weight:700;align-items:flex-end}
+.idline span.f{display:inline-block;border-bottom:1pt solid var(--ink);height:1.35em}
+.sec{border:1.3pt solid var(--ink);border-radius:2.5mm;margin-top:2.6mm;padding:2mm 3mm 2.4mm}
+.sec>h2{font-size:12pt;display:flex;align-items:center;gap:2mm;margin-bottom:1.4mm}
+.sec>h2 .n{display:inline-flex;width:6.4mm;height:6.4mm;border-radius:50%;background:var(--ink);color:#fff;align-items:center;justify-content:center;font-size:10.5pt}
+.sec>h2 .t{font-weight:500;font-size:10.5pt;color:#333}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.cols3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:3mm}
+.cell{border:.8pt solid var(--line);border-radius:1.8mm;padding:1.6mm 2.2mm;min-width:0}
+.cell h3{font-size:10.5pt;margin-bottom:.8mm}
+.cell p.rule{font-size:10.5pt;margin-bottom:1mm}
+.ex{background:var(--soft);border-left:2.2pt solid var(--ink);padding:1.2mm 2mm;margin:1mm 0 1.4mm;border-radius:0 1.5mm 1.5mm 0;font-size:10.5pt}
+.ex b.tag,.tagx{font-size:10.5pt}
+.q{display:inline-block;border:1pt solid var(--ink);border-radius:1mm;padding:0 1.4mm;font-weight:800;font-size:10.5pt;margin-right:1.2mm;background:#fff}
+.qline{margin-top:1.4mm;font-size:10.5pt}
+.blank{display:inline-block;min-width:16mm;border-bottom:1pt solid var(--ink);height:1.25em;vertical-align:bottom;margin:0 .6mm}
+.blank.w{min-width:26mm}
+.cellrow{display:inline-flex;gap:1mm;vertical-align:middle}
+.cellrow i{display:inline-block;width:7mm;height:7.4mm;border:1pt solid var(--ink);border-radius:1mm;background:#fff}
+table.t{border-collapse:collapse;margin:.6mm 0;font-variant-numeric:tabular-nums}
+table.t td,table.t th{border:1pt solid var(--ink);text-align:center;padding:0;min-width:7mm;height:6.6mm;font-weight:700;font-size:10.5pt}
+table.t th{background:var(--soft)}
+table.t td.e{background:#fff}
+table.t.tall td{height:8mm}
+.pas{display:flex;flex-direction:column;align-items:center;gap:.9mm;margin:.6mm 0}
+.pas div{display:flex;gap:1mm;align-items:center}
+.pas .lb{font-size:10.5pt;color:#444;margin-right:1.4mm;min-width:8mm;text-align:right}
+.pas i{font-style:normal;display:inline-flex;width:8mm;height:6.4mm;align-items:center;justify-content:center;font-weight:700;border:1pt solid var(--ink);border-radius:1mm;background:#fff}
+.pas i.g{background:var(--soft)}
+.pas i.b{border-style:dashed;background:#fff}
+svg{display:block;max-width:100%;height:auto}
+svg text{font-family:inherit}
+.lines{margin-top:1mm;background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 7.2mm,#9b9b9b 7.2mm,#9b9b9b calc(7.2mm + .6pt));}
+.foot{margin-top:2.2mm;font-size:10.5pt;color:#333;display:flex;justify-content:space-between;gap:4mm}
+.sm{font-size:10.5pt}
+.mono{font-variant-numeric:tabular-nums}
+.hide-print{}
+@page{size:A4;margin:0}
+@media screen and (max-width:830px){
+  .page{width:auto;margin:10px 8px 20px;padding:16px}
+  .cols2,.cols3{grid-template-columns:1fr}
+  .head{flex-direction:column;align-items:flex-start}
+  .head .lead{text-align:left;max-width:none}
+  .idline{flex-wrap:wrap}
+}
+@media print{
+  html,body{background:#fff}
+  .toolbar{display:none!important}
+  .page{width:210mm;height:296mm;margin:0;box-shadow:none;border-radius:0;overflow:hidden}
+  .cols2{grid-template-columns:1fr 1fr!important}
+  .cols3{grid-template-columns:1fr 1fr 1fr!important}
+}
+
+.page{padding:7mm 10mm}
+table.key{border-collapse:collapse;width:100%;margin-top:1.6mm}
+table.key th,table.key td{border:1pt solid var(--ink);padding:1mm 2mm;text-align:left;vertical-align:top;font-size:10.5pt;line-height:1.35}
+table.key th{background:var(--soft);font-weight:800}
+table.key td.n{width:13mm;font-weight:800;text-align:center;white-space:nowrap}
+table.key td.a{width:46mm;font-weight:800}
+.ans{font-size:12pt;font-weight:800}
+.sec2{border:1.3pt solid var(--ink);border-radius:2.5mm;padding:1.8mm 3mm 2mm;margin-top:2.4mm}
+.sec2 h2{font-size:12pt;margin-bottom:.8mm}
+.sec2 ul{margin:.6mm 0 0;padding-left:5mm}
+.sec2 li{margin:.4mm 0}
+.fig{display:flex;gap:4mm;align-items:center;margin-top:1mm}
+.fig>div{min-width:0}
+.pas i{width:7mm;height:5.4mm}
+.stamp{display:inline-block;border:1.6pt solid var(--ink);border-radius:1.2mm;padding:0 2mm;font-weight:800;font-size:10.5pt;margin-left:2mm;vertical-align:middle}
+@media screen and (max-width:830px){.fig{flex-direction:column;align-items:flex-start}table.key td.a{width:auto}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button type="button" onclick="window.print()">인쇄하기</button>
+  <a href="../index.html">허브로 돌아가기</a>
+  <span class="tip">A4 세로 1장 · 흑백 인쇄 가능</span>
+</div>
+<main class="page">
+
+<header>
+  <div class="head">
+    <h1>2026 수학체험전<small>체험 학습지 정답과 풀이</small></h1>
+    <p class="lead"><span class="stamp" style="margin:0 0 0 0">교사용</span> 번호는 <b>체험 학습지</b>와 같아요. 비슷한 풀이는 정답으로 인정해 주세요.</p>
+  </div>
+</header>
+<table class="key">
+  <tr><th>번호</th><th>정답</th><th>풀이와 지도 포인트</th></tr>
+  <tr><td class="n">1-1</td><td class="a ans">ZOO</td><td>3칸 <b>앞으로</b> 되돌려요. C→B→A→<b>Z</b>, R→Q→P→<b>O</b>, R→<b>O</b>. A 앞에는 Z가 와요(알파벳은 26자의 고리). 흔한 실수: 반대로 뒤로 3칸 밀어 FUU로 씀.</td></tr>
+  <tr><td class="n">1-2</td><td class="a ans">(4,3)(5,1)(5,4)</td><td>N은 3번째 줄 4번째 칸 ➜ <b>(4,3)</b>, E는 1번째 줄 5번째 칸 ➜ <b>(5,1)</b>, T는 4번째 줄 5번째 칸 ➜ <b>(5,4)</b>. 순서는 (가로 X, 세로 Y). 흔한 실수: (3,4)처럼 X와 Y를 바꿔 씀.</td></tr>
+  <tr><td class="n">1-3</td><td class="a ans">26</td><td>11010은 16·8·4·2·1의 자리에 1, 1, 0, 1, 0이에요. 16 + 8 + 2 = <b>26</b>. 흔한 실수: 자리값을 왼쪽부터 1, 2, 4…로 읽음.</td></tr>
+  <tr><td class="n">2-1</td><td class="a">4단: 4, 6, 4<br>5단: 5, 10, 10, 5</td><td>위 두 수의 합이에요. 4단은 1+3=4, 3+3=6, 3+1=4. 5단은 1+4=5, 4+6=10, 6+4=10, 4+1=5. 좌우가 대칭인 것도 확인해 보게 해 주세요.
+    <div class="fig"><div class="pas"><div><span class="lb">4단</span><i>1</i><i class="g"><b>4</b></i><i class="g"><b>6</b></i><i class="g"><b>4</b></i><i>1</i></div><div><span class="lb">5단</span><i>1</i><i class="g"><b>5</b></i><i class="g"><b>10</b></i><i class="g"><b>10</b></i><i class="g"><b>5</b></i><i>1</i></div></div></div></td></tr>
+  <tr><td class="n">2-2</td><td class="a ans">6 ÷ 16</td><td>막대 높이는 1번 칸 1, 2번 칸 4, 3번 칸 6, 4번 칸 4, 5번 칸 1이며 <b>가운데가 가장 높은 종 모양</b>이에요. 전체 길은 1+4+6+4+1 = 16가지(2×2×2×2), 3번 칸은 6가지이므로 확률 <b>6/16 = 3/8</b>이에요. 6÷16, 3÷8, 0.375(37.5%) 모두 정답.
+    <div class="fig" style="margin-top:1.4mm"><div style="width:44mm"><svg viewBox="0 0 124 92" width="100%" role="img" aria-label="막대그래프 칸"><line x1="16" y1="6" x2="116" y2="6" stroke="#9a9a9a" stroke-width="0.7"/><text x="13" y="9.2" font-size="8" text-anchor="end">6</text><line x1="16" y1="16.5" x2="116" y2="16.5" stroke="#9a9a9a" stroke-width="0.7"/><text x="13" y="19.7" font-size="8" text-anchor="end">5</text><line x1="16" y1="27" x2="116" y2="27" stroke="#9a9a9a" stroke-width="0.7"/><text x="13" y="30.2" font-size="8" text-anchor="end">4</text><line x1="16" y1="37.5" x2="116" y2="37.5" stroke="#9a9a9a" stroke-width="0.7"/><text x="13" y="40.7" font-size="8" text-anchor="end">3</text><line x1="16" y1="48" x2="116" y2="48" stroke="#9a9a9a" stroke-width="0.7"/><text x="13" y="51.2" font-size="8" text-anchor="end">2</text><line x1="16" y1="58.5" x2="116" y2="58.5" stroke="#9a9a9a" stroke-width="0.7"/><text x="13" y="61.7" font-size="8" text-anchor="end">1</text><line x1="16" y1="69" x2="116" y2="69" stroke="#111" stroke-width="1.4"/><text x="13" y="72.2" font-size="8" text-anchor="end">0</text><line x1="16" y1="6" x2="16" y2="69" stroke="#111" stroke-width="1.4"/><line x1="36" y1="6" x2="36" y2="69" stroke="#9a9a9a" stroke-width="0.5"/><line x1="56" y1="6" x2="56" y2="69" stroke="#9a9a9a" stroke-width="0.5"/><line x1="76" y1="6" x2="76" y2="69" stroke="#9a9a9a" stroke-width="0.5"/><line x1="96" y1="6" x2="96" y2="69" stroke="#9a9a9a" stroke-width="0.5"/><line x1="116" y1="6" x2="116" y2="69" stroke="#9a9a9a" stroke-width="0.5"/><text x="26" y="80" font-size="10" text-anchor="middle" font-weight="700">1번</text><text x="46" y="80" font-size="10" text-anchor="middle" font-weight="700">2번</text><text x="66" y="80" font-size="10" text-anchor="middle" font-weight="700">3번</text><text x="86" y="80" font-size="10" text-anchor="middle" font-weight="700">4번</text><text x="106" y="80" font-size="10" text-anchor="middle" font-weight="700">5번</text><rect x="19" y="58.5" width="14" height="10.5" fill="#bbb" stroke="#111" stroke-width="1"/><rect x="39" y="27" width="14" height="42" fill="#bbb" stroke="#111" stroke-width="1"/><rect x="59" y="6" width="14" height="63" fill="#bbb" stroke="#111" stroke-width="1"/><rect x="79" y="27" width="14" height="42" fill="#bbb" stroke="#111" stroke-width="1"/><rect x="99" y="58.5" width="14" height="10.5" fill="#bbb" stroke="#111" stroke-width="1"/></svg></div></div></td></tr>
+  <tr><td class="n">3-1</td><td class="a">규칙: ×3 (3배)<br><span class="ans">답: 162</span></td><td>2, 6, 18, 54로 앞의 수에 3을 곱하는 <b>등비수열</b>이에요. 54 × 3 = <b>162</b>.</td></tr>
+  <tr><td class="n">3-2</td><td class="a">규칙: 더하는 수가 1, 2, 3, 4로 늘어남<br><span class="ans">답: 20</span></td><td>차이가 +1, +2, +3, +4이므로 다음 차이는 +5예요. 15 + 5 = <b>20</b>. (계차수열) 규칙 칸에는 &ldquo;차이가 1씩 커진다&rdquo;처럼 자기 말로 써도 정답이에요.</td></tr>
+  <tr><td class="n">4-1</td><td class="a ans">OWL</td><td>열쇠 CAB는 2, 0, 1칸이에요. 암호문에서 거꾸로 빼요. Q−2 = <b>O</b>, W−0 = <b>W</b>, M−1 = <b>L</b>. 확인: OWL에 2, 0, 1을 더하면 Q, W, M.</td></tr>
+  <tr><td class="n">4-2</td><td class="a ans">9 / 10</td><td>처음에 고른 문이 맞을 확률은 1/10이고, <b>틀릴 확률이 9/10</b>예요. 틀렸다면 사회자가 빈 문을 모두 열어 주므로, 남은 문이 자동차예요. 그래서 바꾸면 이길 확률은 <b>9/10</b>(안 바꾸면 1/10)이에요.</td></tr>
+</table>
+
+<section class="sec2">
+  <h2>지도 팁</h2>
+  <ul>
+    <li><b>밀기와 되돌리기</b>: 시저 암호 문제에서 &ldquo;몇 칸 밀렸다 ➜ 같은 수만큼 앞으로&rdquo;를 먼저 말로 확인하게 해 주세요. 게임 화면의 &ldquo;A → D&rdquo; 안내와 같아요.</li>
+    <li><b>좌표 격자</b>는 게임과 같은 5×5(A~Y)로 Z가 없어요. 3차원 좌표는 3×3×3 = 27칸이라 알파벳 26자를 모두 놓을 수 있다고 연결해 주세요.</li>
+    <li><b>섹션 4(오메가)</b>는 3개 미션을 마친 학생에게 열리는 숨은 관문의 맛보기라서, 어려워하면 건너뛰어도 좋아요. 문 바꾸기는 &ldquo;문이 100개라면?&rdquo;으로 생각을 넓혀 보세요.</li>
+    <li><b>&ldquo;오늘의 생각&rdquo;</b>은 정답이 없어요. &ldquo;가운데로 많이 모인다&rdquo;, &ldquo;규칙을 찾으면 다음 수를 알 수 있다&rdquo;, &ldquo;이진수는 0과 1뿐이다&rdquo; 같은 한 문장이면 충분해요.</li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>

@@ -6,16 +6,18 @@
   <title>미션 브리핑: 코드 브레이커 & 갈톤 메이커</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="intro.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/theme.css" />
+  <meta name="theme-color" content="#090d16" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 </head>
 <body class="intro-body">
   <div class="intro-container">
     <!-- 상단 극비 미션 헤더 -->
     <header class="intro-header">
       <div class="intro-badge">TOP SECRET : 2026 MATH SECURITY AGENCY</div>
-      <h1 class="intro-title">코드 브레이커 & 갈톤 메이커</h1>
+      <h1 class="intro-title">코드 브레이커 &amp; 갈톤 메이커</h1>
       <p class="intro-lead">2026 미래 수학연구소 양자 코어 해제 작전 브리핑</p>
     </header>
 
@@ -37,11 +39,46 @@
       </div>
     </section>
 
+    <!-- 3. 요원 등록 및 학년 난이도 선택 폼 -->
+    <section class="intro-start-section">
+      <div class="agent-register-card">
+        <h3>요원 닉네임과 학년을 선택하고 작전을 시작하세요</h3>
+        
+        <!-- 학년 선택 버튼 -->
+        <div class="grade-select-group">
+          <label class="g-label">🎓 참가자 학년 레벨</label>
+          <div class="grade-button-row">
+            <button type="button" class="btn-grade-opt active" data-grade="elem" data-diff="easy">
+              <span class="g-emoji">🌱</span>
+              <span class="g-name">초등부</span>
+              <span class="g-desc">기초 연산 · 직관적 추론</span>
+            </button>
+            <button type="button" class="btn-grade-opt" data-grade="mid" data-diff="normal">
+              <span class="g-emoji">⭐</span>
+              <span class="g-name">중등부</span>
+              <span class="g-desc">규칙 탐구 · 논리적 분석</span>
+            </button>
+            <button type="button" class="btn-grade-opt" data-grade="high" data-diff="hard">
+              <span class="g-emoji">🔥</span>
+              <span class="g-name">고등부</span>
+              <span class="g-desc">심화 점화식 · 고난도 암호</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input type="text" id="intro-player-name" placeholder="닉네임 (예: 수학탐정)" aria-label="요원 닉네임" maxlength="10" autocomplete="off" />
+          <button id="btn-enter-hub" class="btn btn-primary btn-large">
+            <span>🚀 작전 개시</span>
+          </button>
+        </div>
+      </div>
+    </section>
     <!-- 2. 인터랙티브 작전 순서도 (Mission Flowchart) -->
     <section class="intro-flowchart-section">
       <div class="section-title-group">
         <span class="sec-icon">🗺️</span>
-        <h2>작전 진행 순서도 (MISSION FLOWCHART)</h2>
+        <h2>미션 순서 한눈에 보기</h2>
       </div>
       <p class="flow-desc">각 단계를 순서대로 클리어하며 수학적 직관과 논리력을 증명하세요.</p>
 
@@ -52,7 +89,7 @@
           <div class="node-content">
             <div class="node-icon">👤</div>
             <h3 class="node-title">요원 등록</h3>
-            <p class="node-desc">닉네임 입력 & 세션 생성</p>
+            <p class="node-desc">닉네임과 학년을 고르면 준비 끝!</p>
             <span class="node-tag ready">필수 시작</span>
           </div>
         </div>
@@ -82,7 +119,7 @@
           <div class="node-content">
             <div class="node-icon">🔮</div>
             <h3 class="node-title">확률 구슬 챌린지</h3>
-            <p class="node-desc">16슬롯 3D 실물 갈톤보드 정규분포 예측</p>
+            <p class="node-desc">구슬이 16칸 중 어디에 쌓일지 예측하기</p>
             <div class="node-meta">
               <span>수학 개념: 자료와 가능성, 이항분포</span>
               <span class="badge-time">⏱️ 2~3분</span>
@@ -143,43 +180,10 @@
       </div>
     </section>
 
-    <!-- 3. 요원 등록 및 학년 난이도 선택 폼 -->
-    <section class="intro-start-section">
-      <div class="agent-register-card">
-        <h3>요원 닉네임과 학년을 선택하고 작전을 시작하세요</h3>
-        
-        <!-- 학년 선택 버튼 -->
-        <div class="grade-select-group">
-          <label class="g-label">🎓 참가자 학년 레벨</label>
-          <div class="grade-button-row">
-            <button type="button" class="btn-grade-opt active" data-grade="elem" data-diff="easy">
-              <span class="g-emoji">🌱</span>
-              <span class="g-name">초등부</span>
-              <span class="g-desc">기초 연산 · 직관적 추론</span>
-            </button>
-            <button type="button" class="btn-grade-opt" data-grade="mid" data-diff="normal">
-              <span class="g-emoji">⭐</span>
-              <span class="g-name">중등부</span>
-              <span class="g-desc">규칙 탐구 · 논리적 분석</span>
-            </button>
-            <button type="button" class="btn-grade-opt" data-grade="high" data-diff="hard">
-              <span class="g-emoji">🔥</span>
-              <span class="g-name">고등부</span>
-              <span class="g-desc">심화 점화식 · 고난도 암호</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="input-row">
-          <input type="text" id="intro-player-name" placeholder="닉네임을 입력하세요 (예: 수학탐정)" maxlength="10" autocomplete="off" />
-          <button id="btn-enter-hub" class="btn btn-primary btn-large">
-            <span>🚀 작전 개시 (허브 입장)</span> ➔
-          </button>
-        </div>
-      </div>
-    </section>
   </div>
 
+  <script src="shared/ui.js"></script>
+  <script src="shared/pwa.js" defer></script>
   <script src="intro.js"></script>
 </body>
 </html>

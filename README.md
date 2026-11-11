@@ -37,5 +37,18 @@ math-game-hub/
 - **종합 게임 허브 실행**: `math-game-hub/index.html`
 - **단독 암호 탈출 실행**: `math-cipher-escape/index.html`
 
+### 인터넷 없이 사용 (부스 태블릿)
+- 인터넷이 될 때 사이트를 한 번 열고 `인터넷 없이 쓰기`(offline.html)에서 "준비 완료"를 확인한 뒤 홈 화면에 설치합니다.
+- 순위 기록은 해당 기기 브라우저에만 저장되며, 같은 화면에서 JSON/CSV로 백업·가져오기를 할 수 있습니다.
+- 파일을 고쳐 다시 배포할 때는 `math-game-hub/sw.js`의 `CACHE_VERSION`을 올려 주세요. 자세한 내용: `math-game-hub/docs/offline_guide.md`
+
+### 학습 자료 · 부스 운영 (`math-game-hub/learn/`)
+- `worksheet.html` 체험 학습지 · `concepts.html` 개념 정리 · `worksheet-answers.html` 교사용 정답
+- `booth-guide.html` 체험 방법 안내판(A3/A4) · `galton-build.html` 갈톤 보드 제작 설명서
+
+### 도우미(운영자) 기능
+- 게임 정답 입력칸에 마스터 키를 넣으면 정답과 풀이가 표시됩니다. 힌트는 2단계로 제공됩니다.
+- 순위 기록 초기화와 "모든 미션 열기"는 도우미 코드 확인 후 동작합니다.
+
 ### 웹 배포 (GitHub Pages / Vercel / Netlify)
 - 정적 웹 애플리케이션으로 바로 배포 가능합니다.

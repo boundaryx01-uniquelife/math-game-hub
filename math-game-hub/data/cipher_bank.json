@@ -1,305 +1,155 @@
 {
   "caesar": {
     "easy": [
-      { "id": "c_e_01", "shift": 1, "ciphertext": "IFMMP", "answer": "HELLO", "hint": "각 알파벳을 1칸 뒤로(A←B) 되돌려보세요." },
-      { "id": "c_e_02", "shift": 1, "ciphertext": "NBUI", "answer": "MATH", "hint": "각 알파벳을 1칸 뒤로(A←B) 되돌려보세요." },
-      { "id": "c_e_03", "shift": 1, "ciphertext": "DPPE", "answer": "CODE", "hint": "각 알파벳을 1칸 뒤로(A←B) 되돌려보세요." },
-      { "id": "c_e_04", "shift": 2, "ciphertext": "URBAN", "answer": "SPAZM", "hint": "알파벳을 2칸 뒤로 이동하세요." },
-      { "id": "c_e_05", "shift": 2, "ciphertext": "EQQI", "answer": "COOL", "hint": "알파벳을 2칸 뒤로 이동하세요." },
-      { "id": "c_e_06", "shift": 1, "ciphertext": "PQFO", "answer": "OPEN", "hint": "각 글자를 1칸씩 앞선 알파벳으로 바꿔보세요." },
-      { "id": "c_e_07", "shift": 2, "ciphertext": "NQTI", "answer": "LOCK", "hint": "2칸 앞의 알파벳을 찾아보세요 (L, M, N)." },
-      { "id": "c_e_08", "shift": 1, "ciphertext": "LFW", "answer": "KEY", "hint": "각 글자를 1칸 뒤로 되돌려보세요." },
-      { "id": "c_e_09", "shift": 2, "ciphertext": "VGUV", "answer": "TEST", "hint": "2칸 앞 알파벳을 찾아보세요." },
-      { "id": "c_e_10", "shift": 1, "ciphertext": "GVO", "answer": "FUN", "hint": "1칸 앞 알파벳으로 복원하세요." }
+      {"id": "c_e_01", "shift": 1, "ciphertext": "IFMMP", "answer": "HELLO", "hint": "각 알파벳을 1칸 뒤로(A←B) 되돌려보세요."},
+      {"id": "c_e_02", "shift": 1, "ciphertext": "NBUI", "answer": "MATH", "hint": "각 알파벳을 1칸 뒤로(A←B) 되돌려보세요."},
+      {"id": "c_e_03", "shift": 1, "ciphertext": "DPEF", "answer": "CODE", "hint": "각 알파벳을 1칸 뒤로(A←B) 되돌려보세요."},
+      {"id": "c_e_04", "shift": 2, "ciphertext": "URCEG", "answer": "SPACE", "hint": "알파벳을 2칸 앞으로 되돌려보세요."},
+      {"id": "c_e_05", "shift": 2, "ciphertext": "EQQN", "answer": "COOL", "hint": "알파벳을 2칸 뒤로 이동하세요."},
+      {"id": "c_e_06", "shift": 1, "ciphertext": "PQFO", "answer": "OPEN", "hint": "각 글자를 1칸씩 앞선 알파벳으로 바꿔보세요."},
+      {"id": "c_e_07", "shift": 2, "ciphertext": "NQEM", "answer": "LOCK", "hint": "2칸 앞의 알파벳을 찾아보세요 (L, M, N)."},
+      {"id": "c_e_08", "shift": 1, "ciphertext": "LFZ", "answer": "KEY", "hint": "각 글자를 1칸 뒤로 되돌려보세요."},
+      {"id": "c_e_09", "shift": 2, "ciphertext": "VGUV", "answer": "TEST", "hint": "2칸 앞 알파벳을 찾아보세요."},
+      {"id": "c_e_10", "shift": 1, "ciphertext": "GVO", "answer": "FUN", "hint": "1칸 앞 알파벳으로 복원하세요."}
     ],
     "normal": [
-      { "id": "c_n_01", "shift": 3, "ciphertext": "VHFUHW", "answer": "SECRET", "hint": "시저 암호 3칸 이동: D→A, E→B, F→C..." },
-      { "id": "c_n_02", "shift": 3, "ciphertext": "HVFDSH", "answer": "ESCAPE", "hint": "3칸 뒤의 알파벳으로 되돌려보세요." },
-      { "id": "c_n_03", "shift": 3, "ciphertext": "IXQ", "answer": "FUN", "hint": "3칸 앞의 글자를 찾아보세요." },
-      { "id": "c_n_04", "shift": 4, "ciphertext": "GMRX", "answer": "CINT", "hint": "4칸 뒤로 이동하세요." },
-      { "id": "c_n_05", "shift": 3, "ciphertext": "PDWK", "answer": "MATH", "hint": "P에서 3칸 뒤는 M (M, N, O, P)" },
-      { "id": "c_n_06", "shift": 4, "ciphertext": "GSYV", "answer": "COUR", "hint": "4칸 앞의 알파벳을 확인하세요." },
-      { "id": "c_n_07", "shift": 3, "ciphertext": "SODB", "answer": "PLAY", "hint": "3칸 뒤로 되돌립니다." },
-      { "id": "c_n_08", "shift": 4, "ciphertext": "JSYHI", "answer": "FORCE", "hint": "4칸 앞선 알파벳으로 해독하세요." },
-      { "id": "c_n_09", "shift": 3, "ciphertext": "TXLC", "answer": "QUIZ", "hint": "3칸 뒤 알파벳을 찾으세요." },
-      { "id": "c_n_10", "shift": 4, "ciphertext": "PMGI", "answer": "LIKE", "hint": "4칸 앞 알파벳을 찾으세요." }
+      {"id": "c_n_01", "shift": 3, "ciphertext": "VHFUHW", "answer": "SECRET", "hint": "시저 암호 3칸 이동: D→A, E→B, F→C..."},
+      {"id": "c_n_02", "shift": 3, "ciphertext": "HVFDSH", "answer": "ESCAPE", "hint": "3칸 뒤의 알파벳으로 되돌려보세요."},
+      {"id": "c_n_03", "shift": 3, "ciphertext": "IXQ", "answer": "FUN", "hint": "3칸 앞의 글자를 찾아보세요."},
+      {"id": "c_n_04", "shift": 4, "ciphertext": "GMXC", "answer": "CITY", "hint": "알파벳을 4칸 앞으로 되돌려보세요."},
+      {"id": "c_n_05", "shift": 3, "ciphertext": "PDWK", "answer": "MATH", "hint": "P에서 3칸 뒤는 M (M, N, O, P)"},
+      {"id": "c_n_06", "shift": 4, "ciphertext": "XSYV", "answer": "TOUR", "hint": "알파벳을 4칸 앞으로 되돌려보세요."},
+      {"id": "c_n_07", "shift": 3, "ciphertext": "SODB", "answer": "PLAY", "hint": "3칸 뒤로 되돌립니다."},
+      {"id": "c_n_08", "shift": 4, "ciphertext": "JSVGI", "answer": "FORCE", "hint": "4칸 앞선 알파벳으로 해독하세요."},
+      {"id": "c_n_09", "shift": 3, "ciphertext": "TXLC", "answer": "QUIZ", "hint": "3칸 뒤 알파벳을 찾으세요."},
+      {"id": "c_n_10", "shift": 4, "ciphertext": "PMOI", "answer": "LIKE", "hint": "4칸 앞 알파벳을 찾으세요."}
     ],
     "hard": [
-      { "id": "c_h_01", "shift": 5, "ciphertext": "RFXYNTS", "answer": "MYSTERY", "hint": "5칸 앞의 알파벳을 찾아보세요." },
-      { "id": "c_h_02", "shift": 5, "ciphertext": "XTRUTZSI", "answer": "SMOKES", "hint": "5칸 앞 알파벳으로 복원하세요." },
-      { "id": "c_h_03", "shift": 6, "ciphertext": "SGINKZ", "answer": "MANKEY", "hint": "6칸 앞 알파벳을 찾으세요." },
-      { "id": "c_h_04", "shift": 5, "ciphertext": "RFHMNSJ", "answer": "MACHINE", "hint": "5칸을 되돌려보세요 (R→M, F→A...)." },
-      { "id": "c_h_05", "shift": 6, "ciphertext": "HUTXGYY", "answer": "COMPASS", "hint": "6칸 앞의 알파벳을 찾으세요." },
-      { "id": "c_h_06", "shift": 5, "ciphertext": "VZYYQJ", "answer": "PUZZLE", "hint": "5칸 앞 알파벳으로 변환하세요." },
-      { "id": "c_h_07", "shift": 6, "ciphertext": "LGYTEV", "answer": "FASNYP", "hint": "6칸 뒤로 이동하세요." },
-      { "id": "c_h_08", "shift": 5, "ciphertext": "UTSLX", "answer": "POINS", "hint": "5칸 앞의 글자를 찾으세요." },
-      { "id": "c_h_09", "shift": 7, "ciphertext": "JVSSV", "answer": "COLLO", "hint": "7칸 앞의 글자를 찾으세요." },
-      { "id": "c_h_10", "shift": 5, "ciphertext": "XNRZQFYNTS", "answer": "SIMULATION", "hint": "5칸을 되돌려보세요 (X→S, N→I...)." }
+      {"id": "c_h_01", "shift": 5, "ciphertext": "RDXYJWD", "answer": "MYSTERY", "hint": "5칸 앞의 알파벳을 찾아보세요."},
+      {"id": "c_h_02", "shift": 5, "ciphertext": "XMFITB", "answer": "SHADOW", "hint": "알파벳을 5칸 앞으로 되돌려보세요."},
+      {"id": "c_h_03", "shift": 6, "ciphertext": "SUTQKE", "answer": "MONKEY", "hint": "알파벳을 6칸 앞으로 되돌려보세요."},
+      {"id": "c_h_04", "shift": 5, "ciphertext": "RFHMNSJ", "answer": "MACHINE", "hint": "5칸을 되돌려보세요 (R→M, F→A...)."},
+      {"id": "c_h_05", "shift": 6, "ciphertext": "IUSVGYY", "answer": "COMPASS", "hint": "6칸 앞의 알파벳을 찾으세요."},
+      {"id": "c_h_06", "shift": 5, "ciphertext": "UZEEQJ", "answer": "PUZZLE", "hint": "5칸 앞 알파벳으로 변환하세요."},
+      {"id": "c_h_07", "shift": 6, "ciphertext": "LGIZUX", "answer": "FACTOR", "hint": "알파벳을 6칸 앞으로 되돌려보세요."},
+      {"id": "c_h_08", "shift": 5, "ciphertext": "UTNSYX", "answer": "POINTS", "hint": "알파벳을 5칸 앞으로 되돌려보세요."},
+      {"id": "c_h_09", "shift": 7, "ciphertext": "JVSBTU", "answer": "COLUMN", "hint": "알파벳을 7칸 앞으로 되돌려보세요."},
+      {"id": "c_h_10", "shift": 5, "ciphertext": "XNRZQFYNTS", "answer": "SIMULATION", "hint": "5칸을 되돌려보세요 (X→S, N→I...)."}
     ]
   },
   "coordinate": {
     "grid_rule": "좌표는 (가로 X, 세로 Y) 순서입니다.",
     "easy": [
-      {
-        "id": "co_e_01",
-        "answer": "CAT",
-        "coords": ["(3,1)", "(1,1)", "(5,4)"],
-        "hint": "가로(X)번째 줄과 세로(Y)번째 칸이 만나는 문자를 읽으세요."
-      },
-      {
-        "id": "co_e_02",
-        "answer": "DOG",
-        "coords": ["(4,1)", "(5,3)", "(2,2)"],
-        "hint": "(가로, 세로) 순서로 찾으세요."
-      },
-      {
-        "id": "co_e_03",
-        "answer": "SUN",
-        "coords": ["(4,4)", "(1,5)", "(4,3)"],
-        "hint": "(4,4)는 가로 4번, 세로 4번 칸입니다."
-      },
-      {
-        "id": "co_e_04",
-        "answer": "BOX",
-        "coords": ["(2,1)", "(5,3)", "(4,5)"],
-        "hint": "각 좌표의 알파벳을 모아보세요."
-      },
-      {
-        "id": "co_e_05",
-        "answer": "KEY",
-        "coords": ["(1,3)", "(5,1)", "(5,5)"],
-        "hint": "K=(1,3), E=(5,1), Y=(5,5)"
-      },
-      {
-        "id": "co_e_06",
-        "answer": "MAP",
-        "coords": ["(3,3)", "(1,1)", "(1,4)"],
-        "hint": "M, A, P 순서로 글자를 찾아보세요."
-      },
-      {
-        "id": "co_e_07",
-        "answer": "RED",
-        "coords": ["(3,4)", "(5,1)", "(4,1)"],
-        "hint": "R=(3,4), E=(5,1), D=(4,1)"
-      },
-      {
-        "id": "co_e_08",
-        "answer": "STAR",
-        "coords": ["(4,4)", "(5,4)", "(1,1)", "(3,4)"],
-        "hint": "(가로, 세로)를 확인하여 4글자를 완성하세요."
-      },
-      {
-        "id": "co_e_09",
-        "answer": "GOLD",
-        "coords": ["(2,2)", "(5,3)", "(2,3)", "(4,1)"],
-        "hint": "G=(2,2), O=(5,3), L=(2,3), D=(4,1)"
-      },
-      {
-        "id": "co_e_10",
-        "answer": "BLUE",
-        "coords": ["(2,1)", "(2,3)", "(1,5)", "(5,1)"],
-        "hint": "B, L, U, E 좌표를 확인하세요."
-      }
+      {"id": "co_e_01", "answer": "CAT", "coords": ["(3,1)", "(1,1)", "(5,4)"], "hint": "가로(X)번째 줄과 세로(Y)번째 칸이 만나는 문자를 읽으세요."},
+      {"id": "co_e_02", "answer": "DOG", "coords": ["(4,1)", "(5,3)", "(2,2)"], "hint": "(가로, 세로) 순서로 찾으세요."},
+      {"id": "co_e_03", "answer": "SUN", "coords": ["(4,4)", "(1,5)", "(4,3)"], "hint": "(4,4)는 가로 4번, 세로 4번 칸입니다."},
+      {"id": "co_e_04", "answer": "BOX", "coords": ["(2,1)", "(5,3)", "(4,5)"], "hint": "각 좌표의 알파벳을 모아보세요."},
+      {"id": "co_e_05", "answer": "KEY", "coords": ["(1,3)", "(5,1)", "(5,5)"], "hint": "K=(1,3), E=(5,1), Y=(5,5)"},
+      {"id": "co_e_06", "answer": "MAP", "coords": ["(3,3)", "(1,1)", "(1,4)"], "hint": "M, A, P 순서로 글자를 찾아보세요."},
+      {"id": "co_e_07", "answer": "RED", "coords": ["(3,4)", "(5,1)", "(4,1)"], "hint": "R=(3,4), E=(5,1), D=(4,1)"},
+      {"id": "co_e_08", "answer": "STAR", "coords": ["(4,4)", "(5,4)", "(1,1)", "(3,4)"], "hint": "(가로, 세로)를 확인하여 4글자를 완성하세요."},
+      {"id": "co_e_09", "answer": "GOLD", "coords": ["(2,2)", "(5,3)", "(2,3)", "(4,1)"], "hint": "G=(2,2), O=(5,3), L=(2,3), D=(4,1)"},
+      {"id": "co_e_10", "answer": "BLUE", "coords": ["(2,1)", "(2,3)", "(1,5)", "(5,1)"], "hint": "B, L, U, E 좌표를 확인하세요."}
     ],
     "normal": [
-      {
-        "id": "co_n_01",
-        "answer": "MATH",
-        "coords": ["(3,3)", "(1,1)", "(5,4)", "(3,2)"],
-        "hint": "M=(3,3), A=(1,1), T=(5,4), H=(3,2)"
-      },
-      {
-        "id": "co_n_02",
-        "answer": "CODE",
-        "coords": ["(3,1)", "(5,3)", "(4,1)", "(5,1)"],
-        "hint": "C=(3,1), O=(5,3), D=(4,1), E=(5,1)"
-      },
-      {
-        "id": "co_n_03",
-        "answer": "GAME",
-        "coords": ["(2,2)", "(1,1)", "(3,3)", "(5,1)"],
-        "hint": "G=(2,2), A=(1,1), M=(3,3), E=(5,1)"
-      },
-      {
-        "id": "co_n_04",
-        "answer": "LOCK",
-        "coords": ["(2,3)", "(5,3)", "(3,1)", "(1,3)"],
-        "hint": "L=(2,3), O=(5,3), C=(3,1), K=(1,3)"
-      },
-      {
-        "id": "co_n_05",
-        "answer": "OPEN",
-        "coords": ["(5,3)", "(1,4)", "(5,1)", "(4,3)"],
-        "hint": "O=(5,3), P=(1,4), E=(5,1), N=(4,3)"
-      },
-      {
-        "id": "co_n_06",
-        "answer": "FIND",
-        "coords": ["(1,2)", "(4,2)", "(4,3)", "(4,1)"],
-        "hint": "F=(1,2), I=(4,2), N=(4,3), D=(4,1)"
-      },
-      {
-        "id": "co_n_07",
-        "answer": "HERO",
-        "coords": ["(3,2)", "(5,1)", "(3,4)", "(5,3)"],
-        "hint": "H=(3,2), E=(5,1), R=(3,4), O=(5,3)"
-      },
-      {
-        "id": "co_n_08",
-        "answer": "DOOR",
-        "coords": ["(4,1)", "(5,3)", "(5,3)", "(3,4)"],
-        "hint": "D=(4,1), O=(5,3), O=(5,3), R=(3,4)"
-      },
-      {
-        "id": "co_n_09",
-        "answer": "TIME",
-        "coords": ["(5,4)", "(4,2)", "(3,3)", "(5,1)"],
-        "hint": "T=(5,4), I=(4,2), M=(3,3), E=(5,1)"
-      },
-      {
-        "id": "co_n_10",
-        "answer": "QUIZ",
-        "coords": ["(2,4)", "(1,5)", "(4,2)", "(1,1)"],
-        "hint": "Q=(2,4), U=(1,5), I=(4,2), Z=(표밖 또는 보조)"
-      }
+      {"id": "co_n_01", "answer": "MATH", "coords": ["(3,3)", "(1,1)", "(5,4)", "(3,2)"], "hint": "M=(3,3), A=(1,1), T=(5,4), H=(3,2)"},
+      {"id": "co_n_02", "answer": "CODE", "coords": ["(3,1)", "(5,3)", "(4,1)", "(5,1)"], "hint": "C=(3,1), O=(5,3), D=(4,1), E=(5,1)"},
+      {"id": "co_n_03", "answer": "GAME", "coords": ["(2,2)", "(1,1)", "(3,3)", "(5,1)"], "hint": "G=(2,2), A=(1,1), M=(3,3), E=(5,1)"},
+      {"id": "co_n_04", "answer": "LOCK", "coords": ["(2,3)", "(5,3)", "(3,1)", "(1,3)"], "hint": "L=(2,3), O=(5,3), C=(3,1), K=(1,3)"},
+      {"id": "co_n_05", "answer": "OPEN", "coords": ["(5,3)", "(1,4)", "(5,1)", "(4,3)"], "hint": "O=(5,3), P=(1,4), E=(5,1), N=(4,3)"},
+      {"id": "co_n_06", "answer": "FIND", "coords": ["(1,2)", "(4,2)", "(4,3)", "(4,1)"], "hint": "F=(1,2), I=(4,2), N=(4,3), D=(4,1)"},
+      {"id": "co_n_07", "answer": "HERO", "coords": ["(3,2)", "(5,1)", "(3,4)", "(5,3)"], "hint": "H=(3,2), E=(5,1), R=(3,4), O=(5,3)"},
+      {"id": "co_n_08", "answer": "DOOR", "coords": ["(4,1)", "(5,3)", "(5,3)", "(3,4)"], "hint": "D=(4,1), O=(5,3), O=(5,3), R=(3,4)"},
+      {"id": "co_n_09", "answer": "TIME", "coords": ["(5,4)", "(4,2)", "(3,3)", "(5,1)"], "hint": "T=(5,4), I=(4,2), M=(3,3), E=(5,1)"},
+      {"id": "co_n_10", "answer": "LOGIC", "coords": ["(2,3)", "(5,3)", "(2,2)", "(4,2)", "(3,1)"], "hint": "가로(X), 세로(Y) 순서로 좌표 격자에서 글자를 찾아 조합하세요."}
     ],
     "hard": [
-      {
-        "id": "co_h_01",
-        "answer": "ESCAPE",
-        "coords": ["(5,1)", "(4,4)", "(3,1)", "(1,1)", "(1,4)", "(5,1)"],
-        "hint": "E, S, C, A, P, E 6글자를 순서대로 찾아보세요."
-      },
-      {
-        "id": "co_h_02",
-        "answer": "SECRET",
-        "coords": ["(4,4)", "(5,1)", "(3,1)", "(3,4)", "(5,1)", "(5,4)"],
-        "hint": "S, E, C, R, E, T 를 조합하세요."
-      },
-      {
-        "id": "co_h_03",
-        "answer": "PUZZLE",
-        "coords": ["(1,4)", "(1,5)", "(5,5)", "(5,5)", "(2,3)", "(5,1)"],
-        "hint": "P=(1,4), U=(1,5), L=(2,3), E=(5,1)"
-      },
-      {
-        "id": "co_h_04",
-        "answer": "FUTURE",
-        "coords": ["(1,2)", "(1,5)", "(5,4)", "(1,5)", "(3,4)", "(5,1)"],
-        "hint": "F, U, T, U, R, E 를 순서대로 읽으세요."
-      },
-      {
-        "id": "co_h_05",
-        "answer": "BRAIN",
-        "coords": ["(2,1)", "(3,4)", "(1,1)", "(4,2)", "(4,3)"],
-        "hint": "B=(2,1), R=(3,4), A=(1,1), I=(4,2), N=(4,3)"
-      },
-      {
-        "id": "co_h_06",
-        "answer": "SOLVE",
-        "coords": ["(4,4)", "(5,3)", "(2,3)", "(2,5)", "(5,1)"],
-        "hint": "S=(4,4), O=(5,3), L=(2,3), V=(2,5), E=(5,1)"
-      },
-      {
-        "id": "co_h_07",
-        "answer": "SMART",
-        "coords": ["(4,4)", "(3,3)", "(1,1)", "(3,4)", "(5,4)"],
-        "hint": "S, M, A, R, T"
-      },
-      {
-        "id": "co_h_08",
-        "answer": "QUEST",
-        "coords": ["(2,4)", "(1,5)", "(5,1)", "(4,4)", "(5,4)"],
-        "hint": "Q, U, E, S, T"
-      },
-      {
-        "id": "co_h_09",
-        "answer": "NUMBER",
-        "coords": ["(4,3)", "(1,5)", "(3,3)", "(2,1)", "(5,1)", "(3,4)"],
-        "hint": "N, U, M, B, E, R 6글자"
-      },
-      {
-        "id": "co_h_10",
-        "answer": "GALTON",
-        "coords": ["(2,2)", "(1,1)", "(2,3)", "(5,4)", "(5,3)", "(4,3)"],
-        "hint": "G=(2,2), A=(1,1), L=(2,3), T=(5,4), O=(5,3), N=(4,3)"
-      }
+      {"id": "co_h_01", "answer": "ESCAPE", "coords": ["(5,1)", "(4,4)", "(3,1)", "(1,1)", "(1,4)", "(5,1)"], "hint": "E, S, C, A, P, E 6글자를 순서대로 찾아보세요."},
+      {"id": "co_h_02", "answer": "SECRET", "coords": ["(4,4)", "(5,1)", "(3,1)", "(3,4)", "(5,1)", "(5,4)"], "hint": "S, E, C, R, E, T 를 조합하세요."},
+      {"id": "co_h_03", "answer": "PLANET", "coords": ["(1,4)", "(2,3)", "(1,1)", "(4,3)", "(5,1)", "(5,4)"], "hint": "가로(X), 세로(Y) 순서로 좌표 격자에서 글자를 찾아 조합하세요."},
+      {"id": "co_h_04", "answer": "FUTURE", "coords": ["(1,2)", "(1,5)", "(5,4)", "(1,5)", "(3,4)", "(5,1)"], "hint": "F, U, T, U, R, E 를 순서대로 읽으세요."},
+      {"id": "co_h_05", "answer": "BRAIN", "coords": ["(2,1)", "(3,4)", "(1,1)", "(4,2)", "(4,3)"], "hint": "B=(2,1), R=(3,4), A=(1,1), I=(4,2), N=(4,3)"},
+      {"id": "co_h_06", "answer": "SOLVE", "coords": ["(4,4)", "(5,3)", "(2,3)", "(2,5)", "(5,1)"], "hint": "S=(4,4), O=(5,3), L=(2,3), V=(2,5), E=(5,1)"},
+      {"id": "co_h_07", "answer": "SMART", "coords": ["(4,4)", "(3,3)", "(1,1)", "(3,4)", "(5,4)"], "hint": "S, M, A, R, T"},
+      {"id": "co_h_08", "answer": "QUEST", "coords": ["(2,4)", "(1,5)", "(5,1)", "(4,4)", "(5,4)"], "hint": "Q, U, E, S, T"},
+      {"id": "co_h_09", "answer": "NUMBER", "coords": ["(4,3)", "(1,5)", "(3,3)", "(2,1)", "(5,1)", "(3,4)"], "hint": "N, U, M, B, E, R 6글자"},
+      {"id": "co_h_10", "answer": "GALTON", "coords": ["(2,2)", "(1,1)", "(2,3)", "(5,4)", "(5,3)", "(4,3)"], "hint": "G=(2,2), A=(1,1), L=(2,3), T=(5,4), O=(5,3), N=(4,3)"}
     ]
   },
   "binary": {
     "easy": [
-      { "id": "b_e_01", "binary": "0101", "answer": "5", "hint": "4의 자리(1) + 1의 자리(1) = 4+1" },
-      { "id": "b_e_02", "binary": "0011", "answer": "3", "hint": "2의 자리(1) + 1의 자리(1) = 2+1" },
-      { "id": "b_e_03", "binary": "0110", "answer": "6", "hint": "4의 자리(1) + 2의 자리(1) = 4+2" },
-      { "id": "b_e_04", "binary": "0100", "answer": "4", "hint": "4의 자리가 1입니다." },
-      { "id": "b_e_05", "binary": "0111", "answer": "7", "hint": "4 + 2 + 1 = ?" },
-      { "id": "b_e_06", "binary": "0010", "answer": "2", "hint": "2의 자리가 1입니다." },
-      { "id": "b_e_07", "binary": "0001", "answer": "1", "hint": "1의 자리가 1입니다." },
-      { "id": "b_e_08", "binary": "1000", "answer": "8", "hint": "8의 자리가 1입니다." },
-      { "id": "b_e_09", "binary": "1001", "answer": "9", "hint": "8 + 1 = ?" },
-      { "id": "b_e_10", "binary": "1010", "answer": "10", "hint": "8 + 2 = ?" }
+      {"id": "b_e_01", "binary": "0101", "answer": "5", "hint": "4의 자리(1) + 1의 자리(1) = 4+1"},
+      {"id": "b_e_02", "binary": "0011", "answer": "3", "hint": "2의 자리(1) + 1의 자리(1) = 2+1"},
+      {"id": "b_e_03", "binary": "0110", "answer": "6", "hint": "4의 자리(1) + 2의 자리(1) = 4+2"},
+      {"id": "b_e_04", "binary": "0100", "answer": "4", "hint": "4의 자리가 1입니다."},
+      {"id": "b_e_05", "binary": "0111", "answer": "7", "hint": "4 + 2 + 1 = ?"},
+      {"id": "b_e_06", "binary": "0010", "answer": "2", "hint": "2의 자리가 1입니다."},
+      {"id": "b_e_07", "binary": "0001", "answer": "1", "hint": "1의 자리가 1입니다."},
+      {"id": "b_e_08", "binary": "1000", "answer": "8", "hint": "8의 자리가 1입니다."},
+      {"id": "b_e_09", "binary": "1001", "answer": "9", "hint": "8 + 1 = ?"},
+      {"id": "b_e_10", "binary": "1010", "answer": "10", "hint": "8 + 2 = ?"}
     ],
     "normal": [
-      { "id": "b_n_01", "binary": "1100", "answer": "12", "hint": "8 + 4 = ?" },
-      { "id": "b_n_02", "binary": "1101", "answer": "13", "hint": "8 + 4 + 1 = ?" },
-      { "id": "b_n_03", "binary": "1011", "answer": "11", "hint": "8 + 2 + 1 = ?" },
-      { "id": "b_n_04", "binary": "1110", "answer": "14", "hint": "8 + 4 + 2 = ?" },
-      { "id": "b_n_05", "binary": "1111", "answer": "15", "hint": "8 + 4 + 2 + 1 = ?" },
-      { "id": "b_n_06", "binary": "10001", "answer": "17", "hint": "16의 자리(1) + 1의 자리(1) = 16+1" },
-      { "id": "b_n_07", "binary": "10010", "answer": "18", "hint": "16 + 2 = ?" },
-      { "id": "b_n_08", "binary": "10100", "answer": "20", "hint": "16 + 4 = ?" },
-      { "id": "b_n_09", "binary": "10110", "answer": "22", "hint": "16 + 4 + 2 = ?" },
-      { "id": "b_n_10", "binary": "11000", "answer": "24", "hint": "16 + 8 = ?" }
+      {"id": "b_n_01", "binary": "1100", "answer": "12", "hint": "8 + 4 = ?"},
+      {"id": "b_n_02", "binary": "1101", "answer": "13", "hint": "8 + 4 + 1 = ?"},
+      {"id": "b_n_03", "binary": "1011", "answer": "11", "hint": "8 + 2 + 1 = ?"},
+      {"id": "b_n_04", "binary": "1110", "answer": "14", "hint": "8 + 4 + 2 = ?"},
+      {"id": "b_n_05", "binary": "1111", "answer": "15", "hint": "8 + 4 + 2 + 1 = ?"},
+      {"id": "b_n_06", "binary": "10001", "answer": "17", "hint": "16의 자리(1) + 1의 자리(1) = 16+1"},
+      {"id": "b_n_07", "binary": "10010", "answer": "18", "hint": "16 + 2 = ?"},
+      {"id": "b_n_08", "binary": "10100", "answer": "20", "hint": "16 + 4 = ?"},
+      {"id": "b_n_09", "binary": "10110", "answer": "22", "hint": "16 + 4 + 2 = ?"},
+      {"id": "b_n_10", "binary": "11000", "answer": "24", "hint": "16 + 8 = ?"}
     ],
     "hard": [
-      { "id": "b_h_01", "binary": "11001", "answer": "25", "hint": "16 + 8 + 1 = ?" },
-      { "id": "b_h_02", "binary": "11011", "answer": "27", "hint": "16 + 8 + 2 + 1 = ?" },
-      { "id": "b_h_03", "binary": "11101", "answer": "29", "hint": "16 + 8 + 4 + 1 = ?" },
-      { "id": "b_h_04", "binary": "11110", "answer": "30", "hint": "16 + 8 + 4 + 2 = ?" },
-      { "id": "b_h_05", "binary": "11111", "answer": "31", "hint": "16 + 8 + 4 + 2 + 1 = ?" },
-      { "id": "b_h_06", "binary": "100101", "answer": "37", "hint": "32 + 4 + 1 = ?" },
-      { "id": "b_h_07", "binary": "101010", "answer": "42", "hint": "32 + 8 + 2 = ?" },
-      { "id": "b_h_08", "binary": "110010", "answer": "50", "hint": "32 + 16 + 2 = ?" },
-      { "id": "b_h_09", "binary": "111000", "answer": "56", "hint": "32 + 16 + 8 = ?" },
-      { "id": "b_h_10", "binary": "111111", "answer": "63", "hint": "32 + 16 + 8 + 4 + 2 + 1 = ?" }
+      {"id": "b_h_01", "binary": "11001", "answer": "25", "hint": "16 + 8 + 1 = ?"},
+      {"id": "b_h_02", "binary": "11011", "answer": "27", "hint": "16 + 8 + 2 + 1 = ?"},
+      {"id": "b_h_03", "binary": "11101", "answer": "29", "hint": "16 + 8 + 4 + 1 = ?"},
+      {"id": "b_h_04", "binary": "11110", "answer": "30", "hint": "16 + 8 + 4 + 2 = ?"},
+      {"id": "b_h_05", "binary": "11111", "answer": "31", "hint": "16 + 8 + 4 + 2 + 1 = ?"},
+      {"id": "b_h_06", "binary": "100101", "answer": "37", "hint": "32 + 4 + 1 = ?"},
+      {"id": "b_h_07", "binary": "101010", "answer": "42", "hint": "32 + 8 + 2 = ?"},
+      {"id": "b_h_08", "binary": "110010", "answer": "50", "hint": "32 + 16 + 2 = ?"},
+      {"id": "b_h_09", "binary": "111000", "answer": "56", "hint": "32 + 16 + 8 = ?"},
+      {"id": "b_h_10", "binary": "111111", "answer": "63", "hint": "32 + 16 + 8 + 4 + 2 + 1 = ?"}
     ]
   },
   "sequence": {
     "easy": [
-      { "id": "s_e_01", "sequence": "2, 4, 6, 8, [ ? ]", "answer": "10", "hint": "2씩 더해지는 등차수열입니다." },
-      { "id": "s_e_02", "sequence": "5, 10, 15, 20, [ ? ]", "answer": "25", "hint": "5씩 커지는 규칙입니다." },
-      { "id": "s_e_03", "sequence": "3, 6, 9, 12, [ ? ]", "answer": "15", "hint": "3의 배수입니다." },
-      { "id": "s_e_04", "sequence": "10, 20, 30, 40, [ ? ]", "answer": "50", "hint": "10씩 더해집니다." },
-      { "id": "s_e_05", "sequence": "1, 3, 5, 7, [ ? ]", "answer": "9", "hint": "홀수 규칙(2씩 증가)입니다." },
-      { "id": "s_e_06", "sequence": "20, 17, 14, 11, [ ? ]", "answer": "8", "hint": "3씩 작아지는 규칙입니다." },
-      { "id": "s_e_07", "sequence": "100, 90, 80, 70, [ ? ]", "answer": "60", "hint": "10씩 빼보세요." },
-      { "id": "s_e_08", "sequence": "4, 8, 12, 16, [ ? ]", "answer": "20", "hint": "4단 곱셈구구입니다." },
-      { "id": "s_e_09", "sequence": "1, 2, 4, 8, [ ? ]", "answer": "16", "hint": "2배씩 커지는 규칙입니다." },
-      { "id": "s_e_10", "sequence": "7, 14, 21, 28, [ ? ]", "answer": "35", "hint": "7씩 증가합니다." }
+      {"id": "s_e_01", "sequence": "2, 4, 6, 8, [ ? ]", "answer": "10", "hint": "2씩 더해지는 등차수열입니다."},
+      {"id": "s_e_02", "sequence": "5, 10, 15, 20, [ ? ]", "answer": "25", "hint": "5씩 커지는 규칙입니다."},
+      {"id": "s_e_03", "sequence": "3, 6, 9, 12, [ ? ]", "answer": "15", "hint": "3의 배수입니다."},
+      {"id": "s_e_04", "sequence": "10, 20, 30, 40, [ ? ]", "answer": "50", "hint": "10씩 더해집니다."},
+      {"id": "s_e_05", "sequence": "1, 3, 5, 7, [ ? ]", "answer": "9", "hint": "홀수 규칙(2씩 증가)입니다."},
+      {"id": "s_e_06", "sequence": "20, 17, 14, 11, [ ? ]", "answer": "8", "hint": "3씩 작아지는 규칙입니다."},
+      {"id": "s_e_07", "sequence": "100, 90, 80, 70, [ ? ]", "answer": "60", "hint": "10씩 빼보세요."},
+      {"id": "s_e_08", "sequence": "4, 8, 12, 16, [ ? ]", "answer": "20", "hint": "4단 곱셈구구입니다."},
+      {"id": "s_e_09", "sequence": "1, 2, 4, 8, [ ? ]", "answer": "16", "hint": "2배씩 커지는 규칙입니다."},
+      {"id": "s_e_10", "sequence": "7, 14, 21, 28, [ ? ]", "answer": "35", "hint": "7씩 증가합니다."}
     ],
     "normal": [
-      { "id": "s_n_01", "sequence": "1, 1, 2, 3, 5, 8, [ ? ]", "answer": "13", "hint": "앞의 두 수를 더하면 다음 수가 되는 피보나치 수열 (5+8)." },
-      { "id": "s_n_02", "sequence": "1, 4, 9, 16, 25, [ ? ]", "answer": "36", "hint": "제곱수(1x1, 2x2, 3x3, 4x4, 5x5, 6x6)입니다." },
-      { "id": "s_n_03", "sequence": "1, 3, 7, 13, 21, [ ? ]", "answer": "31", "hint": "차이가 +2, +4, +6, +8, +10으로 늘어납니다." },
-      { "id": "s_n_04", "sequence": "2, 6, 18, 54, [ ? ]", "answer": "162", "hint": "3배씩 곱해집니다 (54 x 3)." },
-      { "id": "s_n_05", "sequence": "3, 4, 7, 11, 18, [ ? ]", "answer": "29", "hint": "앞의 두 수를 더해보세요 (7+11=18, 11+18=?)." },
-      { "id": "s_n_06", "sequence": "2, 5, 10, 17, 26, [ ? ]", "answer": "37", "hint": "차이가 +3, +5, +7, +9, +11로 늘어납니다." },
-      { "id": "s_n_07", "sequence": "64, 32, 16, 8, [ ? ]", "answer": "4", "hint": "절반(/2)으로 줄어듭니다." },
-      { "id": "s_n_08", "sequence": "1, 2, 6, 24, [ ? ]", "answer": "120", "hint": "x2, x3, x4, x5로 곱하는 수가 커집니다 (24 x 5)." },
-      { "id": "s_n_09", "sequence": "10, 11, 13, 16, 20, [ ? ]", "answer": "25", "hint": "차이가 +1, +2, +3, +4, +5 입니다." },
-      { "id": "s_n_10", "sequence": "4, 9, 16, 25, 36, [ ? ]", "answer": "49", "hint": "7 x 7 = 49 (제곱수)" }
+      {"id": "s_n_01", "sequence": "1, 1, 2, 3, 5, 8, [ ? ]", "answer": "13", "hint": "앞의 두 수를 더하면 다음 수가 되는 피보나치 수열 (5+8)."},
+      {"id": "s_n_02", "sequence": "1, 4, 9, 16, 25, [ ? ]", "answer": "36", "hint": "제곱수(1x1, 2x2, 3x3, 4x4, 5x5, 6x6)입니다."},
+      {"id": "s_n_03", "sequence": "1, 3, 7, 13, 21, [ ? ]", "answer": "31", "hint": "차이가 +2, +4, +6, +8, +10으로 늘어납니다."},
+      {"id": "s_n_04", "sequence": "2, 6, 18, 54, [ ? ]", "answer": "162", "hint": "3배씩 곱해집니다 (54 x 3)."},
+      {"id": "s_n_05", "sequence": "3, 4, 7, 11, 18, [ ? ]", "answer": "29", "hint": "앞의 두 수를 더해보세요 (7+11=18, 11+18=?)."},
+      {"id": "s_n_06", "sequence": "2, 5, 10, 17, 26, [ ? ]", "answer": "37", "hint": "차이가 +3, +5, +7, +9, +11로 늘어납니다."},
+      {"id": "s_n_07", "sequence": "64, 32, 16, 8, [ ? ]", "answer": "4", "hint": "절반(/2)으로 줄어듭니다."},
+      {"id": "s_n_08", "sequence": "1, 2, 6, 24, [ ? ]", "answer": "120", "hint": "x2, x3, x4, x5로 곱하는 수가 커집니다 (24 x 5)."},
+      {"id": "s_n_09", "sequence": "10, 11, 13, 16, 20, [ ? ]", "answer": "25", "hint": "차이가 +1, +2, +3, +4, +5 입니다."},
+      {"id": "s_n_10", "sequence": "4, 9, 16, 25, 36, [ ? ]", "answer": "49", "hint": "7 x 7 = 49 (제곱수)"}
     ],
     "hard": [
-      { "id": "s_h_01", "sequence": "2, 3, 5, 7, 11, 13, [ ? ]", "answer": "17", "hint": "1과 자기 자신으로만 나누어떨어지는 '소수(Prime Number)'입니다." },
-      { "id": "s_h_02", "sequence": "1, 8, 27, 64, [ ? ]", "answer": "125", "hint": "세제곱수(1^3, 2^3, 3^3, 4^3, 5^3=125)입니다." },
-      { "id": "s_h_03", "sequence": "2, 5, 11, 23, 47, [ ? ]", "answer": "95", "hint": "x2 + 1 규칙 (47 x 2 + 1) 입니다." },
-      { "id": "s_h_04", "sequence": "3, 5, 9, 17, 33, [ ? ]", "answer": "65", "hint": "차이가 +2, +4, +8, +16, +32로 2배씩 늘어납니다." },
-      { "id": "s_h_05", "sequence": "1, 2, 5, 14, 41, [ ? ]", "answer": "122", "hint": "x3 - 1 규칙 (41 x 3 - 1) 입니다." },
-      { "id": "s_h_06", "sequence": "13, 17, 19, 23, 29, [ ? ]", "answer": "31", "hint": "연속된 소수(Prime number) 수열입니다." },
-      { "id": "s_h_07", "sequence": "1, 4, 10, 22, 46, [ ? ]", "answer": "94", "hint": "x2 + 2 규칙 (46 x 2 + 2) 입니다." },
-      { "id": "s_h_08", "sequence": "0, 1, 1, 2, 3, 5, 8, 13, 21, [ ? ]", "answer": "34", "hint": "13 + 21 = 34 (피보나치 수열)" },
-      { "id": "s_h_09", "sequence": "2, 6, 12, 20, 30, [ ? ]", "answer": "42", "hint": "1x2, 2x3, 3x4, 4x5, 5x6, 6x7 = 42" },
-      { "id": "s_h_10", "sequence": "1, 2, 4, 7, 12, 20, 33, [ ? ]", "answer": "54", "hint": "앞의 두 수의 합에 1을 더하는 레오나르도 수열 (20+33+1=54)" }
+      {"id": "s_h_01", "sequence": "2, 3, 5, 7, 11, 13, [ ? ]", "answer": "17", "hint": "1과 자기 자신으로만 나누어떨어지는 '소수(Prime Number)'입니다."},
+      {"id": "s_h_02", "sequence": "1, 8, 27, 64, [ ? ]", "answer": "125", "hint": "세제곱수(1^3, 2^3, 3^3, 4^3, 5^3=125)입니다."},
+      {"id": "s_h_03", "sequence": "2, 5, 11, 23, 47, [ ? ]", "answer": "95", "hint": "x2 + 1 규칙 (47 x 2 + 1) 입니다."},
+      {"id": "s_h_04", "sequence": "3, 5, 9, 17, 33, [ ? ]", "answer": "65", "hint": "차이가 +2, +4, +8, +16, +32로 2배씩 늘어납니다."},
+      {"id": "s_h_05", "sequence": "1, 2, 5, 14, 41, [ ? ]", "answer": "122", "hint": "x3 - 1 규칙 (41 x 3 - 1) 입니다."},
+      {"id": "s_h_06", "sequence": "13, 17, 19, 23, 29, [ ? ]", "answer": "31", "hint": "연속된 소수(Prime number) 수열입니다."},
+      {"id": "s_h_07", "sequence": "1, 4, 10, 22, 46, [ ? ]", "answer": "94", "hint": "x2 + 2 규칙 (46 x 2 + 2) 입니다."},
+      {"id": "s_h_08", "sequence": "0, 1, 1, 2, 3, 5, 8, 13, 21, [ ? ]", "answer": "34", "hint": "13 + 21 = 34 (피보나치 수열)"},
+      {"id": "s_h_09", "sequence": "2, 6, 12, 20, 30, [ ? ]", "answer": "42", "hint": "1x2, 2x3, 3x4, 4x5, 5x6, 6x7 = 42"},
+      {"id": "s_h_10", "sequence": "1, 2, 4, 7, 12, 20, 33, [ ? ]", "answer": "54", "hint": "앞의 두 수의 합에 1을 더하는 레오나르도 수열 (20+33+1=54)"}
     ]
   }
 }

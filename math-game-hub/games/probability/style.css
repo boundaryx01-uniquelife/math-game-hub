@@ -690,3 +690,30 @@ body {
   padding-top: 12px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* ==========================================================================
+   고도화 (2026-11): 예측 막대를 손가락으로 끌기 쉽게 크게
+   ========================================================================== */
+.predict-sliders-container { --tw: 16px; --th: 110px; gap: 4px; padding: 14px 6px; }
+@media (min-width: 620px) { .predict-sliders-container { --tw: 28px; --th: 150px; gap: 6px; padding: 16px 10px; } }
+@media (min-width: 900px) { .predict-sliders-container { --tw: 34px; --th: 170px; } }
+.slider-track-v {
+  width: var(--tw); height: var(--th);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  touch-action: none;
+}
+.slider-fill { background: linear-gradient(to top, #0ea5e9, #7dd3fc); border-radius: 0 0 9px 9px; }
+.slider-v {
+  width: var(--th); height: var(--tw);
+  transform: rotate(-90deg) translate(calc(-1 * var(--th)), 0);
+  margin: 0; touch-action: none;
+}
+.slot-label { font-size: 0.8rem; }
+.pred-val { font-size: 0.8rem; }
+.predict-summary-row { flex-wrap: wrap; gap: 12px; }
+.btn-pill { min-height: 44px; padding-left: 16px; padding-right: 16px; }
+.btn-icon { min-width: 48px; min-height: 48px; }
+.sim-control-bar { flex-wrap: wrap; gap: 12px; }
+.canvas-wrapper canvas, #galton-canvas { max-width: 100%; height: auto; }

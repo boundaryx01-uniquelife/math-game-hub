@@ -3,6 +3,20 @@
  * 60초 긴박한 타이머 + 무한 수열 생성기 + 콤보 시스템 + 넘버패드 지원
  */
 
+// ---- 도우미 스크립트 로딩 (file:// 에서도 동작하도록 <script> 태그 주입) ----
+const SCRIPT_BASE = (document.currentScript && document.currentScript.src) || location.href;
+const assistReady = window.MathAssist ? Promise.resolve(true) : new Promise((resolve) => {
+  try {
+    const sc = document.createElement('script');
+    sc.src = new URL('../../shared/assist.js', SCRIPT_BASE).href;
+    sc.onload = () => resolve(true);
+    sc.onerror = () => resolve(false);
+    document.head.appendChild(sc);
+  } catch (e) {
+    resolve(false);
+  }
+});
+
 // 오디오 사운드 신디사이저
 class VaultAudio {
   constructor() {
@@ -114,7 +128,8 @@ const gameState = {
   maxCombo: 0,
   solvedCount: 0,
   currentInput: '',
-  currentQuestion: null
+  currentQuestion: null,
+  masterKeyUsed: 0
 };
 
 // 허브 연동 닉네임 및 학년 난이도 로드
@@ -142,10 +157,10 @@ diffButtons.forEach(btn => {
 });
 
 // 스피드런 시작
-btnStart.addEventListener('click', () => {
+btnStart.addEventListener('click', async () => {
   const name = inputPlayerName.value.trim();
   if (!name) {
-    alert('요원 이름을 입력해주세요!');
+    window.MathHubUI.toast('요원 이름을 입력해 주세요!', 'warn');
     inputPlayerName.focus();
     return;
   }
@@ -154,6 +169,7 @@ btnStart.addEventListener('click', () => {
   localStorage.setItem('math_hub_current_player', name);
 
   audio.init();
+  await assistReady; // 힌트/풀이 도우미 로딩 대기 (보통 이미 끝나 있음)
 
   // 초기화
   gameState.score = 0;
@@ -162,6 +178,7 @@ btnStart.addEventListener('click', () => {
   gameState.solvedCount = 0;
   gameState.timeLeft = 60.0;
   gameState.currentInput = '';
+  gameState.masterKeyUsed = 0;
 
   displayName.textContent = name;
   displayCombo.textContent = '0 COMBO';
@@ -197,9 +214,8 @@ function startTimer() {
   }, 100);
 }
 
-// 무한 수열 문제 생성기
-function generateNewQuestion() {
-  const d = gameState.difficulty;
+// 무한 수열 문제 생성기: 난이도별 규칙(kind)을 골라 {title, terms, answer, kind} 를 만듦
+function buildQuestion(d) {
   let q;
 
   if (d === 'easy') {
@@ -215,7 +231,7 @@ function generateNewQuestion() {
         title: '등차수열 규칙',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: `${step}씩 커지는 규칙입니다.`
+        kind: 'arith' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     } else if (type === 'sub') {
       const step = Math.floor(Math.random() * 5) + 2; // -2 ~ -6
@@ -225,7 +241,7 @@ function generateNewQuestion() {
         title: '감소 등차수열',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: `${step}씩 작아지는 규칙입니다.`
+        kind: 'arith' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     } else {
       // mul
@@ -236,7 +252,7 @@ function generateNewQuestion() {
         title: '등비수열 규칙',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: `${factor}배씩 곱해지는 규칙입니다.`
+        kind: 'geom' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     }
   } else if (d === 'normal') {
@@ -255,7 +271,7 @@ function generateNewQuestion() {
         title: '피보나치 수열',
         terms: [start1, start2, t3, t4, t5],
         answer: t6,
-        hint: '앞의 두 수를 더하면 다음 수가 됩니다.'
+        kind: 'fib' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     } else if (type === 'sq') {
       const offset = Math.floor(Math.random() * 5) + 1;
@@ -270,7 +286,7 @@ function generateNewQuestion() {
         title: '제곱수 규칙',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: `${offset + 4} x ${offset + 4} 를 계산하세요.`
+        kind: 'squares' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     } else {
       // diff (+1, +2, +3... or +2, +4, +6...)
@@ -285,7 +301,7 @@ function generateNewQuestion() {
         title: '계차수열 규칙',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: `차이가 +${baseStep}, +${baseStep*2}, +${baseStep*3}... 로 늘어납니다.`
+        kind: 'diffarith' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     }
   } else {
@@ -300,7 +316,7 @@ function generateNewQuestion() {
         title: '소수(Prime Number) 수열',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: '1과 자기 자신으로만 나누어지는 소수입니다.'
+        kind: 'primes' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     } else if (type === 'cube') {
       const terms = [1, 8, 27, 64, 125];
@@ -308,7 +324,7 @@ function generateNewQuestion() {
         title: '세제곱수 규칙',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: '5 x 5 x 5 = ?'
+        kind: 'cubes' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     } else {
       // 2a_n + 1
@@ -322,11 +338,32 @@ function generateNewQuestion() {
         title: '복합 점화식 (x2 + 1)',
         terms: terms.slice(0, 4),
         answer: terms[4],
-        hint: '2를 곱하고 1을 더해보세요.'
+        kind: 'affine' // 힌트1/힌트2/풀이는 shared/assist.js 가 규칙(kind)과 항에서 만들어 줍니다
       };
     }
   }
 
+  return withAssist(q);
+}
+
+// 규칙(kind)과 보이는 항(terms)에서 힌트 1/2 와 풀이를 붙임 (answer 가 규칙 계산 결과와 같은지 확인)
+function withAssist(q) {
+  const A = (typeof window !== 'undefined' && window.MathAssist) || null;
+  const info = A ? A.seq.info(q.terms, q.kind, q.answer) : null;
+  if (info && Number(info.answer) === Number(q.answer)) {
+    q.hint1 = info.hint1;
+    q.hint2 = info.hint2;
+    q.explain = info.explain;
+  } else {
+    q.hint1 = '이웃한 두 수의 차이나 곱하는 수를 살펴보세요.';
+    q.hint2 = '앞의 수에서 뒤의 수로 가는 계산이 무엇인지 처음 두 수로 찾아보세요.';
+    q.explain = [`규칙(${q.title})에 따라 계산하면 정답은 ${q.answer}입니다.`];
+  }
+  return q;
+}
+
+function generateNewQuestion() {
+  const q = buildQuestion(gameState.difficulty);
   gameState.currentQuestion = q;
   renderQuestion(q);
 }
@@ -334,7 +371,8 @@ function generateNewQuestion() {
 // 문제 렌더링
 function renderQuestion(q) {
   qCategoryBadge.textContent = q.title;
-  sequenceHint.textContent = q.hint;
+  ensureHints();
+  if (hintStager) hintStager.set(q.hint1, q.hint2);
 
   sequenceNumbers.innerHTML = '';
   q.terms.forEach(num => {
@@ -353,9 +391,24 @@ function renderQuestion(q) {
   updateInputDisplay();
 }
 
+// 힌트 2단계: #sequence-hint 에는 평소 안내 문구, 힌트 버튼은 JS가 만들어 그 뒤에 붙임
+let hintStager = null;
+const SEQ_IDLE_HINT = sequenceHint.textContent;
+function ensureHints() {
+  if (hintStager || !window.MathAssist) return;
+  hintStager = window.MathAssist.createHints({
+    content: sequenceHint,
+    openText: '💡 힌트 보기',
+    closeText: '🔒 힌트 닫기',
+    idleText: SEQ_IDLE_HINT,
+    alwaysVisible: true,
+    noFocusSteal: true // 숫자/Enter 키 입력이 버튼에 가로채이지 않도록
+  });
+}
+
 // 입력값 화면 갱신
 
-// 관리자 코드 (정답 처리용): 입력 중에는 마스킹 표시
+// 마스터 키 (정답+풀이 패널 열기용): 입력 중에는 마스킹 표시
 const ADMIN_CODE = '8680';
 const isAdminPrefix = v => v.length > 0 && ADMIN_CODE.startsWith(v);
 function updateInputDisplay() {
@@ -384,6 +437,7 @@ numpadButtons.forEach(btn => {
 // 키보드 입력 지원
 window.addEventListener('keydown', (e) => {
   if (screenGame.classList.contains('hidden')) return;
+  if (window.MathAssist && window.MathAssist.isPanelOpen()) return;
 
   if (e.key >= '0' && e.key <= '9') {
     if (gameState.currentInput.length < 6) {
@@ -407,10 +461,18 @@ btnSubmitAnswer.addEventListener('click', submitAnswer);
 function submitAnswer() {
   if (!gameState.currentInput) return;
 
+  if (window.MathAssist && window.MathAssist.isPanelOpen()) return;
+
+  // 마스터 키: 점수 없이 "정답 + 풀이" 패널을 보여주고, 닫으면 다음 문제로
+  if (gameState.currentInput === ADMIN_CODE) {
+    openMasterPanel();
+    return;
+  }
+
   const userAns = parseInt(gameState.currentInput, 10);
   const correctAns = gameState.currentQuestion.answer;
 
-  if (userAns === correctAns || gameState.currentInput === ADMIN_CODE) {
+  if (userAns === correctAns) {
     // 정답!
     gameState.combo++;
     gameState.solvedCount++;
@@ -458,6 +520,35 @@ function submitAnswer() {
   }
 }
 
+// 마스터 키 패널
+// - 패널이 열려 있는 동안 60초 타이머를 멈추고, "다음 문제로"를 누르면 남은 시간부터 다시 흐름 (읽는 시간으로 손해 보지 않음)
+// - 학생이 푼 것이 아니므로 점수/풀이 수는 올리지 않고, 콤보는 끊지도 올리지도 않음. 다음 문제로 넘어감
+// - 기록(허브 랭킹)에는 masterKeyUsed(사용 횟수)를 함께 저장
+function openMasterPanel() {
+  gameState.currentInput = '';
+  updateInputDisplay();
+  if (!window.MathAssist) {
+    feedbackPop.textContent = '❌ 도우미 스크립트를 불러오지 못해 마스터 키를 쓸 수 없습니다.';
+    feedbackPop.className = 'feedback-pop wrong';
+    return;
+  }
+  const q = gameState.currentQuestion;
+  gameState.masterKeyUsed = (gameState.masterKeyUsed || 0) + 1;
+  clearInterval(gameState.timerInterval);
+  window.MathAssist.showPanel({
+    answer: q.answer,
+    steps: q.explain,
+    note: '마스터 키를 사용했어요. 이 창이 열려 있는 동안 시간은 멈춰 있고, 이 문제는 점수에 들어가지 않아요.',
+    nextLabel: '다음 문제로',
+    onNext: () => {
+      feedbackPop.textContent = '🔑 마스터 키로 넘어갔어요 (점수 없음)';
+      feedbackPop.className = 'feedback-pop';
+      generateNewQuestion();
+      if (gameState.timeLeft > 0) startTimer();
+    }
+  });
+}
+
 // 게임 종료
 function finishGame() {
   screenGame.classList.add('hidden');
@@ -481,7 +572,8 @@ function finishGame() {
     score: gameState.score,
     clearTimeFormatted: `${gameState.score.toLocaleString()}점`,
     clearTimeSeconds: 100000 - gameState.score, // 점수 내림차순 정렬용
-    timestamp: Date.now()
+    timestamp: Date.now(),
+    ...(gameState.masterKeyUsed ? { masterKeyUsed: gameState.masterKeyUsed } : {})
   });
 }
 

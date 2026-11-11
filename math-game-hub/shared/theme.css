@@ -1,0 +1,243 @@
+/* ==========================================================================
+   공통 테마 (모든 페이지의 개별 style.css 뒤에 불러옵니다)
+   - 인터넷 없이도 같은 모양: 외부 웹폰트 대신 기기 내장 한글 글꼴 사용
+   - 태블릿 터치 기준: 버튼·입력칸 최소 48px, 본문 글자 확대
+   - 접근성: 키보드 포커스 표시, 동작 줄이기 설정 존중, 대비 보강
+   ========================================================================== */
+
+:root {
+  --font-main: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
+    "Noto Sans CJK KR", -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  --font-mono: "Share Tech Mono", ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono",
+    Menlo, Consolas, "Noto Sans Mono CJK KR", monospace;
+  --text-muted: #a9b6c9;            /* 어두운 배경 위 보조 글자 대비 보강 */
+  --touch: 48px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --focus-ring: 0 0 0 3px rgba(9, 13, 22, 0.9), 0 0 0 6px var(--primary, #38bdf8);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100dvh;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+  -webkit-tap-highlight-color: transparent;
+  padding-bottom: calc(24px + var(--safe-b));
+}
+
+/* 태블릿에서는 한 단계 큰 글자 */
+@media (min-width: 700px) {
+  html { font-size: 17px; }
+}
+@media (min-width: 1100px) {
+  html { font-size: 18px; }
+}
+
+/* ---------- 포커스 · 터치 ---------- */
+.hidden { display: none !important; }
+
+/* 입력칸은 각 페이지의 자체 포커스 테두리를 쓰고, 그 밖의 요소에만 포커스 링 표시 */
+:focus-visible:not(input):not(textarea) {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+button, .btn, a.btn, [role="button"], .btn-hub-back, .btn-diff, .btn-pill,
+.rank-tab-btn, .btn-grade-opt, .btn-num {
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.btn, a.btn {
+  min-height: var(--touch);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  line-height: 1.25;
+}
+.btn-sm { min-height: 44px; padding: 8px 16px; font-size: 0.9rem; }
+.btn:active, .btn-num:active, .btn-diff:active { transform: scale(0.97); }
+.btn[disabled], .btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
+
+/* 입력칸: 16px 미만이면 iPad가 화면을 확대하므로 고정 */
+input[type="text"], input[type="number"], input[type="password"], input:not([type]) {
+  font-size: max(1rem, 16px);
+  min-height: var(--touch);
+}
+::placeholder { color: #8493a8; opacity: 1; }
+
+/* ---------- 게임 페이지 공통 ---------- */
+.game-nav-bar {
+  max-width: 920px;
+  padding: 12px 16px;
+  gap: 12px;
+}
+.btn-hub-back {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+.game-badge, .omega-badge { font-size: 0.8rem; }
+
+.app-container { max-width: 880px; }
+.app-header { margin-bottom: 16px; }
+.main-title { letter-spacing: -0.01em; text-wrap: balance; }
+.subtitle, .game-desc, .room-desc, .gate-desc, .intro-desc { text-wrap: pretty; }
+
+/* 문제를 푸는 동안에는 큰 제목을 접어 문제와 입력칸이 한 화면에 들어오게 */
+body.is-playing .app-header { display: none; }
+body.is-playing .game-nav-bar { padding-top: 8px; padding-bottom: 8px; }
+
+/* 힌트 버튼: 글자 링크처럼 보이던 것을 누를 수 있는 버튼 모양으로 */
+.btn-hint-toggle {
+  min-height: 44px;
+  padding: 8px 16px;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+}
+.btn-hint-toggle:hover { background: rgba(245, 158, 11, 0.2); }
+.hint-content { font-size: 1rem; line-height: 1.6; padding: 12px 16px; border-radius: 10px; }
+
+.feedback-msg { font-size: 1rem; min-height: 1.6em; }
+.status-bar, .omega-status-bar, .vault-status-bar { flex-wrap: wrap; row-gap: 6px; }
+
+/* 정답 입력 + 확인 버튼: 좁은 화면에서는 세로로 */
+@media (max-width: 560px) {
+  .input-with-btn { flex-direction: column; }
+  .input-with-btn .btn { width: 100%; }
+}
+
+/* 난이도 버튼 */
+.btn-diff { min-height: 64px; }
+
+/* ---------- 모달 ---------- */
+.modal { padding: 16px; }
+.modal-content {
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.btn-modal-close {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- 알림(토스트) ---------- */
+.mh-toast-wrap {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + var(--safe-b));
+  transform: translateX(-50%);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  pointer-events: none;
+  width: min(92vw, 520px);
+}
+.mh-toast {
+  background: #0f1a2e;
+  color: #f8fafc;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+  animation: mh-toast-in 0.2s ease-out;
+  text-align: center;
+}
+.mh-toast.is-warn { border-color: rgba(245, 158, 11, 0.7); }
+.mh-toast.is-ok { border-color: rgba(16, 185, 129, 0.7); }
+@keyframes mh-toast-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- 확인 대화상자 ---------- */
+.mh-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 2900;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(3, 6, 12, 0.72);
+  backdrop-filter: blur(4px);
+}
+.mh-dialog-card {
+  width: min(100%, 440px);
+  background: #101a2c;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+  color: #f8fafc;
+}
+.mh-dialog-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.mh-dialog-card p { color: var(--text-muted); margin-bottom: 16px; }
+.mh-dialog-card input {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font-family: inherit;
+}
+.mh-dialog-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+.mh-dialog-actions button {
+  min-height: var(--touch);
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mh-dialog-actions button.is-primary {
+  background: #0ea5e9;
+  border-color: #0ea5e9;
+  color: #04121f;
+}
+.mh-dialog-actions button.is-danger {
+  background: #b91c1c;
+  border-color: #ef4444;
+}
+
+/* ---------- 동작 줄이기 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  .mh-toast-wrap, .mh-dialog { display: none !important; }
+}

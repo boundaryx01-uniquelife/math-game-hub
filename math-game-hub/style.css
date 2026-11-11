@@ -690,3 +690,139 @@ body {
     padding: 20px 16px;
   }
 }
+
+/* ==========================================================================
+   허브 고도화 (2026-11): 참가자 바 · 진행 표시 · 학습 자료 · 랭킹
+   ========================================================================== */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+.hub-container { max-width: 1120px; gap: 24px; }
+.hub-title { font-size: clamp(1.8rem, 4.2vw, 2.8rem); letter-spacing: -0.02em; text-wrap: balance; }
+.hub-subtitle { font-size: clamp(1rem, 2vw, 1.15rem); }
+
+/* 참가자 바 */
+.player-bar-card {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px 24px; flex-wrap: wrap; padding: 18px 22px;
+}
+.player-now { display: flex; align-items: center; gap: 14px; flex: 1 1 340px; min-width: 0; }
+.player-avatar {
+  width: 52px; height: 52px; flex: none; border-radius: 50%;
+  display: grid; place-items: center; font-size: 1.5rem;
+  background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.4);
+}
+.player-now-text { min-width: 0; flex: 1; }
+.player-now-label { display: block; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+.player-input-group { flex-wrap: wrap; justify-content: flex-start; }
+.player-input-group input { flex: 1 1 160px; min-width: 0; font-weight: 700; }
+.hub-action-buttons { justify-content: flex-end; flex: 0 1 auto; }
+.btn-accent { background: #f59e0b; color: #1b1203; border: 1px solid #f59e0b; font-weight: 800; }
+.btn-accent:hover { background: #fbbf24; }
+
+/* 진행 표시 */
+.progress-strip {
+  background: var(--bg-card); border: 1px solid var(--bg-card-border);
+  border-radius: 20px; padding: 18px 22px;
+}
+.progress-steps { list-style: none; display: flex; align-items: flex-start; gap: 0; }
+.p-step { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; min-width: 0; }
+.p-step + .p-step::before {
+  content: ""; position: absolute; top: 19px; right: 50%; width: 100%; height: 3px;
+  background: rgba(255, 255, 255, 0.14); z-index: 0;
+}
+.p-step.is-done + .p-step::before { background: var(--success); }
+.p-dot {
+  position: relative; z-index: 1; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; font-weight: 800; font-family: var(--font-mono);
+  background: #131c2e; border: 2px solid rgba(255, 255, 255, 0.22); color: var(--text-muted);
+}
+.p-name { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); text-align: center; }
+.p-step.is-done .p-dot { background: var(--success); border-color: var(--success); color: #032017; font-size: 0; }
+.p-step.is-done .p-dot::after { content: "✓"; font-size: 1.2rem; }
+.p-step.is-done .p-name { color: #a7f3d0; }
+.p-step.is-next .p-dot { border-color: var(--primary); color: #fff; box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.2); }
+.p-step.is-next .p-name { color: #fff; }
+.p-step-omega.is-hidden-step { opacity: 0.45; }
+.p-step-omega.is-next .p-dot { border-color: #c084fc; box-shadow: 0 0 0 5px rgba(192, 132, 252, 0.22); }
+.progress-msg { margin-top: 14px; text-align: center; font-weight: 700; color: #e2e8f0; }
+
+/* 게임 카드 */
+.games-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.game-card { padding: 24px 22px; }
+.game-icon { font-size: 2.8rem; line-height: 1.1; margin-bottom: 10px; }
+.game-name { font-size: 1.35rem; }
+.game-desc { font-size: 1rem; line-height: 1.6; }
+.btn-play { min-height: 56px; font-size: 1.05rem; margin-top: auto; }
+.game-status-tag { font-size: 0.8rem; padding: 5px 12px; }
+.game-status-tag.done { background: rgba(16, 185, 129, 0.16); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); }
+.card-done { border-color: rgba(16, 185, 129, 0.45); }
+.card-locked { opacity: 0.7; }
+.card-locked .btn-play { cursor: not-allowed; }
+@media (hover: none) {
+  .game-card.card-active:hover { transform: none; }
+}
+
+/* 오메가 카드 (기존에 버튼 스타일이 빠져 있던 부분) */
+.card-omega { border-color: rgba(192, 132, 252, 0.45); background: linear-gradient(160deg, rgba(40, 22, 66, 0.85), rgba(15, 12, 28, 0.9)); }
+.card-omega .game-icon { color: #e9d5ff; font-family: Georgia, "Times New Roman", serif; }
+.game-status-tag.omega { background: rgba(192, 132, 252, 0.16); color: #e9d5ff; border: 1px solid rgba(192, 132, 252, 0.5); }
+.text-purple { color: #e9d5ff; }
+.tag-omega { background: rgba(192, 132, 252, 0.14); color: #e9d5ff; border-color: rgba(192, 132, 252, 0.35); }
+.btn-omega {
+  background: linear-gradient(135deg, #a855f7, #7c3aed); color: #fff; border: none;
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.35);
+}
+.btn-omega:hover { filter: brightness(1.1); }
+.btn-large { min-height: 56px; padding: 14px 22px; font-size: 1.05rem; }
+.invitation-actions .btn { width: 100%; }
+
+/* 학습 자료 */
+.resources-section { display: flex; flex-direction: column; gap: 16px; }
+.resource-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+.resource-card {
+  display: flex; align-items: center; gap: 14px; min-height: 76px; padding: 14px 16px;
+  background: rgba(18, 26, 43, 0.6); border: 1px solid var(--bg-card-border); border-radius: 16px;
+  color: var(--text-main); text-decoration: none; text-align: left; font: inherit; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.resource-card:hover { border-color: var(--primary); background: var(--bg-card-hover); }
+.r-icon {
+  width: 46px; height: 46px; flex: none; display: grid; place-items: center; font-size: 1.5rem;
+  border-radius: 12px; background: rgba(255, 255, 255, 0.06);
+}
+.r-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.r-body strong { font-size: 1rem; }
+.r-body span { font-size: 0.85rem; color: var(--text-muted); }
+
+/* 랭킹 */
+.rank-tabs { flex-wrap: wrap; }
+.rank-tab-btn { min-height: 44px; padding: 8px 16px; font-size: 0.9rem; }
+.ranking-table th, .ranking-table td { padding: 12px 10px; }
+.rank-name { font-weight: 700; color: #fff; }
+.rank-record { font-family: var(--font-mono); font-weight: 700; color: var(--primary); white-space: nowrap; }
+.rank-date { font-size: 0.8rem; color: var(--text-muted); white-space: nowrap; }
+.rank-empty { padding: 28px 12px !important; color: var(--text-muted); }
+.rank-me { background: rgba(56, 189, 248, 0.12); }
+.rank-me .rank-name::after { content: " (나)"; color: var(--primary); font-size: 0.8rem; }
+.diff-easy { color: #4ade80; } .diff-normal { color: #38bdf8; } .diff-hard { color: #f87171; }
+#modal-rankings .modal-footer { flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+.rank-note { font-size: 0.85rem; color: var(--text-muted); flex: 1 1 240px; }
+.rank-note a { color: var(--primary); }
+.modal-footer-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.hub-footer { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.btn-staff-link {
+  margin-top: 8px; min-height: 44px; padding: 8px 14px; background: none; border: none;
+  color: #7c8aa0; font: inherit; font-size: 0.8rem; text-decoration: underline; cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .hub-action-buttons { justify-content: stretch; width: 100%; }
+  .hub-action-buttons .btn { flex: 1 1 auto; }
+  .p-name { font-size: 0.75rem; }
+  .ranking-table th:nth-child(5), .ranking-table td:nth-child(5) { display: none; }
+}
+.modal-footer .btn { padding: 10px 20px; white-space: nowrap; border-radius: 12px; }

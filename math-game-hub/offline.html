@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#090d16" />
+  <title>오프라인 사용 안내 | 수학 게임 허브</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <style>
+    :root { --bg:#090d16; --card:#121a2b; --line:rgba(255,255,255,.12); --text:#f8fafc; --muted:#a3b1c6;
+      --primary:#38bdf8; --ok:#34d399; --warn:#fbbf24; --bad:#f87171; }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin:0; background:var(--bg); color:var(--text); line-height:1.65; font-size:18px;
+      font-family:'Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',system-ui,sans-serif; word-break:keep-all; }
+    .wrap { max-width:860px; margin:0 auto; padding:16px 16px 56px; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
+    h1 { font-size:1.6rem; margin:8px 0; }
+    h2 { font-size:1.3rem; margin:0 0 10px; }
+    h3 { font-size:1.08rem; margin:18px 0 6px; color:var(--primary); }
+    p { margin:6px 0; }
+    a { color:var(--primary); }
+    .back, button, .btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:48px; padding:10px 18px;
+      border-radius:12px; border:1px solid var(--line); background:#1b2640; color:var(--text); font:inherit; font-weight:700; text-decoration:none; cursor:pointer; }
+    .btn.primary, button.primary { background:var(--primary); color:#04202c; border-color:transparent; }
+    button.danger { background:#3a1a1f; border-color:#7f2a35; color:#fecaca; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin:16px 0; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; }
+    .stat { background:#0d1424; border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+    .stat .k { font-size:.85rem; color:var(--muted); }
+    .stat .v { font-size:1.25rem; font-weight:800; }
+    .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+    progress { width:100%; height:14px; margin-top:8px; accent-color:var(--ok); }
+    ol, ul { padding-left:1.3em; margin:6px 0; }
+    li { margin:4px 0; }
+    .tag { display:inline-block; font-size:.8rem; padding:2px 10px; border-radius:99px; background:#16324a; color:#7dd3fc; margin-left:6px; vertical-align:middle; }
+    .note { background:#2a2410; border:1px solid #6b5a14; border-radius:12px; padding:12px 14px; margin:12px 0; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px; }
+    details { border-top:1px solid var(--line); padding:8px 0; }
+    summary { cursor:pointer; font-weight:700; min-height:40px; display:flex; align-items:center; }
+    code { background:#0d1424; padding:1px 6px; border-radius:6px; font-size:.92em; word-break:break-all; }
+    #backup-msg { min-height:1.6em; margin-top:10px; font-weight:700; }
+    @media print { body { background:#fff; color:#000; } .card,.stat { background:#fff; border-color:#999; } button,.back{display:none} }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>📶 오프라인 사용 안내</h1>
+    <a class="back" href="index.html">← 허브로 돌아가기</a>
+  </header>
+  <p>인터넷이 없는 행사장에서도 게임을 실행하고 순위를 기록하는 방법입니다. <strong>행사 전날, 인터넷이 되는 곳에서 미리 준비</strong>해 주세요.</p>
+
+  <section class="card" aria-live="polite">
+    <h2>현재 상태</h2>
+    <div class="grid">
+      <div class="stat"><div class="k">네트워크</div><div class="v" id="st-net">확인 중…</div></div>
+      <div class="stat"><div class="k">오프라인 준비</div><div class="v" id="st-ready">확인 중…</div></div>
+      <div class="stat"><div class="k">앱 설치 상태</div><div class="v" id="st-app">확인 중…</div></div>
+      <div class="stat"><div class="k">저장된 순위 기록</div><div class="v" id="st-count">0개</div></div>
+    </div>
+    <progress id="st-progress" max="100" value="0" hidden></progress>
+    <p id="st-detail" style="color:var(--muted);font-size:.95rem"></p>
+    <div class="row">
+      <button class="primary" id="btn-install" hidden>📲 앱으로 설치하기</button>
+      <button id="btn-update">🔄 새 버전 확인</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>방법 1. 앱으로 설치 <span class="tag">추천</span></h2>
+    <p>한 번 설치해 두면 인터넷 없이도 홈 화면 아이콘으로 바로 열립니다. 태블릿(iPad, 갤럭시탭 등)에서는 이 방법을 쓰세요.</p>
+    <ol>
+      <li><strong>인터넷이 되는 곳</strong>에서 이 사이트를 엽니다. (QR 코드 또는 주소 입력)</li>
+      <li>위 <strong>“오프라인 준비”</strong>가 <span class="ok">✅ 준비 완료</span>로 바뀔 때까지 잠시 기다립니다. (보통 수 초)</li>
+      <li>아래 방법으로 <strong>홈 화면에 추가 / 설치</strong>합니다.</li>
+      <li>와이파이를 끄고(비행기 모드) 설치된 아이콘으로 열어 <strong>정상 실행되는지 꼭 확인</strong>합니다.</li>
+    </ol>
+
+    <h3>안드로이드 (Chrome)</h3>
+    <ol>
+      <li>오른쪽 위 <strong>⋮ 메뉴</strong> → <strong>앱 설치</strong> (또는 <strong>홈 화면에 추가</strong>)</li>
+      <li>위의 “앱으로 설치하기” 버튼이 보이면 그것을 눌러도 됩니다.</li>
+    </ol>
+    <h3>아이패드 / 아이폰 (Safari)</h3>
+    <ol>
+      <li><strong>Safari</strong>로 엽니다. (다른 브라우저 앱에서는 홈 화면 추가가 제한될 수 있습니다)</li>
+      <li>주소창 옆 <strong>공유 버튼(□↑)</strong> → <strong>홈 화면에 추가</strong> → <strong>추가</strong></li>
+      <li>설치 버튼은 Safari에서 나타나지 않습니다. 위 방법으로 직접 추가하세요.</li>
+    </ol>
+    <h3>윈도우 / 크롬북 (Chrome, Edge)</h3>
+    <ol>
+      <li>주소창 오른쪽의 <strong>설치 아이콘(⊕ 또는 모니터 모양)</strong> 클릭 → <strong>설치</strong></li>
+      <li>또는 <strong>⋮ / … 메뉴</strong> → <strong>앱 및 기능(또는 저장 및 공유)</strong> → <strong>이 사이트를 앱으로 설치</strong></li>
+    </ol>
+    <div class="note">
+      설치하지 않고 브라우저 탭으로만 써도, 한 번 “오프라인 준비 완료”가 되었다면 같은 브라우저에서 오프라인으로 열립니다.
+      다만 브라우저가 저장 공간을 정리하면 사라질 수 있으니 설치를 권장합니다.
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>방법 2. 내려받아 실행 <span class="tag">PC·크롬북</span></h2>
+    <ol>
+      <li>인터넷이 되는 곳에서 압축 파일을 내려받습니다:<br>
+        <a href="https://github.com/boundaryx01-uniquelife/math-game-hub/archive/refs/heads/main.zip" rel="noopener">https://github.com/boundaryx01-uniquelife/math-game-hub/archive/refs/heads/main.zip</a></li>
+      <li>압축을 풉니다. (<strong>폴더 안에서 바로 열지 말고 꼭 “모두 압축 풀기”</strong>)</li>
+      <li><code>math-game-hub-main/math-game-hub/index.html</code> 을 <strong>Chrome 또는 Edge</strong>로 엽니다.</li>
+    </ol>
+    <div class="note" id="file-note">
+      <strong>알아둘 점</strong>
+      <ul>
+        <li>이 방식은 <strong>PC·노트북·크롬북</strong>에서 현실적입니다. 아이패드/안드로이드 태블릿은 내려받은 HTML 파일을 브라우저에서 여는 과정이 번거롭고 제한이 많아 <strong>방법 1</strong>을 권장합니다.</li>
+        <li>파일로 직접 열면(<code>file://</code>) “앱 설치/오프라인 저장” 기능은 쓸 수 없지만, 파일 자체가 내 기기에 있으므로 인터넷 없이 열립니다.</li>
+        <li>Chrome에서는 파일 주소로 열면 보안 정책상 <code>data/cipher_bank.json</code> 불러오기가 막힙니다. 암호 게임은 <strong>내장 문제은행</strong>(또는 <code>data/cipher_bank.js</code>)으로 대신 동작하므로 문항 수가 적을 수 있습니다.</li>
+        <li>순위 기록은 열 때마다 <strong>같은 파일 경로로 열어야</strong> 유지됩니다. 폴더를 옮기거나 다른 브라우저로 열면 기록이 보이지 않을 수 있습니다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>순위 기록은 어디에 저장되나요?</h2>
+    <ul>
+      <li>순위는 <strong>이 태블릿(이 브라우저) 안에만</strong> 저장됩니다. 서버로 전송되지 않습니다.</li>
+      <li><strong>다른 태블릿과 공유되지 않습니다.</strong> 태블릿마다 순위가 따로입니다.</li>
+      <li><strong>브라우저의 “사이트 데이터/인터넷 사용 기록 삭제”</strong>를 하거나 <strong>시크릿(비공개) 창</strong>에서 플레이하면 기록이 사라집니다.</li>
+      <li>같은 기기라도 <strong>브라우저가 다르면</strong> 기록이 따로입니다. (예: Chrome 탭과 Safari 앱) 같은 브라우저, 같은 주소(주소가 바뀌면 다른 저장소)에서 연 탭과 설치된 앱은 보통 기록을 함께 씁니다. 단, <strong>iPad 홈 화면 앱은 Safari 탭과 저장소가 분리</strong>될 수 있으니 한 가지 방법만 쓰세요.</li>
+      <li>그래서 행사 전·후에 아래에서 <strong>백업 파일</strong>을 내려받아 두는 것을 권장합니다.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>순위 기록 백업</h2>
+    <p>저장된 기록: <strong id="bk-count">0</strong>개</p>
+    <div class="row">
+      <button class="primary" id="bk-json">⬇️ 내보내기 (JSON)</button>
+      <button id="bk-csv">⬇️ 내보내기 (CSV·엑셀)</button>
+      <button id="bk-import">⬆️ 가져오기</button>
+      <input type="file" id="bk-file" accept=".json,application/json" hidden />
+    </div>
+    <p style="color:var(--muted);font-size:.92rem">JSON은 다시 가져올 수 있는 백업용, CSV는 엑셀에서 열어 보는 용도입니다. 가져오기는 현재 기록에 <strong>합치며</strong>(같은 기록은 중복 제외) 기존 기록을 지우지 않습니다.</p>
+    <details>
+      <summary>기록 전체 삭제</summary>
+      <p>이 기기에 저장된 순위를 모두 지웁니다. 되돌릴 수 없으니 먼저 내보내기를 하세요.</p>
+      <button class="danger" id="bk-clear">🗑️ 모든 순위 기록 삭제</button>
+    </details>
+    <div id="backup-msg" role="status"></div>
+  </section>
+
+  <section class="card">
+    <h2>문제가 생겼을 때</h2>
+    <ul>
+      <li><strong>“오프라인 준비”가 계속 안 끝나요</strong> → 와이파이가 연결된 상태에서 페이지를 새로고침하고 1분 기다립니다. 그래도 안 되면 브라우저를 완전히 종료한 뒤 다시 엽니다.</li>
+      <li><strong>업데이트된 내용이 안 보여요</strong> → 인터넷이 되는 곳에서 “새 버전 확인”을 누르고 앱을 한 번 닫았다 엽니다.</li>
+      <li><strong>이 페이지의 “오프라인 준비”가 “지원 안 됨”으로 나와요</strong> → 파일로 열었거나(<code>file://</code>), 주소가 <code>https://</code>가 아닌 경우입니다. 방법 1은 <code>https://</code> 주소에서만 됩니다.</li>
+    </ul>
+  </section>
+</div>
+
+<script src="shared/records.js"></script>
+<script src="shared/pwa.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var P = window.MathHubPWA, R = window.MathHubRecords;
+
+  function setText(id, text, cls) { var el = $(id); el.textContent = text; el.className = 'v' + (cls ? ' ' + cls : ''); }
+
+  function renderCounts() {
+    var n = R ? R.count() : 0;
+    $('st-count').textContent = n + '개';
+    $('bk-count').textContent = n;
+  }
+
+  function render() {
+    renderCounts();
+    var online = navigator.onLine !== false;
+    setText('st-net', online ? '🟢 온라인' : '🔴 오프라인', online ? 'ok' : 'warn');
+    var s = P ? P.status() : null;
+    var prog = $('st-progress'), detail = $('st-detail');
+    if (!s || !s.supported) {
+      var why = s && s.reason === 'file' ? '파일로 직접 열어서 오프라인 저장 기능을 쓸 수 없습니다' :
+        s && s.reason === 'insecure' ? 'https:// 주소에서만 지원됩니다' : '이 브라우저는 지원하지 않습니다';
+      setText('st-ready', '지원 안 됨', 'warn'); setText('st-app', '—');
+      prog.hidden = true; detail.textContent = why + '.';
+      $('btn-install').hidden = true; $('btn-update').disabled = true;
+      return;
+    }
+    if (s.ready) {
+      setText('st-ready', '✅ 준비 완료', 'ok');
+      prog.hidden = true;
+      detail.textContent = '저장된 파일 ' + s.done + '개' + (s.version ? ' · 버전 ' + s.version : '') +
+        (s.missing.length ? ' · 없는 파일 ' + s.missing.length + '개는 건너뜀' : '') + '. 이제 인터넷 없이 열 수 있습니다.';
+    } else if (s.failed.length) {
+      setText('st-ready', '⚠️ 일부 실패', 'bad');
+      prog.hidden = true;
+      detail.textContent = '저장하지 못한 파일 ' + s.failed.length + '개. 인터넷이 연결된 상태에서 새로고침하세요.';
+    } else if (s.total) {
+      setText('st-ready', '⏳ 저장 중… ' + Math.round(s.done / s.total * 100) + '%', 'warn');
+      prog.hidden = false; prog.value = Math.round(s.done / s.total * 100);
+      detail.textContent = '인터넷 연결을 유지한 채 기다려 주세요. (' + s.done + ' / ' + s.total + ')';
+    } else {
+      setText('st-ready', '⏳ 준비 중…', 'warn'); prog.hidden = true;
+      detail.textContent = '처음 방문이면 잠시 후 저장이 시작됩니다.';
+    }
+    if (s.standalone) setText('st-app', '📲 앱으로 실행 중', 'ok');
+    else setText('st-app', s.installable ? '설치 가능' : '브라우저 탭', s.installable ? 'ok' : '');
+    $('btn-install').hidden = !s.installable;
+    $('btn-update').disabled = !online;
+  }
+
+  if (P) {
+    P.on('status', render).on('online', render).on('offline', render);
+    P.on('update', function () { $('st-detail').textContent = '새 버전이 적용되었습니다. 새로고침하면 반영됩니다.'; });
+  }
+  window.addEventListener('online', render);
+  window.addEventListener('offline', render);
+  window.addEventListener('storage', renderCounts);
+
+  $('btn-install').addEventListener('click', function () {
+    P.promptInstall().then(render);
+  });
+  $('btn-update').addEventListener('click', function () {
+    $('st-detail').textContent = '새 버전을 확인하는 중…';
+    P.checkForUpdate().then(function (ok) {
+      setTimeout(function () { render(); if (ok) $('st-detail').textContent += ' (확인 완료)'; }, 1500);
+    });
+  });
+
+  function msg(text, cls) { var m = $('backup-msg'); m.textContent = text; m.className = cls || ''; }
+
+  $('bk-json').addEventListener('click', function () {
+    var n = R.count();
+    if (!n) return msg('내보낼 기록이 없습니다.', 'warn');
+    R.exportJSON(); msg('JSON 파일로 ' + n + '개 기록을 내보냈습니다. (다운로드 폴더 확인)', 'ok');
+  });
+  $('bk-csv').addEventListener('click', function () {
+    var n = R.count();
+    if (!n) return msg('내보낼 기록이 없습니다.', 'warn');
+    R.exportCSV(); msg('CSV 파일로 ' + n + '개 기록을 내보냈습니다. 엑셀에서 열 수 있습니다.', 'ok');
+  });
+  $('bk-import').addEventListener('click', function () { $('bk-file').click(); });
+  $('bk-file').addEventListener('change', function (e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    R.importFile(f).then(function (r) {
+      msg('가져오기 완료: 새로 추가 ' + r.added + '개, 중복 ' + r.skipped + '개 건너뜀' + (r.invalid ? ', 형식 오류 ' + r.invalid + '개 제외' : '') + ' (총 ' + r.total + '개)', 'ok');
+      renderCounts();
+    }).catch(function (err) { msg('가져오기 실패: ' + err.message, 'bad'); });
+    e.target.value = '';
+  });
+  $('bk-clear').addEventListener('click', function () {
+    if (!R.count()) return msg('삭제할 기록이 없습니다.', 'warn');
+    if (confirm('이 기기의 모든 순위 기록을 삭제할까요? 되돌릴 수 없습니다.\n(먼저 내보내기를 해 두었는지 확인하세요)')) {
+      R.clear(); renderCounts(); msg('모든 순위 기록을 삭제했습니다.', 'ok');
+    }
+  });
+
+  render();
+  setInterval(renderCounts, 3000);
+})();
+</script>
+</body>
+</html>
