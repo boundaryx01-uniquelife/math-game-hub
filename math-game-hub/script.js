@@ -375,16 +375,8 @@ function initOfflineStatus() {
   if (!text) return;
   const show = () => {
     const pwa = window.MathHubPWA;
-    let ready = false;
-    try {
-      if (pwa) ready = typeof pwa.isOfflineReady === 'function' ? pwa.isOfflineReady() : !!pwa.offlineReady;
-    } catch (e) { ready = false; }
-    if (ready && typeof ready.then === 'function') {
-      ready.then(v => { if (v) text.textContent = '✅ 오프라인 준비 완료 · 설치 방법과 기록 백업'; }).catch(() => {});
-    } else if (ready) {
-      text.textContent = '✅ 오프라인 준비 완료 · 설치 방법과 기록 백업';
-    }
+    if (pwa && pwa.ready) text.textContent = '✅ 오프라인 준비 완료 · 설치 방법과 기록 백업';
   };
-  window.addEventListener('load', () => setTimeout(show, 1500));
-  ['mathhub:offline-ready', 'mathhubpwa:offlineready'].forEach(evt => window.addEventListener(evt, show));
+  window.addEventListener('mathhub:ready', show);
+  window.addEventListener('load', () => setTimeout(show, 1000));
 }

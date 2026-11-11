@@ -349,7 +349,7 @@ function buildQuestion(d) {
 // 규칙(kind)과 보이는 항(terms)에서 힌트 1/2 와 풀이를 붙임 (answer 가 규칙 계산 결과와 같은지 확인)
 function withAssist(q) {
   const A = (typeof window !== 'undefined' && window.MathAssist) || null;
-  const info = A ? A.seq.info(q.terms, q.kind) : null;
+  const info = A ? A.seq.info(q.terms, q.kind, q.answer) : null;
   if (info && Number(info.answer) === Number(q.answer)) {
     q.hint1 = info.hint1;
     q.hint2 = info.hint2;

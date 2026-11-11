@@ -277,18 +277,21 @@
    * 수열 정보 생성. terms = 화면에 보이는 앞부분 숫자들, kind = (선택) 생성기가 알고 있는 규칙 이름
    * 반환: { kind, answer, hint1, hint2, explain: [문장...] } 또는 규칙을 못 찾으면 null
    */
-  function seqInfo(terms, kind) {
+  function seqInfo(terms, kind, expected) {
     const T = terms.map(Number);
-    let found = null;
-    if (kind && detectors[kind]) {
-      const p = detectors[kind](T);
-      if (p) found = { kind, p };
+    // 후보 규칙: 지정된 kind → 자동 감지 순서. expected(정답)가 주어지면 그 정답을 만드는 규칙을 우선 선택
+    // (예: 3, 5, 9, 15 는 피보나치+1 처럼도 보이지만 실제 규칙은 계차수열)
+    const cands = (kind ? [kind] : []).concat(DETECT_ORDER).filter((k, i, a) => detectors[k] && a.indexOf(k) === i);
+    let first = null;
+    for (const k of cands) {
+      const p = detectors[k](T);
+      if (!p) continue;
+      const out = builders[k](T, p);
+      out.kind = k;
+      if (expected === undefined || expected === null || Number(out.answer) === Number(expected)) return out;
+      if (!first) first = out;
     }
-    if (!found) found = detectKind(T);
-    if (!found) return null;
-    const out = builders[found.kind](T, found.p);
-    out.kind = found.kind;
-    return out;
+    return first;
   }
 
   /* ------------------------------------------------------------------ *
@@ -369,8 +372,8 @@
 
   function cipherSeqInfo(q) {
     const terms = String(q.sequence).split('[')[0].split(',').map((s) => parseInt(s, 10)).filter((n) => !isNaN(n));
-    const r = seqInfo(terms);
-    if (r) return r;
+    const r = seqInfo(terms, q.kind, q.answer);
+    if (r && Number(r.answer) === Number(q.answer)) return r;
     return {
       answer: String(q.answer),
       hint1: '숫자 사이의 관계(차이나 곱하는 수)를 살펴보세요.',
@@ -539,8 +542,10 @@
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
     let done = false;
+    const openedAt = Date.now();
     next.addEventListener('click', () => {
-      if (done) return;
+      // 마스터 키를 Enter 로 제출한 키 입력이 곧바로 새 버튼을 눌러 버리는 것을 방지 (열린 직후 0.35초는 무시)
+      if (done || Date.now() - openedAt < 350) return;
       done = true;
       overlay.remove();
       if (opts.onNext) opts.onNext();

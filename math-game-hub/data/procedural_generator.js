@@ -135,6 +135,7 @@ const ProceduralGenerator = {
         type: 'sequence',
         sequence: `${terms[0]}, ${terms[1]}, ${terms[2]}, ${terms[3]}, [ ? ]`,
         answer: String(terms[4]),
+        kind: 'arith',
         hint: `${step}씩 커지는 등차수열입니다.`
       };
     } else if (difficulty === 'normal') {
@@ -152,6 +153,7 @@ const ProceduralGenerator = {
           type: 'sequence',
           sequence: `${s1}, ${s2}, ${t3}, ${t4}, ${t5}, [ ? ]`,
           answer: String(t6),
+          kind: 'fib',
           hint: `앞의 두 수를 더해보세요 (${t4} + ${t5} = ?)`
         };
       } else if (pick === 'sq') {
@@ -167,6 +169,7 @@ const ProceduralGenerator = {
           type: 'sequence',
           sequence: `${terms[0]}, ${terms[1]}, ${terms[2]}, ${terms[3]}, [ ? ]`,
           answer: String(terms[4]),
+          kind: 'squares',
           hint: `제곱수(${off + 4} x ${off + 4}) 규칙입니다.`
         };
       } else {
@@ -181,6 +184,7 @@ const ProceduralGenerator = {
           type: 'sequence',
           sequence: `${terms[0]}, ${terms[1]}, ${terms[2]}, ${terms[3]}, [ ? ]`,
           answer: String(terms[4]),
+          kind: 'diffarith',
           hint: `차이가 +${base}, +${base*2}, +${base*3}... 로 늘어납니다.`
         };
       }
@@ -193,6 +197,7 @@ const ProceduralGenerator = {
         type: 'sequence',
         sequence: `${terms[0]}, ${terms[1]}, ${terms[2]}, ${terms[3]}, [ ? ]`,
         answer: String(terms[4]),
+        kind: 'primes',
         hint: '1과 자기 자신으로만 나누어지는 소수(Prime Number)입니다.'
       };
     }
