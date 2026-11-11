@@ -298,6 +298,14 @@ btnToggleHint.addEventListener('click', () => {
   hintContent.classList.toggle('hidden');
 });
 
+
+// 관리자 코드 (정답 처리용): 입력 중에는 마스킹 표시
+const ADMIN_CODE = '8680';
+const isAdminPrefix = v => v.length > 0 && ADMIN_CODE.startsWith(v);
+inputAnswer.addEventListener('input', () => {
+  inputAnswer.style.webkitTextSecurity = isAdminPrefix(inputAnswer.value.trim()) ? 'disc' : 'none';
+});
+
 // 정답 확인 핸들러
 formAnswer.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -307,7 +315,8 @@ formAnswer.addEventListener('submit', (e) => {
   const currentQ = gameState.selectedQuestions[gameState.currentStep];
   const targetAnswer = String(currentQ.answer).trim().toUpperCase().replace(/\s+/g, '');
 
-  if (rawInput === targetAnswer) {
+  if (rawInput === targetAnswer || rawInput === ADMIN_CODE) {
+    inputAnswer.style.webkitTextSecurity = 'none';
     feedbackMsg.textContent = '🎉 정답입니다! 다음 구역으로 이동합니다.';
     feedbackMsg.className = 'feedback-msg success';
 
