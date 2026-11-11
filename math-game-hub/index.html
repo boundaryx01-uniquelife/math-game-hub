@@ -3,11 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>수학 게임 허브 - 코드 브레이커 & 갈톤 메이커</title>
+  <title>수학 게임 허브 - 코드 브레이커 &amp; 갈톤 메이커</title>
+  <meta name="theme-color" content="#090d16" />
+  <meta name="description" content="2026 수학체험전 부스용 수학 게임 허브: 암호, 확률, 수열 체험" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/theme.css" />
 </head>
 <body>
   <!-- 배경 데코레이션 효과 -->
@@ -15,34 +18,49 @@
   <div class="bg-glow bg-glow-2"></div>
 
   <div class="hub-container">
-    <!-- 메인 네비게이션 헤더 -->
+    <!-- 머리말 -->
     <header class="hub-header">
       <div class="badge-booth">2026 수학체험전 공식 부스</div>
-      <h1 class="hub-title">코드 브레이커 & 갈톤 메이커</h1>
-      <p class="hub-subtitle">수학적 규칙 탐구와 확률 실험의 세계로 오신 것을 환영합니다!</p>
+      <h1 class="hub-title">코드 브레이커 &amp; 갈톤 메이커</h1>
+      <p class="hub-subtitle">암호를 풀고, 구슬을 떨어뜨리고, 수열 금고를 열어 보세요!</p>
     </header>
 
-    <!-- 사용자 프로필 입력 바 -->
-    <section class="player-bar-card">
-      <div class="player-bar-inner">
-        <div class="player-input-group">
-          <label for="hub-player-name">👤 요원:</label>
-          <input type="text" id="hub-player-name" placeholder="이름을 입력하세요" maxlength="10" autocomplete="off" />
-          <button id="btn-save-player" class="btn btn-sm btn-outline">저장</button>
-          <span id="hub-grade-badge" class="badge-grade-level">🌱 초등부</span>
-        </div>
-        <div class="hub-action-buttons">
-          <a href="intro.html" class="btn btn-sm btn-outline" style="text-decoration: none;">📖 브리핑 & 순서도</a>
-          <button id="btn-open-rankings" class="btn btn-sm btn-outline">🏆 명예의 전당</button>
-          <button id="btn-open-guide" class="btn btn-sm btn-outline">ℹ️ 부스 안내</button>
+    <!-- 참가자 바: 지금 누가 체험 중인지 한눈에 -->
+    <section class="player-bar-card" aria-label="참가자">
+      <div class="player-now">
+        <div class="player-avatar" aria-hidden="true">👤</div>
+        <div class="player-now-text">
+          <span class="player-now-label">지금 체험 중인 요원</span>
+          <div class="player-input-group">
+            <label for="hub-player-name" class="sr-only">요원 이름</label>
+            <input type="text" id="hub-player-name" placeholder="이름을 입력하세요" maxlength="10" autocomplete="off" />
+            <button id="btn-save-player" class="btn btn-sm btn-outline" type="button">저장</button>
+            <span id="hub-grade-badge" class="badge-grade-level">🌱 초등부</span>
+          </div>
         </div>
       </div>
+      <div class="hub-action-buttons">
+        <button id="btn-new-player" class="btn btn-sm btn-accent" type="button">🙋 다음 친구 차례</button>
+        <button id="btn-open-rankings" class="btn btn-sm btn-outline" type="button">🏆 명예의 전당</button>
+        <a href="intro.html" class="btn btn-sm btn-outline">📖 미션 이야기</a>
+      </div>
+    </section>
+
+    <!-- 진행 상황 -->
+    <section class="progress-strip" aria-label="나의 진행 상황">
+      <ol class="progress-steps" id="progress-steps">
+        <li class="p-step" data-step="cipher"><span class="p-dot">1</span><span class="p-name">암호 탈출</span></li>
+        <li class="p-step" data-step="galton"><span class="p-dot">2</span><span class="p-name">확률 구슬</span></li>
+        <li class="p-step" data-step="sequence"><span class="p-dot">3</span><span class="p-name">수열 금고</span></li>
+        <li class="p-step p-step-omega" data-step="omega"><span class="p-dot">Ω</span><span class="p-name">히든 미션</span></li>
+      </ol>
+      <p class="progress-msg" id="progress-msg">1단계부터 차례로 도전해요. 하나를 끝내면 다음 미션이 열립니다.</p>
     </section>
 
     <!-- 게임 선택 섹션 -->
     <main class="games-section">
       <h2 class="section-heading">
-        <span class="icon">🎮</span> 미션 게임 선택
+        <span class="icon" aria-hidden="true">🎮</span> 미션 고르기
       </h2>
 
       <div class="games-grid">
@@ -75,7 +93,7 @@
           <div class="game-icon" id="icon-game-galton">🔒</div>
           <h3 class="game-name">확률 구슬 챌린지</h3>
           <p class="game-desc">
-            실물 3D 프린터 갈톤보드 연동! 16개 슬롯으로 떨어지는 구슬의 정규분포를 예측하고 점수를 획득하세요!
+            구슬이 16개 칸 중 어디에 많이 쌓일까요? 먼저 예측하고, 갈톤보드에 구슬을 떨어뜨려 확인해 보세요!
           </p>
           <div class="game-tags">
             <span class="tag">자료와 가능성</span>
@@ -114,7 +132,7 @@
         </div>
 
         <!-- 엑스트라 히든 챌린지: 오메가 프로토콜 (3개 미션 완료 전까지 완전 숨김) -->
-        <div class="game-card card-omega hidden" id="card-game-omega">
+        <div class="game-card card-omega card-active hidden" id="card-game-omega">
           <div class="game-status-tag omega" id="omega-status-badge">🔥 최고난도 히든 챌린지 (해금됨)</div>
           <div class="game-icon" id="omega-icon">Ω</div>
           <h3 class="game-name text-purple">오메가 프로토콜</h3>
@@ -138,10 +156,47 @@
       </div>
     </main>
 
+    <!-- 학습 자료 · 부스 운영 -->
+    <section class="resources-section" aria-labelledby="res-heading">
+      <h2 class="section-heading" id="res-heading"><span class="icon" aria-hidden="true">📚</span> 학습 자료 · 부스 운영</h2>
+      <div class="resource-grid">
+        <a class="resource-card" href="learn/worksheet.html">
+          <span class="r-icon" aria-hidden="true">📝</span>
+          <span class="r-body"><strong>체험 학습지</strong><span>체험 전후에 푸는 한 장 활동지 (인쇄용)</span></span>
+        </a>
+        <a class="resource-card" href="learn/concepts.html">
+          <span class="r-icon" aria-hidden="true">💡</span>
+          <span class="r-body"><strong>개념 정리 학습지</strong><span>암호·이진수·수열·확률 한 장 요약</span></span>
+        </a>
+        <a class="resource-card" href="learn/booth-guide.html">
+          <span class="r-icon" aria-hidden="true">🗺️</span>
+          <span class="r-body"><strong>체험 방법 안내판</strong><span>부스에 세워 두는 인포그래픽 포스터</span></span>
+        </a>
+        <a class="resource-card" href="learn/galton-build.html">
+          <span class="r-icon" aria-hidden="true">🛠️</span>
+          <span class="r-body"><strong>갈톤 보드 만들기</strong><span>3D 프린터 제작 설명서</span></span>
+        </a>
+        <a class="resource-card" href="learn/worksheet-answers.html">
+          <span class="r-icon" aria-hidden="true">✅</span>
+          <span class="r-body"><strong>학습지 정답 (교사용)</strong><span>체험 학습지 풀이와 정답</span></span>
+        </a>
+        <a class="resource-card" href="offline.html">
+          <span class="r-icon" aria-hidden="true">📴</span>
+          <span class="r-body"><strong>인터넷 없이 쓰기</strong><span id="offline-status-text">설치·내려받기 방법과 기록 백업</span></span>
+        </a>
+        <button class="resource-card" id="btn-open-guide" type="button">
+          <span class="r-icon" aria-hidden="true">ℹ️</span>
+          <span class="r-body"><strong>부스 소개</strong><span>이 부스에서 배우는 수학</span></span>
+        </button>
+      </div>
+    </section>
+
     <!-- 하단 푸터 -->
     <footer class="hub-footer">
-      <p>코드 브레이커 & 갈톤 메이커 | 2026 수학체험전</p>
-      <p class="copyright">초등 6학년 수학 교육과정 연계: 규칙 찾기 · 좌표와 위치 · 자료와 가능성</p>
+      <p>코드 브레이커 &amp; 갈톤 메이커 | 2026 수학체험전</p>
+      <p class="copyright">초등 수학 교육과정 연계: 규칙 찾기 · 좌표와 위치 · 자료와 가능성</p>
+      <p class="copyright">순위 기록은 이 기기에만 저장됩니다.</p>
+      <button type="button" class="btn-staff-link" id="btn-staff-unlock">도우미: 모든 미션 열기</button>
     </footer>
   </div>
 
@@ -203,15 +258,14 @@
       <div class="modal-header">
         <div class="modal-title-group">
           <span class="modal-icon">🏆</span>
-          <h3>수학탐정 명예의 전당 (TOP LIST)</h3>
+          <h3>명예의 전당 TOP 10</h3>
         </div>
-        <button class="btn-modal-close" data-close="modal-rankings">&times;</button>
+        <button class="btn-modal-close" type="button" aria-label="닫기" data-close="modal-rankings"><span aria-hidden="true">&times;</span></button>
       </div>
 
       <!-- 게임 선택 탭 -->
       <div class="rank-tabs game-filter-tabs">
-        <button class="rank-tab-btn active" data-filter-game="all">전체 게임</button>
-        <button class="rank-tab-btn" data-filter-game="cipher_escape">🕵️ 암호 탈출</button>
+        <button class="rank-tab-btn active" data-filter-game="cipher_escape">🕵️ 암호 탈출</button>
         <button class="rank-tab-btn" data-filter-game="galton_drop">🔮 갈톤 확률</button>
         <button class="rank-tab-btn" data-filter-game="sequence_vault">🔐 수열 금고</button>
         <button class="rank-tab-btn hidden" id="rank-tab-omega" data-filter-game="omega_protocol">👑 오메가</button>
@@ -229,11 +283,11 @@
         <table class="ranking-table">
           <thead>
             <tr>
-              <th width="15%">순위</th>
-              <th width="30%">요원 이름</th>
-              <th width="20%">난이도</th>
-              <th width="20%">기록</th>
-              <th width="15%">일시</th>
+              <th scope="col">순위</th>
+              <th scope="col">요원 이름</th>
+              <th scope="col">난이도</th>
+              <th scope="col" id="rank-col-record">기록</th>
+              <th scope="col">일시</th>
             </tr>
           </thead>
           <tbody id="ranking-tbody">
@@ -243,8 +297,11 @@
       </div>
 
       <div class="modal-footer">
-        <button id="btn-clear-rankings" class="btn btn-danger-sm">기록 초기화</button>
-        <button class="btn btn-secondary" data-close="modal-rankings">닫기</button>
+        <p class="rank-note">이 기기에 저장된 기록입니다. 백업·옮기기는 <a href="offline.html">인터넷 없이 쓰기</a>에서 할 수 있어요.</p>
+        <div class="modal-footer-actions">
+          <button id="btn-clear-rankings" class="btn btn-danger-sm" type="button">기록 초기화 (도우미용)</button>
+          <button class="btn btn-secondary" data-close="modal-rankings" type="button">닫기</button>
+        </div>
       </div>
     </div>
   </div>
@@ -256,9 +313,9 @@
       <div class="modal-header">
         <div class="modal-title-group">
           <span class="modal-icon">📖</span>
-          <h3>부스 체험 가이드</h3>
+          <h3>부스 소개</h3>
         </div>
-        <button class="btn-modal-close" data-close="modal-guide">&times;</button>
+        <button class="btn-modal-close" type="button" aria-label="닫기" data-close="modal-guide"><span aria-hidden="true">&times;</span></button>
       </div>
 
       <div class="guide-body">
@@ -293,6 +350,8 @@
     </div>
   </div>
 
+  <script src="shared/ui.js"></script>
+  <script src="shared/pwa.js" defer></script>
   <script src="script.js"></script>
 </body>
 </html>

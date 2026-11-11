@@ -396,3 +396,34 @@
     align-items: flex-start;
   }
 }
+
+/* ==========================================================================
+   인트로 고도화 (2026-11): 등록 폼을 위로, 순서도는 한눈에 보이는 격자로
+   ========================================================================== */
+.intro-container { max-width: 1000px; gap: 20px; padding-bottom: 24px; }
+.intro-title { font-size: clamp(1.7rem, 4vw, 2.6rem); text-wrap: balance; }
+.agent-register-card { padding: 24px; }
+.agent-register-card h3 { margin-bottom: 16px; }
+.btn-grade-opt { min-height: 88px; cursor: pointer; }
+.input-row { max-width: 640px; }
+.input-row .btn { min-height: 56px; white-space: nowrap; padding: 0 24px; font-size: 1.05rem; }
+.flow-step-node:hover { transform: none; }
+.node-desc, .node-meta { font-size: 0.9rem; }
+
+@media (min-width: 760px) {
+  .flowchart-track {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    align-items: stretch;
+  }
+  .flowchart-track .flow-connector { display: none; }
+  .flow-step-node {
+    max-width: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    height: 100%;
+  }
+  .node-meta { flex-direction: column; align-items: flex-start; gap: 6px; }
+}

@@ -47,7 +47,9 @@ const gameState = {
   currentStep: 1,       // 1: 시저, 2: 좌표, 3: 이진수, 4: 수열
   selectedQuestions: {},
   timerInterval: null,
-  elapsedSeconds: 0
+  elapsedSeconds: 0,
+  masterKeyUsed: 0,
+  currentInfo: null
 };
 
 // DOM 요소 참조
@@ -83,20 +85,55 @@ const certCode = document.getElementById('cert-code');
 const btnPrint = document.getElementById('btn-print');
 const btnRestart = document.getElementById('btn-restart');
 
-// 초기 문제은행 로딩
+// ---- 외부 스크립트 로딩 (file:// 에서도 동작하도록 <script> 태그 주입 방식 사용) ----
+// game.js 가 놓인 위치를 기준으로 상대경로를 해석합니다.
+const SCRIPT_BASE = (document.currentScript && document.currentScript.src) || location.href;
+function injectScript(relPath) {
+  return new Promise((resolve) => {
+    try {
+      const s = document.createElement('script');
+      s.src = new URL(relPath, SCRIPT_BASE).href;
+      s.onload = () => resolve(true);
+      s.onerror = () => resolve(false);
+      document.head.appendChild(s);
+    } catch (e) {
+      resolve(false);
+    }
+  });
+}
+
+// 힌트/풀이 도우미 (shared/assist.js)
+const assistReady = window.MathAssist ? Promise.resolve(true) : injectScript('../../shared/assist.js');
+
+// 문제은행이 실제 120문항(JS 또는 JSON)으로 로드되었는지
+let bankLoaded = false;
+// 문제은행 문항을 섞어 쓰는 비율 (0 = 절차적 생성기만, 1 = 문제은행만). 문제은행이 로드되고 생성기도 있을 때 적용
+const BANK_SHARE = 0.5;
+
+// 초기 문제은행 로딩: window.CIPHER_BANK(data/cipher_bank.js) → fetch(cipher_bank.json) → 내장 Fallback
 async function loadQuestionBank() {
+  if (!window.CIPHER_BANK) {
+    await injectScript('../../data/cipher_bank.js');
+  }
+  if (window.CIPHER_BANK) {
+    questionBank = window.CIPHER_BANK;
+    bankLoaded = true;
+    console.log('JS 문제은행 로드 완료 (120문항)');
+    return;
+  }
   try {
     const res = await fetch('../../data/cipher_bank.json');
     if (res.ok) {
-      const data = await res.json();
-      questionBank = data;
+      questionBank = await res.json();
+      bankLoaded = true;
       console.log('JSON 문제은행 로드 완료 (120문항)');
     }
   } catch (err) {
-    console.warn('JSON 로드 실패, 내장 문제은행으로 대체 작동합니다.', err);
+    console.warn('문제은행 로드 실패, 내장 문제은행으로 대체 작동합니다.', err);
   }
 }
-loadQuestionBank();
+const bankReady = loadQuestionBank();
+const resourcesReady = Promise.all([assistReady, bankReady]);
 
 // 허브에서 전달된 플레이어 이름 및 학년 난이도 자동 채우기
 window.addEventListener('DOMContentLoaded', () => {
@@ -126,7 +163,7 @@ diffButtons.forEach(btn => {
 });
 
 // 미션 시작
-btnStart.addEventListener('click', () => {
+btnStart.addEventListener('click', async () => {
   const name = inputPlayerName.value.trim();
   if (!name) {
     alert('수학탐정 요원 이름을 입력해주세요!');
@@ -136,6 +173,10 @@ btnStart.addEventListener('click', () => {
 
   gameState.playerName = name;
   localStorage.setItem('math_hub_current_player', name);
+
+  // 도우미 스크립트와 문제은행 로딩이 끝날 때까지 잠깐 대기 (보통 이미 끝나 있음)
+  await resourcesReady;
+  gameState.masterKeyUsed = 0;
 
   // 단계별 1문제씩 무작위 선정
   pickRandomQuestions();
@@ -164,33 +205,31 @@ function getDiffName(diff) {
 // 문제 랜덤 및 무한 절차적 픽업
 function pickRandomQuestions() {
   const d = gameState.difficulty;
-
-  // 1. 절차적 무한 생성 엔진(ProceduralGenerator) 우선 적용 (100% 무중복)
-  if (typeof window.ProceduralGenerator !== 'undefined') {
-    gameState.selectedQuestions = {
-      1: window.ProceduralGenerator.generateCaesar(d),
-      2: window.ProceduralGenerator.generateCoordinate(d),
-      3: window.ProceduralGenerator.generateBinary(d),
-      4: window.ProceduralGenerator.generateSequence(d)
-    };
-    console.log('✨ 무한 절차적 문제 생성기 작동 완료 (고유 문제 생성)');
-    return;
-  }
-
-  // 2. Fallback 문제은행
   const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-  gameState.selectedQuestions = {
-    1: getRandom(questionBank.caesar[d] || questionBank.caesar.normal),
-    2: getRandom(questionBank.coordinate[d] || questionBank.coordinate.normal),
-    3: getRandom(questionBank.binary[d] || questionBank.binary.normal),
-    4: getRandom(questionBank.sequence[d] || questionBank.sequence.normal)
-  };
+  const hasGen = typeof window.ProceduralGenerator !== 'undefined';
+  const gen = hasGen ? window.ProceduralGenerator : null;
+  const genFns = { 1: 'generateCaesar', 2: 'generateCoordinate', 3: 'generateBinary', 4: 'generateSequence' };
+  const bankKeys = { 1: 'caesar', 2: 'coordinate', 3: 'binary', 4: 'sequence' };
+
+  const picked = {};
+  for (let step = 1; step <= 4; step++) {
+    const bankList = (questionBank[bankKeys[step]] && (questionBank[bankKeys[step]][d] || questionBank[bankKeys[step]].normal)) || [];
+    // 절차적 생성기(무중복)와 문제은행(120문항)을 섞어서 출제. 생성기가 없으면 문제은행/내장 Fallback만 사용
+    const useBank = !hasGen || (bankLoaded && bankList.length > 0 && Math.random() < BANK_SHARE);
+    picked[step] = useBank ? getRandom(bankList) : gen[genFns[step]](d);
+  }
+  gameState.selectedQuestions = picked;
 }
 
 // 타이머 시작
 function startTimer() {
   gameState.elapsedSeconds = 0;
   gameTimer.textContent = '00:00';
+  resumeTimer();
+}
+
+// 타이머 (재)개시: 경과 시간은 유지한 채로 흐름만 다시 시작 (마스터 키 패널 종료 후에도 사용)
+function resumeTimer() {
   clearInterval(gameState.timerInterval);
 
   gameState.timerInterval = setInterval(() => {
@@ -214,9 +253,14 @@ function loadCurrentStep() {
     else if (itemStep < step) item.classList.add('completed');
   });
 
-  // 힌트 및 입력 초기화
-  hintContent.classList.add('hidden');
-  hintContent.textContent = q.hint || '힌트가 제공되지 않는 문제입니다.';
+  // 힌트(2단계) 및 입력 초기화: 힌트 1은 접근법, 힌트 2는 더 구체적인 단계 (정답은 말하지 않음)
+  gameState.currentInfo = window.MathAssist ? window.MathAssist.cipherInfo(step, q) : null;
+  ensureHints();
+  if (hintStager && gameState.currentInfo) {
+    hintStager.set(gameState.currentInfo.hint1, gameState.currentInfo.hint2);
+  } else {
+    hintContent.textContent = '힌트를 불러오지 못했습니다.';
+  }
   feedbackMsg.textContent = '';
   feedbackMsg.className = 'feedback-msg';
   inputAnswer.value = '';
@@ -293,13 +337,20 @@ function loadCurrentStep() {
   }
 }
 
-// 힌트 토글
-btnToggleHint.addEventListener('click', () => {
-  hintContent.classList.toggle('hidden');
-});
+// 힌트 2단계 (기존 #btn-toggle-hint 는 힌트 1 열기/닫기, 힌트 2 버튼은 JS가 만들어 #hint-content 뒤에 붙임)
+let hintStager = null;
+function ensureHints() {
+  if (hintStager || !window.MathAssist) return;
+  hintStager = window.MathAssist.createHints({
+    content: hintContent,
+    toggle: btnToggleHint,
+    openText: '💡 힌트 보기',
+    closeText: '🔒 힌트 닫기'
+  });
+}
 
 
-// 관리자 코드 (정답 처리용): 입력 중에는 마스킹 표시
+// 마스터 키 (정답+풀이 패널 열기용): 입력 중에는 마스킹 표시
 const ADMIN_CODE = '8680';
 const isAdminPrefix = v => v.length > 0 && ADMIN_CODE.startsWith(v);
 inputAnswer.addEventListener('input', () => {
@@ -309,13 +360,20 @@ inputAnswer.addEventListener('input', () => {
 // 정답 확인 핸들러
 formAnswer.addEventListener('submit', (e) => {
   e.preventDefault();
+  if (window.MathAssist && window.MathAssist.isPanelOpen()) return;
   const rawInput = inputAnswer.value.trim().toUpperCase().replace(/\s+/g, '');
   if (!rawInput) return;
 
   const currentQ = gameState.selectedQuestions[gameState.currentStep];
   const targetAnswer = String(currentQ.answer).trim().toUpperCase().replace(/\s+/g, '');
 
-  if (rawInput === targetAnswer || rawInput === ADMIN_CODE) {
+  // 마스터 키: 정답 처리 대신 "정답 + 풀이" 패널을 보여주고, 닫으면 다음 단계로 진행
+  if (rawInput === ADMIN_CODE) {
+    openMasterPanel();
+    return;
+  }
+
+  if (rawInput === targetAnswer) {
     inputAnswer.style.webkitTextSecurity = 'none';
     feedbackMsg.textContent = '🎉 정답입니다! 다음 구역으로 이동합니다.';
     feedbackMsg.className = 'feedback-msg success';
@@ -334,6 +392,39 @@ formAnswer.addEventListener('submit', (e) => {
     inputAnswer.select();
   }
 });
+
+// 마스터 키 패널
+// - 패널이 열려 있는 동안 타이머를 멈추고 (풀이를 읽는 시간이 기록에 들어가지 않음), "다음 문제로"를 누르면 다시 흐름
+// - 학생이 푼 것이 아니므로 기록에 masterKeyUsed(사용 횟수)를 남김. 시간 가산/기록 저장 방식은 그대로
+function openMasterPanel() {
+  inputAnswer.style.webkitTextSecurity = 'none';
+  inputAnswer.value = '';
+  if (!window.MathAssist) {
+    feedbackMsg.textContent = '❌ 도우미 스크립트를 불러오지 못해 마스터 키를 쓸 수 없습니다.';
+    feedbackMsg.className = 'feedback-msg error';
+    return;
+  }
+  const step = gameState.currentStep;
+  const q = gameState.selectedQuestions[step];
+  const info = gameState.currentInfo || window.MathAssist.cipherInfo(step, q);
+  gameState.masterKeyUsed = (gameState.masterKeyUsed || 0) + 1;
+  clearInterval(gameState.timerInterval);
+  window.MathAssist.showPanel({
+    answer: info.answer,
+    steps: info.explain,
+    note: '마스터 키를 사용했어요. 이 창이 열려 있는 동안 시간은 멈춰 있어요.',
+    nextLabel: '다음 문제로',
+    onNext: () => {
+      if (gameState.currentStep < 4) {
+        resumeTimer();
+        gameState.currentStep++;
+        loadCurrentStep();
+      } else {
+        finishGame();
+      }
+    }
+  });
+}
 
 // 게임 완료 처리
 function finishGame() {
@@ -358,7 +449,8 @@ function finishGame() {
     difficulty: gameState.difficulty,
     clearTimeSeconds: gameState.elapsedSeconds,
     clearTimeFormatted: formattedTime,
-    timestamp: Date.now()
+    timestamp: Date.now(),
+    ...(gameState.masterKeyUsed ? { masterKeyUsed: gameState.masterKeyUsed } : {})
   });
 
   // 화면 전환

@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>확률 구슬 챌린지: 3D 갈톤보드 실험실</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/theme.css" />
+  <meta name="theme-color" content="#090d16" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="icon" href="../../icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="../../icons/icon-192.png" />
 </head>
 <body>
   <!-- 최상단 허브 복귀 헤더 바 -->
@@ -135,8 +137,8 @@
       <div class="math-explain-box">
         <h4>💡 수학적 원리: 중심극한정리 & 이항분포</h4>
         <p>
-          작은 쇠구슬들이 12단계의 핀을 지나며 매 순간 좌/우 50%의 독립시행을 거칩니다.
-          시행 횟수가 많아질수록 <strong>가운데(7번) 슬롯으로 도달하는 조합의 수 $\binom{12}{6}$가 가장 많아져 완벽한 종 모양(정규분포 곡선)</strong>이 완성됩니다!
+          작은 쇠구슬들이 15단계의 핀을 지나며 매 순간 좌/우 50%의 독립시행을 거칩니다.
+          시행 횟수가 많아질수록 <strong>가운데(8번·9번) 칸으로 가는 길의 수가 각각 6,435가지로 가장 많아져, 가운데가 볼록한 종 모양</strong>이 만들어집니다!
         </p>
       </div>
 
@@ -154,6 +156,8 @@
     </div>
   </div>
 
+  <script src="../../shared/ui.js"></script>
+  <script src="../../shared/pwa.js" defer></script>
   <script src="game.js"></script>
 </body>
 </html>

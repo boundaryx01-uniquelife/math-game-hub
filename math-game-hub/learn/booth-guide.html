@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>체험 안내 포스터 - 2026 수학체험전</title>
+<style>
+  @page { size: A3 portrait; margin: 0; }
+
+  :root {
+    --ink: #17204a;
+    --ink-soft: #3b4470;
+    --paper: #fffaf0;
+    --line: #17204a;
+    --blue: #1f6fe5;   --blue-t: #e3eeff;
+    --orange: #d95500; --orange-t: #ffe9d6;
+    --green: #0f9a52;  --green-t: #dcf6e7;
+    --purple: #7a3fe0; --purple-t: #eee3ff;
+    --yellow: #ffc61a; --yellow-t: #fff1b8;
+    --pink: #e0306b;   --pink-t: #ffdfea;
+    --u: 1cqw;
+    --font: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #dfe4f0; }
+  body {
+    font-family: var(--font);
+    color: var(--ink);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  /* ---------- 화면용 도구줄 (인쇄 때 숨김) ---------- */
+  .toolbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap;
+    padding: 10px 16px; background: #17204a; color: #fff;
+  }
+  .toolbar .tip { font-size: 14px; opacity: .85; margin-right: 8px; }
+  .toolbar a, .toolbar button {
+    font: 700 16px/1 var(--font); color: #17204a; background: #ffc61a;
+    border: 0; border-radius: 999px; padding: 12px 22px; cursor: pointer; text-decoration: none;
+    min-height: 44px; display: inline-flex; align-items: center;
+  }
+  .toolbar a { background: #fff; }
+  .stage { display: flex; justify-content: center; padding: 14px 0 28px; }
+
+  /* ---------- 포스터 (A 시리즈 비율 297:420) ---------- */
+  .sheet {
+    container-type: inline-size;
+    width: min(100vw - 24px, calc((100vh - 84px) * 0.70714));
+    width: min(100vw - 24px, calc((100dvh - 84px) * 0.70714));
+    min-width: 300px;
+    aspect-ratio: 297 / 420;
+    background: var(--paper);
+    box-shadow: 0 10px 40px rgba(23,32,74,.3);
+    overflow: hidden;
+    position: relative;
+  }
+  .poster {
+    position: absolute; inset: 0;
+    padding: calc(var(--u) * 2.2) calc(var(--u) * 3.2) calc(var(--u) * 2.2);
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    row-gap: calc(var(--u) * 1.2);
+    background:
+      radial-gradient(circle at 1.4cqw 1.4cqw, rgba(23,32,74,.07) .28cqw, transparent .3cqw) 0 0 / 2.8cqw 2.8cqw;
+  }
+  .poster > * { min-height: 0; }
+
+  svg { display: block; }
+  .ic { width: 100%; height: 100%; }
+
+  /* ---------- 머리말 ---------- */
+  .head {
+    display: grid; grid-template-columns: 1fr calc(var(--u) * 13);
+    align-items: center; column-gap: calc(var(--u) * 2);
+    background: var(--yellow); border: calc(var(--u) * .5) solid var(--line);
+    border-radius: calc(var(--u) * 3);
+    padding: calc(var(--u) * 1.1) calc(var(--u) * 2.6);
+    box-shadow: calc(var(--u) * .8) calc(var(--u) * .8) 0 var(--line);
+  }
+  .kicker {
+    display: inline-block; background: var(--ink); color: #fff; font-weight: 800;
+    font-size: calc(var(--u) * 2); padding: calc(var(--u) * .3) calc(var(--u) * 1.4);
+    border-radius: 999px; letter-spacing: .02em;
+  }
+  h1 {
+    font-size: calc(var(--u) * 6.6); line-height: 1.08; white-space: nowrap; font-weight: 900; letter-spacing: -.03em;
+    margin: calc(var(--u) * .6) 0 calc(var(--u) * .5);
+  }
+  h1 em { font-style: normal; color: var(--pink); }
+  .invite { font-size: calc(var(--u) * 2.5); font-weight: 700; line-height: 1.35; }
+  .head-art { width: 100%; aspect-ratio: 1; }
+
+  /* ---------- 공통 구획 제목 ---------- */
+  .sec-title {
+    display: flex; align-items: center; gap: calc(var(--u) * 1.2);
+    font-size: calc(var(--u) * 3); font-weight: 900; letter-spacing: -.02em;
+    margin-bottom: calc(var(--u) * .8);
+  }
+  .sec-title .pill {
+    background: var(--ink); color: #fff; font-size: calc(var(--u) * 2); font-weight: 800;
+    padding: calc(var(--u) * .3) calc(var(--u) * 1.3); border-radius: 999px;
+  }
+
+  /* ---------- 진행 순서 ---------- */
+  .flow { display: flex; flex-direction: column; }
+  .steps {
+    display: grid; grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: stretch; column-gap: calc(var(--u) * .2);
+  }
+  .step {
+    position: relative; background: #fff; border: calc(var(--u) * .45) solid var(--line);
+    border-radius: calc(var(--u) * 2.2);
+    padding: calc(var(--u) * 2.8) calc(var(--u) * .5) calc(var(--u) * .8);
+    text-align: center; display: flex; flex-direction: column; align-items: center;
+    box-shadow: 0 calc(var(--u) * .6) 0 var(--line);
+  }
+  .step .num {
+    position: absolute; top: calc(var(--u) * -2.1); left: 50%; transform: translateX(-50%);
+    width: calc(var(--u) * 4.4); height: calc(var(--u) * 4.4); border-radius: 50%;
+    border: calc(var(--u) * .45) solid var(--line);
+    color: #fff; font-weight: 900; font-size: calc(var(--u) * 3);
+    display: grid; place-items: center; line-height: 1;
+  }
+  .step .pic { width: calc(var(--u) * 6); height: calc(var(--u) * 6); margin: calc(var(--u) * .2) 0 calc(var(--u) * .4); }
+  .step b { font-size: calc(var(--u) * 2.65); white-space: nowrap; font-weight: 900; line-height: 1.15; letter-spacing: -.03em; }
+  .step small { display: block; font-size: calc(var(--u) * 1.7); font-weight: 700; line-height: 1.3; margin-top: calc(var(--u) * .4); color: var(--ink-soft); }
+  .s1 .num { background: var(--blue); }   .s1 { background: var(--blue-t); }
+  .s2 .num { background: var(--green); }  .s2 { background: var(--green-t); }
+  .s3 .num { background: var(--orange); } .s3 { background: var(--orange-t); }
+  .s4 .num { background: var(--purple); } .s4 { background: var(--purple-t); }
+  .s5 .num { background: var(--pink); }   .s5 { background: var(--pink-t); }
+  .arrow { width: calc(var(--u) * 2.2); align-self: center; height: calc(var(--u) * 4); }
+  .steps { margin-top: calc(var(--u) * 2.1); }
+
+  /* ---------- 게임 4종 ---------- */
+  .games { display: flex; flex-direction: column; min-height: 0; }
+  .game-grid {
+    flex: 1; min-height: 0;
+    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+    gap: calc(var(--u) * 1.2);
+  }
+  .game {
+    --c: var(--blue); --t: var(--blue-t);
+    background: #fff; border: calc(var(--u) * .45) solid var(--line);
+    border-radius: calc(var(--u) * 2.2); overflow: hidden;
+    display: grid; grid-template-rows: auto 1fr auto;
+    box-shadow: 0 calc(var(--u) * .6) 0 var(--line);
+  }
+  .g1 { --c: var(--blue);   --t: var(--blue-t); }
+  .g2 { --c: var(--green);  --t: var(--green-t); }
+  .g3 { --c: var(--orange); --t: var(--orange-t); }
+  .g4 { --c: var(--purple); --t: var(--purple-t); }
+  .g-top {
+    background: var(--c); color: #fff; display: flex; align-items: center; gap: calc(var(--u) * 1.1);
+    padding: calc(var(--u) * .7) calc(var(--u) * 1.3);
+    border-bottom: calc(var(--u) * .45) solid var(--line);
+  }
+  .g-no {
+    flex: none; width: calc(var(--u) * 3.6); height: calc(var(--u) * 3.6); border-radius: 50%;
+    background: #fff; color: var(--c); font-size: calc(var(--u) * 2.5); font-weight: 900;
+    display: grid; place-items: center; border: calc(var(--u) * .3) solid var(--line);
+  }
+  .g-top h3 { font-size: calc(var(--u) * 2.75); font-weight: 900; line-height: 1.12; letter-spacing: -.03em; }
+  .g-top .sub { font-size: calc(var(--u) * 1.65); font-weight: 800; opacity: .95; display: block; margin-top: calc(var(--u) * .15); }
+  .g-body { display: grid; grid-template-columns: calc(var(--u) * 10.5) 1fr; column-gap: calc(var(--u) * 1.2); padding: calc(var(--u) * .7) calc(var(--u) * 1.3); align-items: center; background: var(--t); }
+  .g-pic { width: calc(var(--u) * 10.5); height: calc(var(--u) * 10.5); background: #fff; border-radius: calc(var(--u) * 1.6); border: calc(var(--u) * .3) solid var(--line); padding: calc(var(--u) * .6); }
+  .g-what { font-size: calc(var(--u) * 2.3); font-weight: 700; line-height: 1.32; }
+  .g-what .math { display: inline-block; background: var(--c); color: #fff; font-weight: 800; font-size: calc(var(--u) * 1.75); padding: calc(var(--u) * .15) calc(var(--u) * .9); border-radius: 999px; margin-bottom: calc(var(--u) * .5); }
+  .g-what strong { font-weight: 900; }
+  .g-foot { display: flex; gap: calc(var(--u) * .7); flex-wrap: nowrap; overflow: hidden; padding: calc(var(--u) * .6) calc(var(--u) * 1.3); border-top: calc(var(--u) * .3) dashed var(--line); background: #fff; }
+  .chip {
+    font-size: calc(var(--u) * 1.85); font-weight: 800; background: #fff; border: calc(var(--u) * .3) solid var(--line);
+    border-radius: 999px; padding: calc(var(--u) * .25) calc(var(--u) * 1.1); white-space: nowrap;
+    display: inline-flex; align-items: center; gap: calc(var(--u) * .5);
+  }
+  .chip svg { width: calc(var(--u) * 2.1); height: calc(var(--u) * 2.1); }
+  .chip.time { background: var(--yellow-t); }
+  .g4 { background: #fff; position: relative; }
+  .lockline {
+    font-size: calc(var(--u) * 1.8); font-weight: 800; color: var(--ink-soft);
+    margin: calc(var(--u) * .9) 0 0;
+    text-align: center;
+  }
+
+  /* ---------- 도움 / 기록 / 매너 ---------- */
+  .info { display: grid; grid-template-columns: 1fr 1.3fr 1fr; gap: calc(var(--u) * 1.2); }
+  .panel {
+    border: calc(var(--u) * .45) solid var(--line); border-radius: calc(var(--u) * 2.2);
+    padding: calc(var(--u) * 1.1) calc(var(--u) * 1.4); background: #fff;
+    box-shadow: 0 calc(var(--u) * .6) 0 var(--line);
+    display: flex; flex-direction: column;
+  }
+  .panel h4 { display: flex; align-items: center; gap: calc(var(--u) * .8); font-size: calc(var(--u) * 2.6); white-space: nowrap; font-weight: 900; letter-spacing: -.03em; margin-bottom: calc(var(--u) * .8); }
+  .panel h4 svg { width: calc(var(--u) * 3.8); height: calc(var(--u) * 3.8); flex: none; }
+  .p-help { background: var(--yellow-t); }
+  .p-rank { background: var(--blue-t); }
+  .p-manner { background: var(--green-t); }
+  .hint-path { display: flex; align-items: center; gap: calc(var(--u) * .4); margin-bottom: calc(var(--u) * .1); }
+  .hint-path .h {
+    flex: 1; text-align: center; font-weight: 900; font-size: calc(var(--u) * 2);
+    border: calc(var(--u) * .35) solid var(--line); border-radius: calc(var(--u) * 1.3);
+    padding: calc(var(--u) * .6) calc(var(--u) * .2); background: #fff; line-height: 1.15; white-space: nowrap; font-size: calc(var(--u) * 1.9);
+  }
+  .hint-path .h.last { background: var(--pink); color: #fff; }
+  .hint-path .h i { display: block; font-style: normal; font-size: calc(var(--u) * 1.5); font-weight: 700; margin-top: calc(var(--u) * .1); }
+  .hint-path .sep { width: calc(var(--u) * 1.8); height: calc(var(--u) * 2.4); flex: none; }
+  .p-help p { font-size: calc(var(--u) * 1.85); font-weight: 700; line-height: 1.35; }
+  .call {
+    margin-top: calc(var(--u) * .9); background: var(--ink); color: #fff; border-radius: calc(var(--u) * 1.4);
+    padding: calc(var(--u) * .6) calc(var(--u) * 1.1); font-size: calc(var(--u) * 2.2); font-weight: 900; line-height: 1.25;
+    display: flex; align-items: center; gap: calc(var(--u) * 1);
+  }
+  .call small { display: block; font-size: calc(var(--u) * 1.65); font-weight: 700; opacity: .92; margin-top: calc(var(--u) * .2); }
+  .call svg { width: calc(var(--u) * 3.6); height: calc(var(--u) * 3.6); flex: none; }
+  ul.dots { list-style: none; display: flex; flex-direction: column; gap: calc(var(--u) * .6); }
+  ul.dots li { font-size: calc(var(--u) * 1.85); font-weight: 700; line-height: 1.28; padding-left: calc(var(--u) * 2.4); position: relative; }
+  ul.dots li::before { content: ""; position: absolute; left: 0; top: .28em; width: calc(var(--u) * 1.5); height: calc(var(--u) * 1.5); border-radius: 50%; background: var(--blue); border: calc(var(--u) * .25) solid var(--line); }
+  ul.manners li::before { background: var(--green); }
+  ul.dots b { font-weight: 900; }
+  .manner-row { display: flex; align-items: center; gap: calc(var(--u) * 1); }
+  ul.manners { gap: calc(var(--u) * .8); }
+  ul.manners li { padding-left: 0; display: flex; align-items: center; gap: calc(var(--u) * 1); font-size: calc(var(--u) * 1.85); }
+  ul.manners li::before { display: none; }
+  ul.manners li > svg { width: calc(var(--u) * 4.4); height: calc(var(--u) * 4.4); flex: none; }
+
+  /* ---------- 바닥 ---------- */
+  .foot {
+    background: var(--blue); color: #fff; border: calc(var(--u) * .45) solid var(--line);
+    border-radius: calc(var(--u) * 2.2); box-shadow: 0 calc(var(--u) * .6) 0 var(--line);
+    display: flex; align-items: center; gap: calc(var(--u) * 2); padding: calc(var(--u) * .6) calc(var(--u) * 2.4);
+  }
+  .foot .sheet-ic { width: calc(var(--u) * 5.6); height: calc(var(--u) * 5.6); flex: none; }
+  .foot b { font-size: calc(var(--u) * 3.4); font-weight: 900; letter-spacing: -.03em; line-height: 1.15; display: block; }
+  .foot span { font-size: calc(var(--u) * 1.8); font-weight: 700; }
+  .foot .grow { flex: 1; }
+  .foot .badge { background: var(--yellow); color: var(--ink); font-weight: 900; font-size: calc(var(--u) * 2.4); border: calc(var(--u) * .35) solid var(--line); border-radius: 999px; padding: calc(var(--u) * .7) calc(var(--u) * 1.8); white-space: nowrap; }
+
+  /* ---------- 인쇄 ---------- */
+  @media print {
+    html, body { background: #fff; width: 100%; height: 100%; overflow: hidden; }
+    .toolbar { display: none !important; }
+    .stage { display: block; padding: 0; }
+    .sheet { width: 100vw; min-width: 0; height: calc(100vh - 1px); aspect-ratio: auto; box-shadow: none; page-break-after: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 아이콘 모음 (인라인 SVG, 외부 파일 없음) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-nametag" viewBox="0 0 64 64">
+      <rect x="6" y="12" width="52" height="40" rx="8" fill="#fff" stroke="#17204a" stroke-width="4"/>
+      <rect x="6" y="12" width="52" height="11" rx="6" fill="#1f6fe5" stroke="#17204a" stroke-width="4"/>
+      <circle cx="21" cy="37" r="6" fill="#ffc61a" stroke="#17204a" stroke-width="3"/>
+      <path d="M11 50c1-7 5-9 10-9s9 2 10 9z" fill="#ffc61a" stroke="#17204a" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M37 33h15M37 41h15" stroke="#17204a" stroke-width="4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-level" viewBox="0 0 64 64">
+      <rect x="6" y="38" width="14" height="18" rx="3" fill="#7dd99f" stroke="#17204a" stroke-width="4"/>
+      <rect x="25" y="26" width="14" height="30" rx="3" fill="#ffc61a" stroke="#17204a" stroke-width="4"/>
+      <rect x="44" y="12" width="14" height="44" rx="3" fill="#f26a0f" stroke="#17204a" stroke-width="4"/>
+      <path d="M13 31l1.8 3.7 4 .6-2.9 2.8.7 4-3.6-1.9-3.6 1.9.7-4-2.9-2.8 4-.6z" fill="#fff" stroke="#17204a" stroke-width="1.5" transform="translate(0 -4) scale(1)"/>
+    </symbol>
+    <symbol id="i-pad" viewBox="0 0 64 64">
+      <rect x="4" y="16" width="56" height="34" rx="14" fill="#ff9a4d" stroke="#17204a" stroke-width="4"/>
+      <path d="M19 26v14M12 33h14" stroke="#17204a" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="43" cy="29" r="4" fill="#fff" stroke="#17204a" stroke-width="3"/>
+      <circle cx="51" cy="37" r="4" fill="#ffc61a" stroke="#17204a" stroke-width="3"/>
+    </symbol>
+    <symbol id="i-pencil" viewBox="0 0 64 64">
+      <rect x="8" y="8" width="38" height="48" rx="6" fill="#fff" stroke="#17204a" stroke-width="4"/>
+      <path d="M15 22h24M15 32h16M15 42h10" stroke="#9aa3d1" stroke-width="4" stroke-linecap="round"/>
+      <path d="M52 20l6 6-22 22-9 3 3-9z" fill="#ffc61a" stroke="#17204a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M46 26l6 6" stroke="#17204a" stroke-width="4"/>
+    </symbol>
+    <symbol id="i-trophy" viewBox="0 0 64 64">
+      <path d="M18 8h28v18c0 9-6 15-14 15s-14-6-14-15z" fill="#ffc61a" stroke="#17204a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M18 14H8c0 10 4 15 11 16M46 14h10c0 10-4 15-11 16" fill="none" stroke="#17204a" stroke-width="4" stroke-linecap="round"/>
+      <path d="M32 41v8M20 56h24l-3-7H23z" fill="#f26a0f" stroke="#17204a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M32 15l2.4 5 5.4.8-3.9 3.8.9 5.4-4.8-2.6-4.8 2.6.9-5.4-3.9-3.8 5.4-.8z" fill="#fff" stroke="#17204a" stroke-width="2"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 30 50">
+      <path d="M4 4l22 21L4 46" fill="none" stroke="#17204a" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M4 4l22 21L4 46" fill="none" stroke="#ffc61a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-bulb" viewBox="0 0 64 64">
+      <path d="M32 6c-11 0-19 8-19 18 0 7 4 11 7 15 2 2 3 4 3 7h18c0-3 1-5 3-7 3-4 7-8 7-15 0-10-8-18-19-18z" fill="#ffd84a" stroke="#17204a" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M23 50h18M25 57h14" stroke="#17204a" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M26 24l6 8 6-8" fill="none" stroke="#17204a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-hand" viewBox="0 0 64 64">
+      <path d="M20 34V16a4 4 0 018 0v14V10a4 4 0 018 0v20V13a4 4 0 018 0v21V22a4 4 0 018 0v18c0 12-8 20-19 20-8 0-13-4-17-10l-8-12a4 4 0 016-5z" fill="#ffd9b0" stroke="#17204a" stroke-width="3.6" stroke-linejoin="round" transform="translate(-2 0)"/>
+    </symbol>
+    <symbol id="i-people" viewBox="0 0 64 64">
+      <circle cx="20" cy="18" r="9" fill="#ffc61a" stroke="#17204a" stroke-width="4"/>
+      <path d="M4 52c1-14 8-19 16-19s15 5 16 19z" fill="#1f6fe5" stroke="#17204a" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="46" cy="22" r="7" fill="#ffd9b0" stroke="#17204a" stroke-width="4"/>
+      <path d="M34 52c1-10 6-14 12-14s11 4 12 14z" fill="#f26a0f" stroke="#17204a" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-tablet" viewBox="0 0 64 64">
+      <rect x="6" y="10" width="52" height="38" rx="6" fill="#fff" stroke="#17204a" stroke-width="4"/>
+      <rect x="12" y="16" width="40" height="26" rx="2" fill="#bcd6ff" stroke="#17204a" stroke-width="2.5"/>
+      <path d="M4 56c6-6 10-6 14-3M60 56c-6-6-10-6-14-3" fill="none" stroke="#17204a" stroke-width="4" stroke-linecap="round"/>
+      <path d="M22 56h20" stroke="#17204a" stroke-width="4" stroke-linecap="round"/>
+      <path d="M26 33l5 5 8-10" fill="none" stroke="#0f9a52" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-smile" viewBox="0 0 64 64">
+      <circle cx="32" cy="32" r="26" fill="#ffc61a" stroke="#17204a" stroke-width="4"/>
+      <circle cx="23" cy="26" r="3.4" fill="#17204a"/><circle cx="41" cy="26" r="3.4" fill="#17204a"/>
+      <path d="M18 37c3 10 25 10 28 0z" fill="#fff" stroke="#17204a" stroke-width="3.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-sheet" viewBox="0 0 64 64">
+      <rect x="10" y="6" width="38" height="50" rx="5" fill="#fff" stroke="#17204a" stroke-width="4"/>
+      <path d="M17 18h24M17 27h24M17 36h14" stroke="#17204a" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="44" cy="44" r="12" fill="#ffc61a" stroke="#17204a" stroke-width="4"/>
+      <path d="M38.5 44.5l4 4 7-8" fill="none" stroke="#17204a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-clock" viewBox="0 0 64 64">
+      <circle cx="32" cy="34" r="22" fill="#fff" stroke="#17204a" stroke-width="6"/>
+      <path d="M32 20v15l9 6M26 6h12" fill="none" stroke="#17204a" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-star" viewBox="0 0 64 64">
+      <path d="M32 5l8.5 17.5 19 2.7-13.8 13.4 3.3 19L32 48.5 15 57.6l3.3-19L4.500 25.200l19-2.700z" fill="#ffc61a" stroke="#17204a" stroke-width="6" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- 게임 그림 -->
+    <symbol id="g-cipher" viewBox="0 0 100 100">
+      <rect x="16" y="46" width="68" height="46" rx="9" fill="#1f6fe5" stroke="#17204a" stroke-width="5"/>
+      <path d="M30 46V32a20 20 0 0140 0v14" fill="none" stroke="#17204a" stroke-width="9" stroke-linecap="round"/>
+      <path d="M30 46V32a20 20 0 0140 0v14" fill="none" stroke="#ffc61a" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="50" cy="65" r="8" fill="#ffc61a" stroke="#17204a" stroke-width="4"/>
+      <path d="M50 70v12" stroke="#17204a" stroke-width="6" stroke-linecap="round"/>
+      <g font-family="Arial,sans-serif" font-weight="900" font-size="15" fill="#fff" stroke="#17204a" stroke-width="3.5" paint-order="stroke" text-anchor="middle">
+        <text x="30" y="14">A</text><text x="50" y="12">B</text><text x="70" y="14">C</text>
+      </g>
+    </symbol>
+    <symbol id="g-galton" viewBox="0 0 100 100">
+      <path d="M50 6L8 70h84z" fill="#dcf6e7" stroke="#17204a" stroke-width="5" stroke-linejoin="round"/>
+      <g fill="#17204a">
+        <circle cx="50" cy="26" r="4"/>
+        <circle cx="42" cy="40" r="4"/><circle cx="58" cy="40" r="4"/>
+        <circle cx="34" cy="54" r="4"/><circle cx="50" cy="54" r="4"/><circle cx="66" cy="54" r="4"/>
+      </g>
+      <circle cx="50" cy="14" r="6" fill="#f26a0f" stroke="#17204a" stroke-width="3"/>
+      <path d="M6 94V80h88v14z" fill="#fff" stroke="#17204a" stroke-width="5" stroke-linejoin="round"/>
+      <rect x="14" y="85" width="7" height="9" fill="#0f9a52"/><rect x="24" y="80" width="7" height="14" fill="#0f9a52"/>
+      <rect x="35" y="73" width="8" height="21" fill="#0f9a52"/><rect x="46" y="66" width="9" height="28" fill="#0f9a52"/>
+      <rect x="58" y="73" width="8" height="21" fill="#0f9a52"/><rect x="69" y="80" width="7" height="14" fill="#0f9a52"/>
+      <rect x="79" y="85" width="7" height="9" fill="#0f9a52"/>
+    </symbol>
+    <symbol id="g-vault" viewBox="0 0 100 100">
+      <rect x="6" y="10" width="88" height="82" rx="12" fill="#ffb673" stroke="#17204a" stroke-width="5"/>
+      <circle cx="50" cy="51" r="31" fill="#fff" stroke="#17204a" stroke-width="5"/>
+      <g stroke="#17204a" stroke-width="5" stroke-linecap="round">
+        <path d="M50 24v7M50 71v7M23 51h7M70 51h7"/>
+      </g>
+      <circle cx="50" cy="51" r="13" fill="#f26a0f" stroke="#17204a" stroke-width="5"/>
+      <path d="M50 51l9-10" stroke="#17204a" stroke-width="5" stroke-linecap="round"/>
+      <rect x="18" y="90" width="12" height="6" fill="#17204a"/><rect x="70" y="90" width="12" height="6" fill="#17204a"/>
+    </symbol>
+    <symbol id="g-omega" viewBox="0 0 100 100">
+      <path d="M14 36l14 12 22-24 22 24 14-12-6 28H20z" fill="#ffc61a" stroke="#17204a" stroke-width="5" stroke-linejoin="round"/>
+      <circle cx="14" cy="34" r="5" fill="#fff" stroke="#17204a" stroke-width="3.5"/><circle cx="50" cy="20" r="5" fill="#fff" stroke="#17204a" stroke-width="3.5"/><circle cx="86" cy="34" r="5" fill="#fff" stroke="#17204a" stroke-width="3.5"/>
+      <text x="50" y="94" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="46" font-weight="900" fill="#7a3fe0" stroke="#17204a" stroke-width="3.5" paint-order="stroke">Ω</text>
+    </symbol>
+  </defs>
+</svg>
+
+<div class="toolbar" role="toolbar" aria-label="포스터 도구">
+  <span class="tip">A3 세로 · 컬러 인쇄를 권장해요 (A4로 줄여도 한 장이에요)</span>
+  <button type="button" onclick="window.print()">🖨️ 인쇄하기</button>
+  <a href="../index.html">← 허브로 돌아가기</a>
+</div>
+
+<div class="stage">
+<div class="sheet" id="sheet">
+<div class="poster">
+
+  <!-- 1. 제목 -->
+  <header class="head">
+    <div>
+      <span class="kicker">2026 수학체험전</span>
+      <h1>수학 게임, <em>이렇게</em> 해요!</h1>
+      <p class="invite">암호·구슬·수열을 풀고 ‘코드 브레이커’에 도전해요!</p>
+    </div>
+    <svg class="head-art" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="92" fill="#fff" stroke="#17204a" stroke-width="7"/>
+      <circle cx="86" cy="86" r="48" fill="#bcd6ff" stroke="#17204a" stroke-width="9"/>
+      <path d="M120 122l46 46" stroke="#17204a" stroke-width="22" stroke-linecap="round"/>
+      <path d="M120 122l46 46" stroke="#f26a0f" stroke-width="9" stroke-linecap="round"/>
+      <text x="86" y="108" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="68" fill="#17204a">?</text>
+      <circle cx="40" cy="162" r="13" fill="#e0306b" stroke="#17204a" stroke-width="5"/>
+      <circle cx="68" cy="174" r="10" fill="#0f9a52" stroke="#17204a" stroke-width="5"/>
+      <circle cx="160" cy="40" r="11" fill="#7a3fe0" stroke="#17204a" stroke-width="5"/>
+      <path d="M150 156l4 9 10 1-7.500 6.500 2.500 10-9-5.500-9 5.500 2.500-10L136 166l10-1z" fill="#ffc61a" stroke="#17204a" stroke-width="3" transform="translate(-8 -34) scale(.9)"/>
+    </svg>
+  </header>
+
+  <!-- 2. 진행 순서 -->
+  <section class="flow" aria-label="진행 순서">
+    <div class="sec-title"><span class="pill">순서</span> 이 순서대로 따라 해요</div>
+    <div class="steps">
+      <div class="step s1">
+        <div class="num">1</div>
+        <svg class="pic"><use href="#i-nametag"/></svg>
+        <b>이름 입력</b>
+        <small>내 이름을<br>써요</small>
+      </div>
+      <svg class="arrow" viewBox="0 0 30 50" aria-hidden="true"><use href="#i-arrow"/></svg>
+      <div class="step s2">
+        <div class="num">2</div>
+        <svg class="pic"><use href="#i-level"/></svg>
+        <b>난이도 선택</b>
+        <small>쉬움·보통·어려움<br>중에 골라요</small>
+      </div>
+      <svg class="arrow" viewBox="0 0 30 50" aria-hidden="true"><use href="#i-arrow"/></svg>
+      <div class="step s3">
+        <div class="num">3</div>
+        <svg class="pic"><use href="#i-pad"/></svg>
+        <b>게임 고르기</b>
+        <small>①②③ 차례로<br>열려요</small>
+      </div>
+      <svg class="arrow" viewBox="0 0 30 50" aria-hidden="true"><use href="#i-arrow"/></svg>
+      <div class="step s4">
+        <div class="num">4</div>
+        <svg class="pic"><use href="#i-pencil"/></svg>
+        <b>문제 풀기</b>
+        <small>막히면 힌트!<br>(2단계)</small>
+      </div>
+      <svg class="arrow" viewBox="0 0 30 50" aria-hidden="true"><use href="#i-arrow"/></svg>
+      <div class="step s5">
+        <div class="num">5</div>
+        <svg class="pic"><use href="#i-trophy"/></svg>
+        <b>기록 확인</b>
+        <small>🏆 명예의 전당에서<br>순위 보기</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. 게임 4종 -->
+  <section class="games" aria-label="게임 소개">
+    <div class="sec-title"><span class="pill">게임 4종</span> 어떤 게임이 있을까요?</div>
+    <div class="game-grid">
+      <article class="game g1">
+        <div class="g-top"><div class="g-no">1</div><div><h3>암호 연구소 탈출</h3><span class="sub">규칙과 대응 · 좌표 · 이진수</span></div></div>
+        <div class="g-body">
+          <svg class="g-pic"><use href="#g-cipher"/></svg>
+          <div class="g-what"><strong>4개의 방</strong>(시저·좌표·이진수·수열) 암호를 풀어 탈출!</div>
+        </div>
+        <div class="g-foot"><span class="chip time"><svg><use href="#i-clock"/></svg>3~5분</span><span class="chip">🌱 초등은 쉬움</span><span class="chip">⏱ 빠를수록 위</span></div>
+      </article>
+      <article class="game g2">
+        <div class="g-top"><div class="g-no">2</div><div><h3>확률 구슬 챌린지</h3><span class="sub">자료와 가능성 · 확률</span></div></div>
+        <div class="g-body">
+          <svg class="g-pic"><use href="#g-galton"/></svg>
+          <div class="g-what">구슬이 <strong>16칸</strong>에 얼마나 쌓일지 <strong>%로 예측</strong>하고 실험과 비교!</div>
+        </div>
+        <div class="g-foot"><span class="chip time"><svg><use href="#i-clock"/></svg>2~3분</span><span class="chip">🎯 100점 만점</span></div>
+      </article>
+      <article class="game g3">
+        <div class="g-top"><div class="g-no">3</div><div><h3>수열 금고 스피드런</h3><span class="sub">규칙 찾기 · 수열</span></div></div>
+        <div class="g-body">
+          <svg class="g-pic"><use href="#g-vault"/></svg>
+          <div class="g-what"><strong>60초</strong> 동안 규칙을 찾아 빈칸 채우기. 연속 정답은 <strong>콤보</strong>!</div>
+        </div>
+        <div class="g-foot"><span class="chip time"><svg><use href="#i-clock"/></svg>딱 60초</span><span class="chip">⭐ 점수 높을수록 위</span></div>
+      </article>
+      <article class="game g4">
+        <div class="g-top"><div class="g-no">★</div><div><h3>오메가 프로토콜</h3><span class="sub">히든 · 최고 난이도</span></div></div>
+        <div class="g-body">
+          <svg class="g-pic"><use href="#g-omega"/></svg>
+          <div class="g-what">1~3번을 모두 깨면 열려요! <strong>5개 관문</strong>(암호·3D 좌표·논리 회로 등)</div>
+        </div>
+        <div class="g-foot"><span class="chip time"><svg><use href="#i-clock"/></svg>5~10분</span><span class="chip">👑 골드 인증서</span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 4. 힌트·도우미 / 순위 / 매너 -->
+  <section class="info" aria-label="도움말">
+    <div class="panel p-help">
+      <h4><svg><use href="#i-bulb"/></svg>막히면 이렇게!</h4>
+      <div class="hint-path">
+        <div class="h">💡 힌트 1</div>
+        <svg class="sep" viewBox="0 0 30 50"><use href="#i-arrow"/></svg>
+        <div class="h">💡 힌트 2</div>
+        <svg class="sep" viewBox="0 0 30 50"><use href="#i-arrow"/></svg>
+        <div class="h last">🙋 도우미</div>
+      </div>
+      <div class="call"><svg><use href="#i-hand"/></svg><span>도우미 선생님께<br>손을 들어 주세요!<small>정답과 풀이를 함께 봐요</small></span></div>
+    </div>
+
+    <div class="panel p-rank">
+      <h4><svg><use href="#i-trophy"/></svg>순위는 이렇게</h4>
+      <ul class="dots">
+        <li><b>암호·오메가</b>: 빨리 풀수록 위</li>
+        <li><b>확률·수열</b>: 점수 높을수록 위</li>
+        <li>🏆 <b>명예의 전당</b>에서 TOP 10</li>
+        <li>기록은 <b>이 태블릿에만</b> 저장돼요</li>
+      </ul>
+    </div>
+
+    <div class="panel p-manner">
+      <h4><svg><use href="#i-smile"/></svg>부스 매너 3가지</h4>
+      <ul class="dots manners">
+        <li><svg><use href="#i-people"/></svg><span><b>차례</b>를 지켜 기다려요</span></li>
+        <li><svg><use href="#i-tablet"/></svg><span>태블릿은 <b>두 손으로 살살</b></span></li>
+        <li><svg><use href="#i-smile"/></svg><span>친구 정답은 <b>비밀!</b> 응원만 해요</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5. 바닥 -->
+  <footer class="foot">
+    <svg class="sheet-ic"><use href="#i-sheet"/></svg>
+    <div class="grow">
+      <b>체험 학습지도 받아 가세요!</b>
+      <span>집에서 더 풀어 보며 오늘 배운 수학을 되새겨요.</span>
+    </div>
+    <div class="badge">2026 수학체험전</div>
+  </footer>
+
+</div>
+</div>
+</div>
+
+<script>
+  // cqw 단위를 지원하지 않는 오래된 태블릿 브라우저를 위한 보정
+  (function () {
+    try {
+      if (window.CSS && CSS.supports && CSS.supports('width', '1cqw')) return;
+      var sheet = document.getElementById('sheet');
+      function fit() { document.documentElement.style.setProperty('--u', (sheet.clientWidth / 100) + 'px'); }
+      fit(); window.addEventListener('resize', fit); window.addEventListener('beforeprint', fit);
+    } catch (e) {}
+  })();
+</script>
+</body>
+</html>

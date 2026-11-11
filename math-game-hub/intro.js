@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEnterHub.addEventListener('click', () => {
     const name = inputPlayerName.value.trim();
     if (!name) {
-      alert('요원 닉네임을 입력해주세요!');
+      window.MathHubUI.toast('요원 닉네임을 입력해 주세요!', 'warn');
       inputPlayerName.focus();
       return;
     }
@@ -67,7 +67,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateFlowchartProgress() {
   try {
     const raw = localStorage.getItem('math_hub_records');
-    const records = raw ? JSON.parse(raw) : [];
+    const all = raw ? JSON.parse(raw) : [];
+    // 한 태블릿을 여러 학생이 쓰므로 지금 이름으로 남긴 기록만 진행으로 표시
+    const player = (localStorage.getItem('math_hub_current_player') || '').trim();
+    const records = player ? all.filter(r => r && r.name === player) : [];
 
     const hasCipher = records.some(r => r.gameId === 'cipher_escape');
     const hasGalton = records.some(r => r.gameId === 'galton_drop');
