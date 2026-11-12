@@ -151,6 +151,12 @@ window.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('active');
     }
   });
+
+  // 인트로(등록 → 미션 이야기)에서 바로 넘어오면 시작 화면을 건너뛰고 첫 문제부터 시작
+  if (/[?&]from=intro\b/.test(location.search)) {
+    try { history.replaceState(null, '', location.pathname); } catch (e) {}
+    if (savedPlayer && savedPlayer.trim()) setTimeout(() => btnStart.click(), 0);
+  }
 });
 
 // 난이도 선택 버튼 이벤트

@@ -2,10 +2,11 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
   <title>오메가 프로토콜: 마스터 코드브레이커 (최고난도 엑스트라 미션)</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="../../shared/theme.css" />
+  <link rel="stylesheet" href="../../shared/fit.css" />
   <meta name="theme-color" content="#090d16" />
   <link rel="manifest" href="../../manifest.webmanifest" />
   <link rel="icon" href="../../icons/icon-192.png" />
@@ -31,6 +32,7 @@
     <!-- 1. 시작 화면 -->
     <section id="screen-start" class="screen card active">
       <div class="omega-intro">
+        <div class="intro-left">
         <div class="omega-symbol">Ω</div>
         <h2>최고 보안 레벨 오메가 코어 잠금</h2>
         <p class="intro-desc">
@@ -38,6 +40,8 @@
           <strong>비제네르 암호, 3차원 입체 좌표, 논리 게이트 회로, 파스칼 조합, 조건부 확률</strong>의<br>
           5대 관문을 돌파하고 <strong>'오메가 마스터 골드 인증서'</strong>를 획득하세요!
         </p>
+        </div>
+        <div class="intro-right">
 
         <div class="input-group">
           <label for="player-name">엘리트 요원 닉네임</label>
@@ -71,6 +75,7 @@
           <button id="btn-start" class="btn btn-omega btn-large">
             <span>오메가 프로토콜 개시</span> ⚡
           </button>
+        </div>
         </div>
       </div>
     </section>
@@ -202,5 +207,6 @@
   <script src="../../shared/ui.js"></script>
   <script src="../../shared/pwa.js" defer></script>
   <script src="game.js"></script>
+  <script src="../../shared/fit.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
   <title>수학 게임 허브 - 코드 브레이커 &amp; 갈톤 메이커</title>
   <meta name="theme-color" content="#090d16" />
   <meta name="description" content="2026 수학체험전 부스용 수학 게임 허브: 암호, 확률, 수열 체험" />
@@ -11,6 +11,7 @@
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="shared/theme.css" />
+  <link rel="stylesheet" href="shared/fit.css" />
 </head>
 <body>
   <!-- 배경 데코레이션 효과 -->
@@ -46,7 +47,7 @@
       <div class="hub-action-buttons">
         <button id="btn-new-player" class="btn btn-sm btn-accent" type="button">🙋 다음 친구 차례</button>
         <button id="btn-open-rankings" class="btn btn-sm btn-outline" type="button">🏆 명예의 전당</button>
-        <a href="intro.html" class="btn btn-sm btn-outline">📖 미션 이야기</a>
+        <a href="intro.html#story" class="btn btn-sm btn-outline">📖 미션 이야기</a>
       </div>
     </section>
 
@@ -208,6 +209,7 @@
   <div id="modal-completion" class="modal hidden">
     <div class="modal-backdrop"></div>
     <div class="modal-content modal-completion-content">
+      <div class="comp-left">
       <div class="completion-badge-icon">🎖️</div>
       <span class="cert-subtitle">OFFICIAL CODEBREAKER CREDENTIAL</span>
       <h2 class="completion-title">축하합니다! 공식 [코드 브레이커] 자격 획득</h2>
@@ -222,7 +224,9 @@
         <div class="c-item">✅ 2. 갈톤 확률 완료</div>
         <div class="c-item">✅ 3. 수열 금고 완료</div>
       </div>
+      </div>
 
+      <div class="comp-right">
       <!-- 🔥 히든 챌린지 도전 여부 선택 박스 -->
       <div class="omega-challenge-invitation">
         <div class="omega-inv-header">
@@ -251,6 +255,7 @@
             <span>🏆 여기까지만 하고 수료 완료 (허브 머무르기)</span>
           </button>
         </div>
+      </div>
       </div>
     </div>
   </div>
@@ -357,5 +362,6 @@
   <script src="shared/ui.js"></script>
   <script src="shared/pwa.js" defer></script>
   <script src="script.js"></script>
+  <script src="shared/fit.js"></script>
 </body>
 </html>
