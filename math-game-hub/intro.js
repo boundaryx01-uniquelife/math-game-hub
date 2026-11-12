@@ -13,7 +13,7 @@ const KEY_PLAYER = 'math_hub_current_player';
 const KEY_GRADE = 'math_hub_grade_level';
 const KEY_DIFF = 'math_hub_difficulty';
 const FIRST_GAME_URL = 'games/cipher/index.html?from=intro';
-const HUB_URL = 'index.html';
+const HUB_URL = 'hub.html';
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('intro-app');

@@ -53,7 +53,7 @@ find . -type f \( -name '*.html' -o -name '*.css' -o -name '*.js' -o -name '*.js
 
 ## 4. 페이지에 넣을 태그
 
-사이트 루트의 페이지(`index.html`, `intro.html`, `offline.html`, `learn/` 아님):
+사이트 루트의 페이지(`index.html`, `hub.html`, `resources.html`, `offline.html`, `learn/` 아님):
 
 ```html
 <link rel="manifest" href="manifest.webmanifest">

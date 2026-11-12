@@ -7,6 +7,8 @@
  * ========================================================================== */
 
 html, body { overflow-x: clip; }
+/* 배경 장식이 페이지 크기를 키워 불필요한 스크롤(가로·세로 100px)이 생기던 문제 */
+.bg-glow { position: fixed; }
 
 /* ---------- 가로 + 낮은 화면: 공통 압축 ---------- */
 @media screen and (orientation: landscape) and (max-height: 820px) {
@@ -18,7 +20,8 @@ html, body { overflow-x: clip; }
 
   /* 게임/결과 화면에서는 큰 제목 머리글을 숨기고, 시작 화면에서는 한 줄로 줄임 */
   .app-container:has(#screen-game:not(.hidden)) .app-header,
-  .app-container:has(#screen-result:not(.hidden)) .app-header { display: none; }
+  .app-container:has(#screen-result:not(.hidden)) .app-header,
+  .app-container:has(#screen-rank:not(.hidden)) .app-header { display: none; }
   .app-header { margin-bottom: 8px; }
   .app-header .mission-tag, .app-header .subtitle { display: none; }
   .app-header .main-title { font-size: 1.35rem; margin-bottom: 0; }
@@ -111,7 +114,7 @@ html, body { overflow-x: clip; }
   .progress-strip .p-dot { width: 26px; height: 26px; font-size: 0.8rem; }
   .progress-strip .p-name { font-size: 0.75rem; }
   .section-heading { font-size: 1.05rem; margin: 6px 0; }
-  .games-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .games-grid { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
   .games-section { margin: 0; }
   .game-card { padding: 12px 14px; gap: 6px; }
   .game-card .game-icon { font-size: 1.8rem; margin: 0; }
@@ -122,6 +125,10 @@ html, body { overflow-x: clip; }
   .game-card .btn-play { padding: 8px 10px; font-size: 0.9rem; white-space: nowrap; }
   .resource-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
   .resource-card { padding: 8px 10px; }
+  .hub-footer { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2px 18px; padding: 6px 0 0; margin: 0; }
+  .hub-footer p { margin: 0; font-size: 0.8rem; }
+  .hub-footer p.copyright:nth-of-type(2) { display: none; }
+  .hub-footer .footer-link { margin-top: 0; min-height: 44px; }
 }
 
 /* ---------- 확률 구슬 챌린지: 왼쪽 컨트롤·예측, 오른쪽 보드 ---------- */

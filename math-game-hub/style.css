@@ -844,3 +844,7 @@ body {
   .grade-switch { display: flex; width: 100%; max-width: 100%; box-sizing: border-box; }
   .grade-opt { flex: 1 1 0; min-width: 0; padding: 0 6px; }
 }
+
+/* 허브 하단: 운영 페이지로 가는 작은 링크 */
+.footer-link { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; margin-top: 6px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.18); color: var(--text-muted, #94a3b8); font-weight: 700; font-size: 0.9rem; text-decoration: none; }
+.footer-link:hover, .footer-link:focus-visible { color: #fff; border-color: #38bdf8; }
