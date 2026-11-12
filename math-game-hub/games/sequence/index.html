@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="../../shared/theme.css" />
   <link rel="stylesheet" href="../../shared/fit.css" />
+  <link rel="stylesheet" href="../../shared/rank.css" />
   <meta name="theme-color" content="#090d16" />
   <link rel="manifest" href="../../manifest.webmanifest" />
   <link rel="icon" href="../../icons/icon-192.png" />
@@ -15,8 +16,8 @@
 <body>
   <!-- 최상단 허브 복귀 헤더 바 -->
   <header class="game-nav-bar">
-    <a href="../../hub.html" class="btn-hub-back">
-      <span class="icon">🏠</span> 수학 게임 허브로
+    <a href="../../index.html" class="btn-hub-back">
+      <span class="icon">🏠</span> 처음 화면으로
     </a>
     <div class="game-badge">코드 브레이커: 수열 금고 스피드런</div>
   </header>
@@ -187,16 +188,23 @@
           <button id="btn-restart" class="btn btn-primary btn-large">
             <span>🔄 다시 도전하기</span>
           </button>
-          <a href="../../hub.html" class="btn btn-secondary btn-large">
-            <span>🏠 허브 랭킹 확인하기</span>
-          </a>
+          <button id="btn-to-rank" type="button" class="btn btn-secondary btn-large">
+            <span>🏆 순위 TOP 10 보기</span>
+          </button>
+          <button id="btn-result-intro" type="button" class="btn btn-secondary btn-large">
+            <span>🙋 다음 친구 차례</span>
+          </button>
         </div>
       </div>
     </section>
+
+    <!-- 4. 순위 TOP 10 (게임이 끝나면 가장 먼저 보이는 화면) -->
+    <section id="screen-rank" class="screen card hidden" aria-live="polite"></section>
   </div>
 
   <script src="../../shared/ui.js"></script>
   <script src="../../shared/pwa.js" defer></script>
+  <script src="../../shared/rank.js"></script>
   <script src="game.js"></script>
   <script src="../../shared/fit.js"></script>
 </body>

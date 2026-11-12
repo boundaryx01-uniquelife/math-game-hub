@@ -171,6 +171,8 @@ const OMEGA_GATES = [
 const screenStart = document.getElementById('screen-start');
 const screenGame = document.getElementById('screen-game');
 const screenResult = document.getElementById('screen-result');
+const screenRank = document.getElementById('screen-rank');
+let lastRecord = null;
 
 const inputPlayerName = document.getElementById('player-name');
 const btnStart = document.getElementById('btn-start');
@@ -236,6 +238,7 @@ btnStart.addEventListener('click', async () => {
 
   screenStart.classList.add('hidden');
   screenResult.classList.add('hidden');
+  screenRank.classList.add('hidden');
   screenGame.classList.remove('hidden');
 
   startTimer();
@@ -372,7 +375,6 @@ function finishOmegaGame() {
   clearInterval(gameState.timerInterval);
 
   screenGame.classList.add('hidden');
-  screenResult.classList.remove('hidden');
 
   const m = String(Math.floor(gameState.timerSeconds / 60)).padStart(2, '0');
   const s = String(gameState.timerSeconds % 60).padStart(2, '0');
@@ -383,8 +385,8 @@ function finishOmegaGame() {
   const randomCode = `OMG-GOLD-${Math.floor(1000 + Math.random() * 9000)}`;
   certCode.textContent = randomCode;
 
-  // 허브 명예의 전당 저장
-  saveToHub({
+  // 명예의 전당 저장
+  lastRecord = {
     gameId: 'omega_protocol',
     gameTitle: '오메가 프로토콜',
     name: gameState.playerName,
@@ -394,7 +396,34 @@ function finishOmegaGame() {
     clearTimeSeconds: gameState.timerSeconds,
     timestamp: Date.now(),
     ...(gameState.masterKeyUsed ? { masterKeyUsed: gameState.masterKeyUsed } : {})
+  };
+  saveToHub(lastRecord);
+  showRank();
+}
+
+// 끝나면 순위 TOP 10을 먼저 보여 주고, 골드 인증서는 버튼으로 볼 수 있게
+function showRank() {
+  screenResult.classList.add('hidden');
+  screenGame.classList.add('hidden');
+  screenRank.classList.remove('hidden');
+  const level = localStorage.getItem('math_hub_difficulty') || 'all';
+  window.MathHubRank.mount(screenRank, {
+    difficulty: level,
+    finished: lastRecord,
+    actions: [
+      { label: '📄 골드 인증서 보기', variant: 'omega', onClick: showResult },
+      { label: '🔄 다시 도전하기', onClick: restartGame }
+    ]
   });
+}
+function showResult() {
+  screenRank.classList.add('hidden');
+  screenResult.classList.remove('hidden');
+}
+function restartGame() {
+  screenResult.classList.add('hidden');
+  screenRank.classList.add('hidden');
+  screenStart.classList.remove('hidden');
 }
 
 function saveToHub(record) {
@@ -413,8 +442,7 @@ btnPrint.addEventListener('click', () => {
   window.print();
 });
 
-// 다시 시작
-btnRestart.addEventListener('click', () => {
-  screenResult.classList.add('hidden');
-  screenStart.classList.remove('hidden');
-});
+// 다시 시작 / 순위 보기 / 처음 화면으로
+btnRestart.addEventListener('click', restartGame);
+document.getElementById('btn-to-rank').addEventListener('click', showRank);
+document.getElementById('btn-result-intro').addEventListener('click', () => window.MathHubRank.goIntro());

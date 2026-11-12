@@ -20,7 +20,8 @@ html, body { overflow-x: clip; }
 
   /* 게임/결과 화면에서는 큰 제목 머리글을 숨기고, 시작 화면에서는 한 줄로 줄임 */
   .app-container:has(#screen-game:not(.hidden)) .app-header,
-  .app-container:has(#screen-result:not(.hidden)) .app-header { display: none; }
+  .app-container:has(#screen-result:not(.hidden)) .app-header,
+  .app-container:has(#screen-rank:not(.hidden)) .app-header { display: none; }
   .app-header { margin-bottom: 8px; }
   .app-header .mission-tag, .app-header .subtitle { display: none; }
   .app-header .main-title { font-size: 1.35rem; margin-bottom: 0; }

@@ -90,6 +90,8 @@ const PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 
 const screenStart = document.getElementById('screen-start');
 const screenGame = document.getElementById('screen-game');
 const screenResult = document.getElementById('screen-result');
+const screenRank = document.getElementById('screen-rank');
+let lastRecord = null;
 
 const inputPlayerName = document.getElementById('player-name');
 const diffButtons = document.querySelectorAll('.btn-diff');
@@ -187,6 +189,7 @@ btnStart.addEventListener('click', async () => {
 
   screenStart.classList.add('hidden');
   screenResult.classList.add('hidden');
+  screenRank.classList.add('hidden');
   screenGame.classList.remove('hidden');
 
   generateNewQuestion();
@@ -557,7 +560,6 @@ function openMasterPanel() {
 // 게임 종료
 function finishGame() {
   screenGame.classList.add('hidden');
-  screenResult.classList.remove('hidden');
 
   resFinalScore.textContent = gameState.score.toLocaleString();
   resSolvedCount.textContent = `${gameState.solvedCount}개`;
@@ -568,8 +570,8 @@ function finishGame() {
   if (gameState.difficulty === 'hard') diffText = '어려움';
   resDiff.textContent = diffText;
 
-  // 허브 명예의 전당 저장
-  saveToHub({
+  // 명예의 전당 저장
+  lastRecord = {
     gameId: 'sequence_vault',
     gameTitle: '수열 금고 스피드런',
     name: gameState.playerName,
@@ -579,7 +581,31 @@ function finishGame() {
     clearTimeSeconds: 100000 - gameState.score, // 점수 내림차순 정렬용
     timestamp: Date.now(),
     ...(gameState.masterKeyUsed ? { masterKeyUsed: gameState.masterKeyUsed } : {})
-  });
+  };
+  saveToHub(lastRecord);
+  showRank();
+}
+
+// 끝나면 순위 TOP 10을 먼저 보여 주고, 결과(점수)는 버튼으로 볼 수 있게
+function showRank() {
+  screenResult.classList.add('hidden');
+  screenGame.classList.add('hidden');
+  screenRank.classList.remove('hidden');
+  const actions = [{ label: '📄 내 결과 보기', onClick: showResult }];
+  if (window.MathHubRank.hasClearedBasics(gameState.playerName)) {
+    actions.push({ label: '👑 히든 미션 도전', variant: 'omega', href: '../hidden_omega/index.html' });
+  }
+  actions.push({ label: '🔄 다시 도전하기', onClick: restartGame });
+  window.MathHubRank.mount(screenRank, { difficulty: gameState.difficulty, finished: lastRecord, actions });
+}
+function showResult() {
+  screenRank.classList.add('hidden');
+  screenResult.classList.remove('hidden');
+}
+function restartGame() {
+  screenResult.classList.add('hidden');
+  screenRank.classList.add('hidden');
+  screenStart.classList.remove('hidden');
 }
 
 function saveToHub(record) {
@@ -593,8 +619,7 @@ function saveToHub(record) {
   }
 }
 
-// 다시 도전
-btnRestart.addEventListener('click', () => {
-  screenResult.classList.add('hidden');
-  screenStart.classList.remove('hidden');
-});
+// 다시 도전 / 순위 보기 / 처음 화면으로
+btnRestart.addEventListener('click', restartGame);
+document.getElementById('btn-to-rank').addEventListener('click', showRank);
+document.getElementById('btn-result-intro').addEventListener('click', () => window.MathHubRank.goIntro());
