@@ -35,7 +35,11 @@
             <label for="hub-player-name" class="sr-only">요원 이름</label>
             <input type="text" id="hub-player-name" placeholder="이름을 입력하세요" maxlength="10" autocomplete="off" />
             <button id="btn-save-player" class="btn btn-sm btn-outline" type="button">저장</button>
-            <span id="hub-grade-badge" class="badge-grade-level">🌱 초등부</span>
+          </div>
+          <div class="grade-switch" role="radiogroup" aria-label="학년(난이도) 선택">
+            <button type="button" class="grade-opt" role="radio" aria-checked="true" data-grade="elem" data-diff="easy">🌱 초등</button>
+            <button type="button" class="grade-opt" role="radio" aria-checked="false" data-grade="mid" data-diff="normal">⭐ 중등</button>
+            <button type="button" class="grade-opt" role="radio" aria-checked="false" data-grade="high" data-diff="hard">🔥 고등</button>
           </div>
         </div>
       </div>

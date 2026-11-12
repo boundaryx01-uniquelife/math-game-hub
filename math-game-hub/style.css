@@ -826,3 +826,21 @@ body {
   .ranking-table th:nth-child(5), .ranking-table td:nth-child(5) { display: none; }
 }
 .modal-footer .btn { padding: 10px 20px; white-space: nowrap; border-radius: 12px; }
+
+/* 허브 학년(난이도) 선택 */
+.grade-switch {
+  display: inline-flex; gap: 4px; margin-top: 8px; padding: 4px;
+  background: rgba(9, 13, 22, 0.7); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px;
+}
+.grade-opt {
+  min-height: 48px; min-width: 72px; padding: 0 14px; border: 0; border-radius: 9px;
+  background: transparent; color: #94a3b8; font: inherit; font-weight: 700; font-size: 0.95rem;
+  cursor: pointer; word-break: keep-all; white-space: nowrap;
+}
+.grade-opt:hover { color: #e2e8f0; background: rgba(255, 255, 255, 0.06); }
+.grade-opt.active { background: rgba(56, 189, 248, 0.18); color: #38bdf8; box-shadow: inset 0 0 0 1px rgba(56, 189, 248, 0.5); }
+.grade-opt:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
+@media (max-width: 600px) {
+  .grade-switch { display: flex; width: 100%; max-width: 100%; box-sizing: border-box; }
+  .grade-opt { flex: 1 1 0; min-width: 0; padding: 0 6px; }
+}

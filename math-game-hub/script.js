@@ -8,6 +8,7 @@
 const UI = window.MathHubUI;
 const KEY_PLAYER = 'math_hub_current_player';
 const KEY_GRADE = 'math_hub_grade_level';
+const KEY_DIFF = 'math_hub_difficulty';
 const KEY_RECORDS = 'math_hub_records';
 const KEY_STAFF_UNLOCK = 'math_hub_staff_unlock';   // 도우미가 모든 미션을 열어 둔 상태(탭을 닫으면 해제)
 
@@ -65,25 +66,69 @@ document.addEventListener('DOMContentLoaded', () => {
   const savedName = currentPlayer();
   if (savedName) inputHubPlayerName.value = savedName;
 
-  const savedGrade = localStorage.getItem(KEY_GRADE) || 'elem';
-  const gradeBadge = document.getElementById('hub-grade-badge');
-  if (gradeBadge) {
-    gradeBadge.textContent = { elem: '🌱 초등부', mid: '⭐ 중등부', high: '🔥 고등부' }[savedGrade] || '🌱 초등부';
-  }
+  initGradeSwitch();
 
   checkCourseCompletion();
   initOfflineStatus();
 });
 
+/**
+ * 허브에서 바로 학년(난이도) 고르기.
+ * 학년→난이도: 초등=easy, 중등=normal, 고등=hard (인트로와 같은 저장 키 사용)
+ */
+const GRADE_DIFF = { elem: 'easy', mid: 'normal', high: 'hard' };
+const GRADE_LABEL = { elem: '초등부', mid: '중등부', high: '고등부' };
+
+function renderGradeSwitch() {
+  const grade = GRADE_DIFF[localStorage.getItem(KEY_GRADE)] ? localStorage.getItem(KEY_GRADE) : 'elem';
+  document.querySelectorAll('.grade-switch .grade-opt').forEach(btn => {
+    const on = btn.dataset.grade === grade;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-checked', on ? 'true' : 'false');
+    btn.tabIndex = on ? 0 : -1;
+  });
+}
+
+function setGrade(grade, announce) {
+  if (!GRADE_DIFF[grade]) return;
+  localStorage.setItem(KEY_GRADE, grade);
+  localStorage.setItem(KEY_DIFF, GRADE_DIFF[grade]);
+  renderGradeSwitch();
+  if (announce && UI && UI.toast) UI.toast(`${GRADE_LABEL[grade]} 난이도로 바꿨어요.`, 'success');
+}
+
+function initGradeSwitch() {
+  const btns = Array.from(document.querySelectorAll('.grade-switch .grade-opt'));
+  // 인트로를 거치지 않고 들어와도 학년과 난이도가 서로 맞도록 저장
+  const saved = localStorage.getItem(KEY_GRADE);
+  setGrade(GRADE_DIFF[saved] ? saved : 'elem', false);
+  btns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      if (btn.getAttribute('aria-checked') !== 'true') setGrade(btn.dataset.grade, true);
+    });
+    // 방향키로 이동(라디오 그룹 관례)
+    btn.addEventListener('keydown', (e) => {
+      const step = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : (e.key === 'ArrowLeft' || e.key === 'ArrowUp') ? -1 : 0;
+      if (!step) return;
+      e.preventDefault();
+      const next = btns[(i + step + btns.length) % btns.length];
+      setGrade(next.dataset.grade, true);
+      next.focus();
+    });
+  });
+}
+
 // 다른 탭(또는 설치된 앱)에서 기록이 바뀌면 바로 반영
 window.addEventListener('storage', (e) => {
   if (e.key === KEY_RECORDS || e.key === KEY_PLAYER) checkCourseCompletion();
+  if (e.key === KEY_GRADE) renderGradeSwitch();
 });
 // 게임에서 뒤로 가기로 돌아왔을 때도 최신 상태로
 window.addEventListener('pageshow', () => {
   const name = currentPlayer();
   if (name && inputHubPlayerName.value !== name) inputHubPlayerName.value = name;
   checkCourseCompletion();
+  renderGradeSwitch();
 });
 
 /**
