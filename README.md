@@ -44,7 +44,7 @@ math-game-hub/
 
 ### 학습 자료 · 부스 운영 (`math-game-hub/learn/`)
 - `worksheet.html` 체험 학습지 · `concepts.html` 개념 정리 · `worksheet-answers.html` 교사용 정답
-- `booth-guide.html` 체험 방법 안내판(A3/A4) · `galton-build.html` 갈톤 보드 제작 설명서
+- `booth-guide.html` 체험 방법 안내판(A3/A4) · `galton-build.html` 갈톤 보드 제작 A1 포스터(자세한 설명서는 `galton-build-detail.html`)
 
 ### 도우미(운영자) 기능
 - 게임 정답 입력칸에 마스터 키를 넣으면 정답과 풀이가 표시됩니다. 힌트는 2단계로 제공됩니다.

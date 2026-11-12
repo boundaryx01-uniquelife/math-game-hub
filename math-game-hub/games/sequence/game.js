@@ -437,6 +437,11 @@ numpadButtons.forEach(btn => {
 // 키보드 입력 지원
 window.addEventListener('keydown', (e) => {
   if (screenGame.classList.contains('hidden')) return;
+  // 입력 칸에 글을 쓰는 중이면 건드리지 않음
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  // 컴퓨터에서 Backspace가 "페이지 뒤로 가기"로 동작하지 않게 막음(도우미 창이 열려 있을 때도)
+  if (e.key === 'Backspace') e.preventDefault();
   if (window.MathAssist && window.MathAssist.isPanelOpen()) return;
 
   if (e.key >= '0' && e.key <= '9') {

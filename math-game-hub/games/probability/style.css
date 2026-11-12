@@ -717,3 +717,10 @@ body {
 .btn-icon { min-width: 48px; min-height: 48px; }
 .sim-control-bar { flex-wrap: wrap; gap: 12px; }
 .canvas-wrapper canvas, #galton-canvas { max-width: 100%; height: auto; }
+
+/* 예측 먼저, 실험은 그 다음 */
+.step-badge { display: inline-block; background: rgba(251, 191, 36, 0.16); border: 1px solid rgba(251, 191, 36, 0.5); color: #fbbf24; font-weight: 800; font-size: 0.9rem; padding: 4px 12px; border-radius: 999px; margin-bottom: 8px; }
+.start-hint { display: block; margin-top: 6px; font-size: 0.85rem; font-weight: 700; color: #fbbf24; word-break: keep-all; }
+.start-hint.hidden { display: none; }
+.btn-run:disabled { opacity: 0.45; cursor: not-allowed; }
+.predict-sliders-container.is-locked { opacity: 0.6; pointer-events: none; }
