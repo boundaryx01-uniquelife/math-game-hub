@@ -11,7 +11,7 @@
  * ========================================================================== */
 
 // 배포할 때마다 이 값을 올리세요. (예: '2026-11-12-3')
-const CACHE_VERSION = '2026-11-12-13';
+const CACHE_VERSION = '2026-11-12-14';
 
 // 사이트 루트(이 sw.js가 있는 폴더) 기준 상대 경로. 없는 파일은 건너뜁니다(설치 실패 아님).
 const PRECACHE_URLS = [
@@ -37,6 +37,15 @@ const PRECACHE_URLS = [
   'shared/theme.css',
   'media/intro-story.mp4',
   'media/intro-story-poster.jpg',
+  'media/intro-kids.mp4',
+  'media/intro-kids-poster.jpg',
+
+  // 꼬마 요원(유아·초등 저학년)
+  'kids/',
+  'kids/index.html',
+  'kids/kids.css',
+  'kids/kids.js',
+  'kids/fonts/Jua-kids.woff2',
   'shared/fit.css',
   'shared/rank.css',
   'shared/rank.js',

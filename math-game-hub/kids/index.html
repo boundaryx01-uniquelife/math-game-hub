@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>꼬마 요원 출동! (유아·초등 저학년)</title>
+  <link rel="stylesheet" href="kids.css" />
+  <meta name="theme-color" content="#fff3d6" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../icons/icon-192.png" />
+</head>
+<body>
+  <!-- 콩이(병아리 요원) 그림: 여러 곳에서 다시 씀 -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="kong" viewBox="-100 -125 200 230">
+      <ellipse cx="-26" cy="88" rx="20" ry="9" fill="#ff9a3c"/><ellipse cx="26" cy="88" rx="20" ry="9" fill="#ff9a3c"/>
+      <ellipse cx="0" cy="12" rx="76" ry="78" fill="#ffd84d"/><ellipse cx="0" cy="38" rx="46" ry="40" fill="#ffe98a"/>
+      <ellipse cx="-72" cy="14" rx="18" ry="32" fill="#ffc928" transform="rotate(28 -72 14)"/>
+      <ellipse class="kong-wing" cx="72" cy="2" rx="18" ry="34" fill="#ffc928" transform="rotate(-40 72 2)"/>
+      <ellipse cx="-26" cy="-10" rx="9" ry="12" fill="#3d2a1c"/><ellipse cx="26" cy="-10" rx="9" ry="12" fill="#3d2a1c"/>
+      <circle cx="-23" cy="-15" r="3.5" fill="#fff"/><circle cx="29" cy="-15" r="3.5" fill="#fff"/>
+      <path d="M-13 2 Q0 -6 13 2 Q0 20 -13 2Z" fill="#ff8a3c"/>
+      <circle cx="-46" cy="8" r="11" fill="#ff6e6e" opacity=".5"/><circle cx="46" cy="8" r="11" fill="#ff6e6e" opacity=".5"/>
+      <path d="M-60 -48 Q-56 -108 0 -108 Q56 -108 60 -48Z" fill="#3d6df2"/>
+      <ellipse cx="14" cy="-48" rx="78" ry="13" fill="#2a4fc4"/>
+      <path d="M0 -94 L4.6 -84.3 15.2 -82.9 7.4 -75.7 9.4 -65.1 0 -70.2 -9.4 -65.1 -7.4 -75.7 -15.2 -82.9 -4.6 -84.3Z" fill="#ffd84d" stroke="#ffd84d" stroke-width="4" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="kstar" viewBox="-60 -60 120 120">
+      <path d="M0 -44 L12.9 -17.8 41.8 -13.6 20.9 6.8 25.9 35.6 0 22 -25.9 35.6 -20.9 6.8 -41.8 -13.6 -12.9 -17.8Z" fill="currentColor" stroke="currentColor" stroke-width="14" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <main id="app" data-stage="start">
+    <!-- 위쪽 줄: 모은 별 · 소리 · 처음으로 -->
+    <header class="k-top">
+      <button type="button" class="k-round" id="btn-home" aria-label="처음 화면으로">🏠</button>
+      <div class="k-stars" id="k-stars" aria-label="모은 별">
+        <svg class="k-starslot" data-i="0"><use href="#kstar"/></svg>
+        <svg class="k-starslot" data-i="1"><use href="#kstar"/></svg>
+        <svg class="k-starslot" data-i="2"><use href="#kstar"/></svg>
+        <svg class="k-starslot" data-i="3"><use href="#kstar"/></svg>
+      </div>
+      <button type="button" class="k-round" id="btn-sound" aria-pressed="true" aria-label="소리 켜기/끄기">🔊</button>
+    </header>
+
+    <!-- 1. 시작: 친구 고르기 -->
+    <section class="k-stage" id="stage-start">
+      <div class="start-hero">
+        <svg class="start-kong bounce"><use href="#kong"/></svg>
+        <div>
+          <h1 class="k-title"><span>꼬</span><span>마</span> <span>요</span><span>원</span> <span>출</span><span>동</span><span>!</span></h1>
+          <p class="k-lead">함께 갈 친구를 골라요</p>
+        </div>
+      </div>
+      <div class="buddy-row" role="radiogroup" aria-label="함께 갈 친구">
+        <button type="button" class="buddy active" role="radio" aria-checked="true" data-buddy="토끼" data-emoji="🐰"><span class="b-emoji">🐰</span><span class="b-name">토끼</span></button>
+        <button type="button" class="buddy" role="radio" aria-checked="false" data-buddy="곰돌이" data-emoji="🐻"><span class="b-emoji">🐻</span><span class="b-name">곰돌이</span></button>
+        <button type="button" class="buddy" role="radio" aria-checked="false" data-buddy="여우" data-emoji="🦊"><span class="b-emoji">🦊</span><span class="b-name">여우</span></button>
+        <button type="button" class="buddy" role="radio" aria-checked="false" data-buddy="판다" data-emoji="🐼"><span class="b-emoji">🐼</span><span class="b-name">판다</span></button>
+      </div>
+      <div class="start-opts">
+        <div class="level-row" role="radiogroup" aria-label="나이">
+          <button type="button" class="level active" role="radio" aria-checked="true" data-level="k">🐣 유치원</button>
+          <button type="button" class="level" role="radio" aria-checked="false" data-level="e">🐥 초등 1·2학년</button>
+        </div>
+        <input type="text" id="kid-name" maxlength="8" autocomplete="off" placeholder="이름 (안 써도 돼요)" aria-label="이름 (안 써도 돼요)" />
+      </div>
+      <button type="button" class="k-go" id="btn-start">▶ 이야기 보러 가기</button>
+    </section>
+
+    <!-- 2. 미션 이야기 영상 -->
+    <section class="k-stage" id="stage-story" hidden>
+      <div class="story-frame">
+        <video id="kid-video" playsinline preload="metadata" poster="../media/intro-kids-poster.jpg" aria-label="꼬마 요원 미션 이야기 (자막이 들어 있어요)"></video>
+        <button type="button" class="story-big" id="btn-vplay" aria-label="영상 재생" hidden>▶</button>
+      </div>
+      <div class="story-bar">
+        <button type="button" class="k-btn" id="btn-vreplay">🔁 다시 보기</button>
+        <button type="button" class="k-go small" id="btn-vstart">🚀 출발!</button>
+      </div>
+    </section>
+
+    <!-- 3. 놀이 -->
+    <section class="k-stage" id="stage-play" hidden>
+      <div class="q-row">
+        <svg class="q-kong"><use href="#kong"/></svg>
+        <div class="q-bubble">
+          <div class="q-tag" id="q-tag">열쇠 1 · 세기</div>
+          <div class="q-text" id="q-text" aria-live="polite"></div>
+        </div>
+        <button type="button" class="k-round q-say" id="btn-say" aria-label="문제 다시 듣기">🗣️</button>
+      </div>
+      <div class="q-board" id="q-board"></div>
+      <div class="q-choices" id="q-choices"></div>
+      <div class="q-dots" id="q-dots" aria-hidden="true"></div>
+    </section>
+
+    <!-- 4. 인증서 -->
+    <section class="k-stage" id="stage-cert" hidden>
+      <div class="cert">
+        <div class="cert-ribbon">꼬마 요원 인증서</div>
+        <div class="cert-stars"><svg><use href="#kstar"/></svg><svg><use href="#kstar"/></svg><svg><use href="#kstar"/></svg><svg><use href="#kstar"/></svg></div>
+        <div class="cert-name"><span id="cert-emoji">🐰</span> <b id="cert-name">토끼 요원</b></div>
+        <p class="cert-text">별님 넷을 모두 구했어요!<br />수학 마을의 멋진 꼬마 요원이에요.</p>
+        <svg class="cert-kong bounce"><use href="#kong"/></svg>
+      </div>
+      <div class="cert-btns">
+        <button type="button" class="k-btn" id="btn-again">🔁 한 번 더</button>
+        <button type="button" class="k-go small" id="btn-finish">🏠 처음으로</button>
+      </div>
+    </section>
+
+    <!-- 별 얻음 축하 -->
+    <div class="k-pop" id="k-pop" hidden>
+      <div class="k-pop-card">
+        <svg class="k-pop-star"><use href="#kstar"/></svg>
+        <div class="k-pop-title" id="pop-title">별님을 구했어요!</div>
+        <button type="button" class="k-go small" id="btn-pop-next">다음 ▶</button>
+      </div>
+    </div>
+
+    <!-- 처음으로 갈지 묻기 -->
+    <div class="k-pop" id="k-ask" hidden>
+      <div class="k-pop-card">
+        <div class="k-pop-title">처음 화면으로 갈까요?</div>
+        <div class="ask-btns">
+          <button type="button" class="k-btn" id="btn-ask-no">아니요</button>
+          <button type="button" class="k-go small" id="btn-ask-yes">네</button>
+        </div>
+      </div>
+    </div>
+    <canvas id="k-confetti" aria-hidden="true"></canvas>
+  </main>
+
+  <script src="../shared/pwa.js" defer></script>
+  <script src="kids.js"></script>
+</body>
+</html>
