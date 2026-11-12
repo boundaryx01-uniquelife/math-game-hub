@@ -110,74 +110,56 @@ table.seq td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
 .tipbox{border:1pt dashed var(--ink);border-radius:1.5mm;padding:.8mm 2mm;margin-top:.8mm}
 @media screen and (max-width:830px){.minis{grid-template-columns:1fr 1fr}.seqg{grid-template-columns:1fr 1fr}.flex{flex-wrap:wrap}.flex>*{flex:1 1 150px!important}table.seq td:last-child,table.seq td:first-child{white-space:normal}}
 
-/* ===== 컬러 + 형광펜 하이라이트 (색은 카드마다 달라요) ===== */
-:root{--hl:#fff176;--hl2:#ffd54f}
-.page{background:#fffdf7}
-.head{border:0;padding:3mm 4mm;border-radius:3mm;background:linear-gradient(95deg,#2563eb 0%,#7c3aed 55%,#db2777 100%);color:#fff;align-items:center}
-.head h1{font-size:18pt;color:#fff}
-.head h1 small{color:#fde047;font-size:12pt;font-weight:800}
-.head .lead{color:#fff;font-size:10.5pt}
-.head .lead b{background:linear-gradient(transparent 52%,rgba(253,224,71,.85) 52%);color:#fff;padding:0 1mm}
+/* ===== 차분한 색: 파란 한 가지 + 아주 연한 노랑 표시 ===== */
+:root{--ink:#1f2937;--accent:#2b5d8f;--tint:#eef3f9;--line:#c9d3df;--mark:#fff1a8}
+.page{background:#fff}
+.head{border-bottom:2pt solid var(--accent)}
+.head h1{color:var(--ink)}
+.head h1 small{color:var(--accent)}
+.head .lead b{background:linear-gradient(transparent 62%,var(--mark) 62%);padding:0 .5mm}
 .idline{display:none}
-.card{--c:#2563eb;--t:#eef4ff;border:1.5pt solid var(--c);background:var(--t);border-radius:3mm;overflow:hidden;padding:0 2.8mm 1.8mm}
-.card>h2{margin:0 -2.8mm 1.3mm;padding:1mm 2.8mm;background:var(--c);color:#fff;gap:2mm}
-.card>h2 .n{background:#fff;color:var(--c);font-weight:900}
-.card>h2 .t{color:rgba(255,255,255,.92);font-weight:600}
-.c1{--c:#2563eb;--t:#eef4ff}
-.c2{--c:#059669;--t:#ecfdf5}
-.c3{--c:#7c3aed;--t:#f5f0ff}
-.c4{--c:#ea580c;--t:#fff4ea}
-.c5{--c:#db2777;--t:#fff0f6}
-.c6{--c:#b45309;--t:#fffbe6}
-.card p b,.mini p b,.s b:first-child,.flex p b{background:linear-gradient(transparent 50%,var(--hl) 50%);padding:0 .6mm;border-radius:.6mm}
-.ex{background:#fff;border-left:2.4pt solid var(--c);border-radius:0 1.8mm 1.8mm 0;box-shadow:0 0 0 .6pt var(--c) inset}
-.ex b:first-child{background:var(--c);color:#fff;border-radius:1mm;padding:0 1.4mm;margin-right:.6mm}
-.ex b:not(:first-child){background:linear-gradient(transparent 38%,var(--hl2) 38%);padding:0 .8mm;border-radius:.6mm}
-table.t td,table.t th,table.seq td,table.seq th,.pas i,.s,.mini{border-color:var(--c)}
-table.t th,table.seq th{background:var(--c);color:#fff;border-color:var(--c)}
-table.strip th.lbl{background:var(--c);color:#fff}
+.card{border:1pt solid var(--line);border-left:4pt solid var(--accent);background:#fff;border-radius:2mm;overflow:hidden;padding:0 2.8mm 1.6mm}
+.card>h2{margin:0 -2.8mm 1mm;padding:1.1mm 2.8mm;background:var(--tint);color:var(--ink);border-bottom:.8pt solid var(--line)}
+.card>h2 .n{background:var(--accent);color:#fff}
+.card>h2 .t{color:#4b5563;font-weight:500}
+.card p b,.mini p b,.s b:first-child,.flex p b{font-weight:800}
+.ex{background:var(--tint);border-left:2.2pt solid var(--accent);border-radius:0 1.5mm 1.5mm 0}
+.ex b:first-child{color:var(--accent);margin-right:.8mm}
+.ex b:not(:first-child){background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 .6mm}
+table.t td,table.t th,table.seq td,table.seq th,.pas i,.s,.mini{border-color:#8fa3b8}
+table.t th,table.seq th{background:#e4ebf3;color:var(--ink)}
+table.strip th.lbl{background:#e4ebf3;color:var(--ink)}
 table.t td{background:#fff}
-table.strip td.sh{background:#bfdbfe;color:#1e3a8a}
-table.t td.hl{background:#fde047;color:#111;box-shadow:inset 0 0 0 1.2pt #059669}
-table.t td.on{background:#a78bfa;color:#fff}
-.pas i{background:#fff;border-color:var(--c);color:#9d174d}
-.pas i.g{background:#fbcfe8}
-.pas div:nth-child(odd) i{background:#ffe4f0}
-.pas .lb{color:var(--c);font-weight:700}
-.mini{background:#fff;border:1.1pt solid var(--c);border-top-width:3pt}
-.mini h3{color:var(--c)}
-.s{background:#fff;border:1pt solid var(--c);border-left:3.2pt solid var(--c)}
-.s .e{color:#111}
-.seqg .s:nth-child(1){--c:#2563eb}.seqg .s:nth-child(2){--c:#0891b2}.seqg .s:nth-child(3){--c:#059669}
-.seqg .s:nth-child(4){--c:#65a30d}.seqg .s:nth-child(5){--c:#ca8a04}.seqg .s:nth-child(6){--c:#ea580c}
-.seqg .s:nth-child(7){--c:#dc2626}.seqg .s:nth-child(8){--c:#db2777}.seqg .s:nth-child(9){--c:#7c3aed}
-.seqg .s b:first-child{color:var(--c);background:none;padding:0}
-.seqg .s{background:#fff}
-svg rect[fill="#bdbdbd"]{fill:#f9a8d4}
-svg rect[fill="#bdbdbd"]:nth-of-type(8),svg rect[fill="#bdbdbd"]:nth-of-type(9){fill:#db2777}
-svg rect[fill="#fff"]{fill:#ffe4f0}
-svg circle{fill:#db2777}
-svg path[fill="#fff"]{fill:#fde047}
-.card h2 + .flex, .card h2 + p{margin-top:.2mm}
-.toolbar .tip{color:#555}
-.head{padding:2mm 4mm}
-.head h1{font-size:16.5pt}
-.card>h2{padding:.5mm 2.8mm;margin-bottom:.9mm;font-size:11.5pt}
-.card>h2 .n{min-width:5.6mm;height:5.6mm;font-size:10pt}
-.card{margin-top:1.5mm!important;padding-bottom:1.2mm}
+table.strip td.sh{background:#dde8f4;color:var(--ink)}
+table.t td.hl{background:var(--mark);color:var(--ink)}
+table.t td.on{background:#cfe0f1;color:var(--ink)}
+.pas i{background:#fff;color:var(--ink)}
+.pas i.g{background:var(--tint)}
+.pas .lb{color:#4b5563}
+.mini{background:#fff;border:.9pt solid var(--line);border-top:2.4pt solid var(--accent)}
+.mini h3{color:var(--accent)}
+.s{background:#fff;border:.9pt solid var(--line);border-left:3pt solid var(--accent)}
+.s b:first-child{color:var(--accent)}
+svg rect[fill="#bdbdbd"]{fill:#c5d5e8}
+svg rect[fill="#bdbdbd"]:nth-of-type(8),svg rect[fill="#bdbdbd"]:nth-of-type(9){fill:#7fa3c9}
+svg rect[fill="#fff"]{fill:#f3f6fa}
+svg circle{fill:#2b5d8f}
+svg path[fill="#fff"]{fill:var(--mark)}
+.head{padding:0 0 1.6mm}
+.card>h2{font-size:11.5pt}
+.card{margin-top:1.5mm!important}
 .cols2 .card{margin-top:0!important}
 .cols2{margin-top:1.5mm!important}
-.page{padding:5mm 10mm}
+.page{padding:5.5mm 10mm}
 .card p{margin:.3mm 0}
 .ex{padding:.4mm 1.8mm}
-@media print{.page{background:#fffdf7}}
 </style>
 </head>
 <body>
 <div class="toolbar">
   <button type="button" onclick="window.print()">인쇄하기</button>
   <a href="../index.html">허브로 돌아가기</a>
-  <span class="tip">A4 세로 1장 · 컬러 인쇄 추천 (흑백도 가능)</span>
+  <span class="tip">A4 세로 1장 · 흑백 인쇄도 잘 보여요</span>
 </div>
 <main class="page">
 
