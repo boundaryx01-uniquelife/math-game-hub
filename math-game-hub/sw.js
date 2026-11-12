@@ -11,7 +11,7 @@
  * ========================================================================== */
 
 // 배포할 때마다 이 값을 올리세요. (예: '2026-11-12-3')
-const CACHE_VERSION = '2026-11-12-6';
+const CACHE_VERSION = '2026-11-12-7';
 
 // 사이트 루트(이 sw.js가 있는 폴더) 기준 상대 경로. 없는 파일은 건너뜁니다(설치 실패 아님).
 const PRECACHE_URLS = [
@@ -31,6 +31,8 @@ const PRECACHE_URLS = [
   'shared/assist.js',
   'shared/ui.js',
   'shared/theme.css',
+  'media/intro-story.mp4',
+  'media/intro-story-poster.jpg',
   'shared/fit.css',
   'shared/fit.js',
 
@@ -255,6 +257,33 @@ async function cacheLookup(cache, request) {
 /* 전략: stale-while-revalidate (캐시 즉시 응답 + 뒤에서 최신본으로 갱신)
  *  - 오프라인에서도 즉시 열림, 온라인이면 다음 방문부터 최신 내용이 보임.
  *  - CACHE_VERSION 을 올리면 새 서비스 워커가 전체를 다시 받고 옛 캐시를 지움. */
+
+// 저장해 둔 파일(영상 등)에서 Range 요청 구간만 돌려줌
+async function rangeResponse(req, cached) {
+  const buf = await cached.clone().arrayBuffer();
+  const size = buf.byteLength;
+  const m = /bytes=(\d*)-(\d*)/.exec(req.headers.get('range') || '');
+  let start = 0, end = size - 1;
+  if (m) {
+    if (m[1] !== '') { start = parseInt(m[1], 10); if (m[2] !== '') end = parseInt(m[2], 10); }
+    else if (m[2] !== '') { start = Math.max(0, size - parseInt(m[2], 10)); }
+  }
+  end = Math.min(end, size - 1);
+  if (start > end || start >= size) {
+    return new Response(null, { status: 416, headers: { 'Content-Range': 'bytes */' + size } });
+  }
+  return new Response(buf.slice(start, end + 1), {
+    status: 206,
+    statusText: 'Partial Content',
+    headers: {
+      'Content-Type': cached.headers.get('Content-Type') || 'video/mp4',
+      'Content-Length': String(end - start + 1),
+      'Content-Range': 'bytes ' + start + '-' + end + '/' + size,
+      'Accept-Ranges': 'bytes'
+    }
+  });
+}
+
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
@@ -279,6 +308,12 @@ self.addEventListener('fetch', (event) => {
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     const cached = await cacheLookup(cache, req);
+
+    // 영상(Range 요청): 저장된 파일에서 요청한 구간만 잘라 206 으로 답해야 사파리(아이패드)도 재생됨
+    if (req.headers.has('range')) {
+      if (cached) return rangeResponse(req, cached);
+      return fetch(req);
+    }
 
     const network = fetch(req).then(async (res) => {
       if (res && res.ok && res.type === 'basic' && res.status === 200) {

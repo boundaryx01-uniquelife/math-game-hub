@@ -5,10 +5,9 @@
  * - 허브의 "미션 이야기" 버튼으로 오면(주소 끝 #story) 등록을 건너뛰고 이야기만 보여 주고 허브로 돌아갑니다.
  */
 
-// 이야기 영상을 만들면 이 줄에 경로를 넣으세요. 예: 'media/intro-story.mp4'
-// (넣으면 왼쪽 그림 자리에 영상이 나오고, 영상이 끝나면 시작 버튼이 강조됩니다.
-//  sw.js 의 PRECACHE_URLS 에 같은 경로를 추가하고 CACHE_VERSION 도 올려야 태블릿이 오프라인에서도 재생합니다.)
-const STORY_VIDEO_SRC = '';
+// 미션 이야기 영상(24초 모션 그래픽, tools/intro-story 에서 만듦). 비워 두거나 못 불러오면 글 장면으로 대신 보여 줌.
+// 영상을 새로 만들면 sw.js 의 CACHE_VERSION 도 올려야 태블릿이 새 영상을 받습니다.
+const STORY_VIDEO_SRC = 'media/intro-story.mp4';
 
 const KEY_PLAYER = 'math_hub_current_player';
 const KEY_GRADE = 'math_hub_grade_level';
@@ -31,12 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const sceneSub = document.getElementById('scene-sub');
   const scene = document.getElementById('story-scene');
   const video = document.getElementById('story-video');
+  const player = document.getElementById('story-player');
+  const fallback = document.getElementById('story-fallback');
+  const btnBig = document.getElementById('btn-video-play');
+  const bigIcon = document.getElementById('player-big-icon');
+  const btnReplay = document.getElementById('btn-video-replay');
+  const btnSound = document.getElementById('btn-video-sound');
+  const btnVideoStart = document.getElementById('btn-video-start');
 
   const replayOnly = location.hash === '#story' && !!(localStorage.getItem(KEY_PLAYER) || '').trim();
   let selectedGrade = 'elem';
   let selectedDiff = 'easy';
   let slideIdx = 0;
-  let videoDone = false;
+  let videoMode = !!STORY_VIDEO_SRC;
 
   // ---------- 저장된 값 불러오기 ----------
   const savedName = localStorage.getItem(KEY_PLAYER) || '';
@@ -107,19 +113,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const last = slideIdx === slides.length - 1;
     btnNext.querySelector('span').textContent = last ? (replayOnly ? '🏠 허브로 돌아가기' : '🚀 미션 시작') : '다음 ▶';
     btnNext.classList.toggle('pulse', last);
-    btnSkip.hidden = replayOnly || last;
+    btnSkip.hidden = replayOnly || (!videoMode && last);
   }
+
+  function useFallback() {
+    videoMode = false;
+    player.hidden = true;
+    fallback.hidden = false;
+    video.pause();
+    showSlide(0);
+  }
+
+  function setBig(icon) { bigIcon.textContent = icon; btnBig.hidden = icon === ''; }
 
   function startStory() {
     startAgent();
-    showSlide(0);
     btnBack.hidden = replayOnly;
-    if (STORY_VIDEO_SRC && !video.getAttribute('src')) {
-      video.src = STORY_VIDEO_SRC;
-      video.hidden = false;
-      scene.hidden = true;
-      video.addEventListener('ended', () => { videoDone = true; showSlide(slides.length - 1); }, { once: true });
-    }
+    btnSkip.hidden = replayOnly;
+    const startLabel = replayOnly ? '🏠 허브로 돌아가기' : '🚀 미션 시작';
+    btnVideoStart.querySelector('span').textContent = startLabel;
+    if (!videoMode) { useFallback(); return; }
+    player.hidden = false;
+    fallback.hidden = true;
+    if (!video.getAttribute('src')) video.src = STORY_VIDEO_SRC;
+    video.currentTime = 0;
+    video.muted = false;
+    btnSound.setAttribute('aria-pressed', 'false');
+    btnSound.querySelector('span').textContent = '🔊 소리 끄기';
+    btnVideoStart.classList.remove('pulse');
+    setBig('');
+    // 등록 버튼을 누른 직후라 소리와 함께 바로 재생됨. 막히면 재생 버튼을 보여 줌
+    const p = video.play();
+    if (p && p.catch) p.catch(() => setBig('▶'));
   }
 
   function goPlay() {
@@ -133,7 +158,22 @@ document.addEventListener('DOMContentLoaded', () => {
   btnPrev.addEventListener('click', () => showSlide(slideIdx - 1));
   dots.forEach(d => d.addEventListener('click', () => showSlide(parseInt(d.dataset.go, 10))));
   btnSkip.addEventListener('click', goPlay);
-  btnBack.addEventListener('click', () => setStage('register'));
+  btnBack.addEventListener('click', () => { video.pause(); setStage('register'); });
+
+  // ---- 영상 컨트롤 ----
+  btnBig.addEventListener('click', () => { if (video.ended) video.currentTime = 0; video.play().catch(() => {}); });
+  btnReplay.addEventListener('click', () => { video.currentTime = 0; btnVideoStart.classList.remove('pulse'); setBig(''); video.play().catch(() => setBig('▶')); });
+  btnSound.addEventListener('click', () => {
+    video.muted = !video.muted;
+    btnSound.setAttribute('aria-pressed', String(video.muted));
+    btnSound.querySelector('span').textContent = video.muted ? '🔇 소리 켜기' : '🔊 소리 끄기';
+  });
+  btnVideoStart.addEventListener('click', () => { video.pause(); goPlay(); });
+  video.addEventListener('click', () => { if (video.paused) { video.play().catch(() => {}); } else { video.pause(); setBig('▶'); } });
+  video.addEventListener('play', () => setBig(''));
+  video.addEventListener('pause', () => { if (!video.ended) setBig('▶'); });
+  video.addEventListener('ended', () => { setBig('↻'); btnVideoStart.classList.add('pulse'); });
+  video.addEventListener('error', () => { if (app.dataset.stage === 'story') useFallback(); });
 
   // 좌우 방향키로도 넘길 수 있게 (외부 키보드)
   document.addEventListener('keydown', (e) => {

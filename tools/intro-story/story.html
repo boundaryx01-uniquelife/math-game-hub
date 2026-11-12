@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>미션 이야기 모션 그래픽 (render.js 로 mp4 로 만듦)</title>
+<style>
+  :root { --font: "Pretendard","Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  #stage { position: relative; width: 1280px; height: 720px; overflow: hidden; font-family: var(--font); color: #fff; word-break: keep-all;
+    background: radial-gradient(circle at 50% 40%, #12203a 0%, #070b16 70%); }
+  #grid { position: absolute; inset: -80px; background-image: linear-gradient(rgba(120,170,255,.07) 2px, transparent 2px), linear-gradient(90deg, rgba(120,170,255,.07) 2px, transparent 2px); background-size: 64px 64px; }
+  #fx { position: absolute; inset: 0; width: 1280px; height: 720px; }
+  #alarm { position: absolute; inset: 0; pointer-events: none; }
+  #gold { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 22%, rgba(251,191,36,.55), transparent 55%); opacity: 0; }
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+
+  #core { position: absolute; left: 0; top: 0; width: 320px; height: 320px; transform-origin: 50% 50%; }
+  #core svg { width: 100%; height: 100%; overflow: visible; }
+  #coreIcon { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 110px; line-height: 1; }
+  #padlock { position: absolute; left: 0; top: 0; width: 200px; font-size: 150px; text-align: center; line-height: 1; filter: drop-shadow(0 10px 20px rgba(0,0,0,.6)); }
+
+  .chip { position: absolute; left: 56px; top: 40px; font-size: 34px; font-weight: 900; padding: 8px 26px; border-radius: 999px; letter-spacing: -.02em; white-space: nowrap; border: 3px solid; opacity: 0; }
+  #chip1 { background: rgba(239,68,68,.22); border-color: #f87171; color: #fecaca; }
+  #chip2 { background: rgba(56,189,248,.2); border-color: #38bdf8; color: #bae6fd; }
+  #chip3 { background: rgba(251,191,36,.2); border-color: #fbbf24; color: #fde68a; }
+
+  .card { position: absolute; top: 232px; width: 340px; height: 296px; border-radius: 26px; padding: 18px 20px; background: linear-gradient(180deg, rgba(30,41,59,.95), rgba(15,23,42,.95)); border: 3px solid var(--c); box-shadow: 0 16px 50px rgba(0,0,0,.55), 0 0 0 0 var(--c); opacity: 0; }
+  .card h3 { font-size: 28px; font-weight: 900; letter-spacing: -.03em; white-space: nowrap; color: var(--c); }
+  .card .sub { font-size: 20px; font-weight: 700; color: #cbd5e1; margin-top: 2px; white-space: nowrap; }
+  .card .lock { position: absolute; right: 16px; top: 12px; font-size: 38px; }
+  .card .ok { position: absolute; left: 50%; bottom: -20px; transform: translateX(-50%) scale(0); font-size: 22px; font-weight: 900; padding: 4px 18px; border-radius: 999px; background: #10b981; color: #052e22; white-space: nowrap; }
+  .tiles { position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; }
+  .tile { width: 58px; height: 66px; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; border-radius: 12px; background: #0b1224; border: 2px solid rgba(255,255,255,.25); font-family: "Share Tech Mono", ui-monospace, monospace; }
+  .tile.out { border-color: var(--c); color: #fde68a; background: #1a1f3a; }
+  .arrowtxt { position: absolute; left: 0; right: 0; text-align: center; font-size: 24px; font-weight: 900; color: var(--c); white-space: nowrap; }
+  #board { position: absolute; left: 20px; top: 70px; width: 300px; height: 180px; }
+
+  #caption { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); text-align: center; font-size: 42px; font-weight: 900; line-height: 1.32; letter-spacing: -.03em; padding: 14px 40px; border-radius: 22px; background: rgba(8,12,24,.72); border: 2px solid rgba(255,255,255,.14); white-space: nowrap; opacity: 0; }
+  #caption .hl { color: #fde047; }
+  #caption .bl { color: #7dd3fc; }
+  #final { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; background: radial-gradient(circle at 50% 45%, rgba(15,23,42,.88), rgba(2,6,15,.96)); opacity: 0; }
+  #final .t1 { font-size: 78px; font-weight: 900; letter-spacing: -.04em; white-space: nowrap; background: linear-gradient(135deg, #fff 30%, #38bdf8 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  #final .t2 { font-size: 54px; font-weight: 900; color: #fde047; white-space: nowrap; }
+  #final .t3 { font-size: 30px; font-weight: 700; color: #cbd5e1; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="grid"></div>
+  <canvas id="fx" width="1280" height="720"></canvas>
+  <div id="alarm"></div>
+  <div id="gold"></div>
+
+  <div id="chip1" class="chip">🚨 긴급 상황 발생</div>
+  <div id="chip2" class="chip">🧩 풀어야 할 보안 장치 3개</div>
+  <div id="chip3" class="chip">🎖️ 요원님의 임무</div>
+
+  <div id="core">
+    <svg viewBox="-160 -160 320 320">
+      <defs>
+        <radialGradient id="orb" cx="50%" cy="45%" r="55%">
+          <stop offset="0" stop-color="#e0f2fe"/><stop offset=".45" id="orbMid" stop-color="#38bdf8"/><stop offset="1" id="orbEdge" stop-color="#0c4a6e"/>
+        </radialGradient>
+      </defs>
+      <circle id="ring1" r="150" fill="none" stroke="#38bdf8" stroke-width="3" stroke-dasharray="18 14" opacity=".7"/>
+      <circle id="ring2" r="125" fill="none" stroke="#a78bfa" stroke-width="3" stroke-dasharray="6 12" opacity=".7"/>
+      <circle id="prog" r="140" fill="none" stroke="#fbbf24" stroke-width="10" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="880" stroke-dashoffset="880" opacity="0"/>
+      <circle id="orb0" r="92" fill="url(#orb)"/>
+    </svg>
+    <div id="coreIcon">⚛️</div>
+  </div>
+  <div id="padlock">🔒</div>
+
+  <div class="card" id="card1" style="--c:#fb923c; left:100px">
+    <h3>🕵️ 암호 연구소</h3><div class="sub">시저 암호 · 글자를 밀어 풀기</div><div class="lock">🔒</div>
+    <div class="tiles" style="top:96px"><div class="tile">M</div><div class="tile">A</div><div class="tile">T</div><div class="tile">H</div></div>
+    <div class="arrowtxt" style="top:166px" id="c1arrow">▼ 3칸 뒤로 밀기</div>
+    <div class="tiles" style="top:200px" id="c1out"><div class="tile out">P</div><div class="tile out">D</div><div class="tile out">W</div><div class="tile out">K</div></div>
+    <div class="ok">✓ 해독 성공</div>
+  </div>
+  <div class="card" id="card2" style="--c:#38bdf8; left:470px">
+    <h3>🔮 확률 구슬</h3><div class="sub">구슬이 쌓이는 모양 예측</div><div class="lock">🔒</div>
+    <svg id="board" viewBox="0 0 300 180"></svg>
+    <div class="ok">✓ 종 모양 완성</div>
+  </div>
+  <div class="card" id="card3" style="--c:#a78bfa; left:840px">
+    <h3>🔐 수열 금고</h3><div class="sub">60초 안에 규칙 찾기</div><div class="lock">🔒</div>
+    <div class="tiles" style="top:104px" id="c3tiles"><div class="tile" style="width:52px">3</div><div class="tile" style="width:52px">6</div><div class="tile" style="width:52px">12</div><div class="tile" style="width:52px">24</div><div class="tile out" style="width:52px" id="c3q">?</div></div>
+    <div class="arrowtxt" style="top:186px" id="c3rule">×2 씩 커져요!</div>
+    <div class="ok">✓ 금고 열림</div>
+  </div>
+
+  <div id="caption"></div>
+  <div id="final"><div class="t1">코드 브레이커 &amp; 갈톤 메이커</div><div class="t2">🚀 미션 시작!</div><div class="t3">2026 수학체험전</div></div>
+  <div id="flash"></div>
+</div>
+
+<script>
+const T = 24;                         // 전체 길이(초)
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const seg = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, x) => a + (b - a) * x;
+const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+const easeInOut = (x) => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const easeBack = (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// ---------- 타임라인(초) ----------
+const S1 = [0, 7], S2 = [7, 15], S3 = [15, 24];
+const T_ALARM = [1.0, 4.6], T_LOCK = 3.0;
+const T_CARD = [7.3, 7.7, 8.1];
+const T_UNLOCK = [15.6, 16.7, 17.8];
+const T_IGNITE = 19.0;
+const T_FINAL = 21.6;
+
+// ---------- 작은 갈톤 보드 ----------
+const board = $('board'); const NS = 'http://www.w3.org/2000/svg';
+const pegs = []; for (let r = 0; r < 5; r++) for (let i = 0; i <= r; i++) pegs.push([150 + (i - r / 2) * 34, 26 + r * 21]);
+let bhtml = '';
+pegs.forEach(([x, y]) => bhtml += `<circle cx="${x}" cy="${y}" r="3.6" fill="#a5b4cc"/>`);
+for (let k = 0; k <= 6; k++) { const x = 48 + k * 34; bhtml += `<line x1="${x}" y1="128" x2="${x}" y2="178" stroke="#64748b" stroke-width="2"/>`; }
+bhtml += `<line x1="48" y1="178" x2="252" y2="178" stroke="#64748b" stroke-width="2"/>`;
+const NB = 16; const brng = rng(7); const balls = []; const binCount = new Array(6).fill(0);
+// 실제 보드처럼 가운데가 높은 종 모양이 되도록 칸별 개수를 정해 두고(1·2·5·5·2·1), 순서만 섞음
+const binPlan = []; [1, 2, 5, 5, 2, 1].forEach((n, k) => { for (let j = 0; j < n; j++) binPlan.push(k); });
+for (let i = binPlan.length - 1; i > 0; i--) { const j = Math.floor(brng() * (i + 1)); [binPlan[i], binPlan[j]] = [binPlan[j], binPlan[i]]; }
+for (let i = 0; i < NB; i++) {
+  const k = binPlan[i]; const rows = [0, 1, 2, 3, 4]; for (let q = 4; q > 0; q--) { const j = Math.floor(brng() * (q + 1)); [rows[q], rows[j]] = [rows[j], rows[q]]; }
+  const right = new Set(rows.slice(0, k)); let x = 150; const way = [[150, 6]];
+  for (let r = 0; r < 5; r++) { const d = right.has(r) ? 1 : -1; way.push([x, 26 + r * 21 - 9]); x += d * 17; way.push([x, 26 + r * 21 + 9]); }
+  const rest = [65 + 34 * k, 175 - (binCount[k] + .5) * 10]; binCount[k]++;
+  way.push([x, 124]); way.push(rest);
+  balls.push({ t0: 8.4 + i * 0.36, dur: 1.15, way });
+}
+board.innerHTML = bhtml + balls.map((_, i) => `<circle id="ball${i}" r="5" fill="#f1f5f9" stroke="#475569" stroke-width="1.2" cx="150" cy="-20"/>`).join('');
+const ballEls = balls.map((_, i) => $('ball' + i));
+function ballPos(b, t) {
+  if (t < b.t0) return null;
+  const u = clamp((t - b.t0) / b.dur); const n = b.way.length - 1; const f = u * n; const i = Math.min(n - 1, Math.floor(f)); const l = f - i;
+  const a = b.way[i], c = b.way[i + 1]; return [lerp(a[0], c[0], l), lerp(a[1], c[1], l * l * (i === n - 1 ? 1 : 1))];
+}
+const landTimes = balls.map(b => b.t0 + b.dur);
+
+// ---------- 배경 입자 / 꽃가루 ----------
+const fx = $('fx').getContext('2d');
+const dots = []; { const r = rng(3); for (let i = 0; i < 46; i++) dots.push({ x: r() * 1280, y: r() * 720, s: .4 + r() * 1.4, v: 8 + r() * 22, a: .15 + r() * .4 }); }
+const confetti = []; { const r = rng(11); const cols = ['#fbbf24', '#38bdf8', '#f472b6', '#a78bfa', '#34d399', '#fb923c']; for (let i = 0; i < 90; i++) { const ang = r() * Math.PI * 2, sp = 160 + r() * 520; confetti.push({ vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 260, w: 8 + r() * 10, h: 5 + r() * 8, rot: r() * 6, vr: (r() - .5) * 14, c: cols[i % cols.length] }); } }
+
+// ---------- 자막 ----------
+const CAPS = [
+  { a: 1.5, b: 6.6, lines: [[['2026 미래 수학연구소의 ', ''], ['중앙 양자 코어', 'hl'], ['가', '']], [['원인 모를 수학 오류로 ', ''], ['완전히 잠겨', 'hl'], [' 버렸어요!', '']]], type: [1.5, 5.2] },
+  { a: 7.6, b: 14.6, lines: [[['풀어야 할 보안 장치는 ', ''], ['3개', 'hl'], ['!', '']], [['규칙', 'bl'], [' · ', ''], ['확률', 'bl'], [' · ', ''], ['수열', 'bl']]] },
+  { a: 15.4, b: 21.2, lines: [[['차례로 풀고', '']], [['공식 ', ''], ['[코드 브레이커]', 'hl'], ['가 되어 보세요!', '']]] },
+];
+function renderCaption(t) {
+  let html = '', op = 0;
+  for (const c of CAPS) {
+    if (t >= c.a - .01 && t <= c.b + .5) {
+      op = Math.min(seg(t, c.a, c.a + .4), 1 - seg(t, c.b, c.b + .5));
+      const total = c.lines.reduce((s, l) => s + l.reduce((q, p) => q + p[0].length, 0), 0);
+      let show = c.type ? Math.floor(total * easeOut(seg(t, c.type[0], c.type[1]))) : total;
+      html = c.lines.map(line => line.map(([txt, cls]) => { const take = Math.max(0, Math.min(txt.length, show)); show -= txt.length; const s = txt.slice(0, take); return cls ? `<span class="${cls}">${s}</span>` : s; }).join('')).join('<br>');
+      break;
+    }
+  }
+  const el = $('caption'); el.style.opacity = op; if (el._h !== html) { el.innerHTML = html; el._h = html; }
+  el.style.transform = `translateX(-50%) translateY(${(1 - op) * 18}px)`;
+}
+
+// ---------- 한 프레임 그리기 ----------
+function render(t) {
+  const stage = $('stage');
+  stage.style.opacity = Math.min(seg(t, 0, .6), 1 - seg(t, T - .6, T));
+  $('grid').style.transform = `translate(${-(t * 14) % 64}px, ${-(t * 9) % 64}px)`;
+
+  // 경보
+  const alarmIn = seg(t, T_ALARM[0], T_ALARM[0] + .4) * (1 - seg(t, T_ALARM[1], T_ALARM[1] + 1.2));
+  const flick = .55 + .45 * Math.sin((t - T_ALARM[0]) * 11);
+  const alarmA = alarmIn * flick;
+  $('alarm').style.boxShadow = `inset 0 0 220px 70px rgba(239,68,68,${(alarmA * .75).toFixed(3)})`;
+
+  // 코어: 위치·크기
+  const toTop = easeInOut(seg(t, 6.4, 7.5));
+  const cx = 640, cy = lerp(310, 128, toTop), sc = lerp(1, .42, toTop);
+  let shake = 0; if (t > T_ALARM[0] && t < T_LOCK + .8) shake = Math.sin(t * 70) * 5 * alarmIn;
+  if (t > T_LOCK && t < T_LOCK + .35) shake += Math.sin((t - T_LOCK) * 90) * 12 * (1 - seg(t, T_LOCK, T_LOCK + .35));
+  const pop = t >= T_IGNITE ? 1 + .18 * Math.exp(-(t - T_IGNITE) * 4) * Math.cos((t - T_IGNITE) * 16) : 1;
+  const core = $('core'); core.style.transform = `translate(${cx - 160 + shake}px, ${cy - 160}px) scale(${(sc * pop).toFixed(4)})`;
+  core.style.opacity = seg(t, .3, 1.1);
+  $('ring1').setAttribute('transform', `rotate(${t * 38})`); $('ring2').setAttribute('transform', `rotate(${-t * 52})`);
+  const breathe = 1 + .05 * Math.sin(t * 3.2);
+  $('orb0').setAttribute('r', (92 * breathe).toFixed(2));
+  // 색: 파랑 → (경보) 빨강 → (잠김) 어두운 청회색 → (점화) 금색
+  const redMix = alarmIn * .9; const lockedDim = seg(t, T_LOCK + .2, T_LOCK + 1) * (1 - seg(t, T_UNLOCK[0], T_UNLOCK[2] + 1.2));
+  const ign = seg(t, T_IGNITE, T_IGNITE + .8);
+  const mid = ign > 0 ? mix('#38bdf8', '#fbbf24', ign) : mix(mix('#38bdf8', '#ef4444', redMix), '#475569', lockedDim);
+  const edge = ign > 0 ? mix('#0c4a6e', '#92400e', ign) : mix(mix('#0c4a6e', '#7f1d1d', redMix), '#1e293b', lockedDim);
+  $('orbMid').setAttribute('stop-color', mid); $('orbEdge').setAttribute('stop-color', edge);
+  $('ring1').setAttribute('stroke', ign > 0 ? '#fbbf24' : mix('#38bdf8', '#ef4444', redMix));
+  $('coreIcon').textContent = t >= T_IGNITE + .25 ? '🎖️' : '⚛️';
+  $('coreIcon').style.fontSize = (t >= T_IGNITE + .25 ? 120 : 110) + 'px';
+  $('coreIcon').style.opacity = t >= T_LOCK + .4 && t < T_IGNITE ? .35 : 1;
+
+  // 자물쇠 쾅
+  const pl = $('padlock'); const drop = seg(t, 2.4, T_LOCK);
+  const plVisible = t >= 2.4 && t < 6.6;
+  const plY = lerp(-220, cy - 100, drop * drop); const plShrink = 1 - easeInOut(seg(t, 6.0, 6.8));
+  pl.style.opacity = plVisible ? Math.min(1, drop * 3) * (1 - seg(t, 6.2, 6.8)) : 0;
+  pl.style.transform = `translate(${cx - 100 + shake}px, ${plY}px) scale(${plShrink})`;
+  // 진행 링
+  const unlocked = T_UNLOCK.filter(u => t >= u).length; const prog = $('prog');
+  let progV = 0; if (unlocked > 0) { const e = easeOut(seg(t, T_UNLOCK[unlocked - 1], T_UNLOCK[unlocked - 1] + .6)); progV = lerp((unlocked - 1) / 3, unlocked / 3, e); }
+  prog.setAttribute('stroke-dashoffset', (880 * (1 - progV)).toFixed(1)); prog.setAttribute('opacity', t >= S3[0] ? 1 : 0);
+
+  // 칩(상단 제목)
+  const chipOp = (a, b) => Math.min(seg(t, a, a + .4), 1 - seg(t, b - .4, b));
+  $('chip1').style.opacity = chipOp(.9, 6.8); $('chip2').style.opacity = chipOp(7.0, 14.9); $('chip3').style.opacity = chipOp(15.0, 21.6);
+  [['chip1', .9], ['chip2', 7.0], ['chip3', 15.0]].forEach(([id, a]) => { $(id).style.transform = `translateY(${(1 - easeOut(seg(t, a, a + .5))) * -20}px)`; });
+
+  // 카드 3장
+  const cards = [$('card1'), $('card2'), $('card3')];
+  cards.forEach((el, i) => {
+    const a = T_CARD[i]; const p = easeBack(seg(t, a, a + .7)); const alpha = Math.min(1, seg(t, a, a + .35)) * (1 - seg(t, T_FINAL - .2, T_FINAL + .4));
+    el.style.opacity = alpha; el.style.transform = `translateY(${(1 - p) * 90}px) scale(${lerp(.85, 1, p)})`;
+    const u = t >= T_UNLOCK[i]; const ua = seg(t, T_UNLOCK[i], T_UNLOCK[i] + .5);
+    el.querySelector('.lock').textContent = u ? '🔓' : '🔒';
+    el.querySelector('.lock').style.transform = u ? `scale(${1 + .4 * Math.exp(-(t - T_UNLOCK[i]) * 6)})` : 'none';
+    el.style.borderColor = u ? '#34d399' : '';
+    el.style.boxShadow = u ? `0 16px 50px rgba(0,0,0,.55), 0 0 ${40 * (1 - ua) + 18}px rgba(52,211,153,${.35 + .4 * (1 - ua)})` : '0 16px 50px rgba(0,0,0,.55)';
+    const ok = el.querySelector('.ok'); ok.style.transform = `translateX(-50%) scale(${easeBack(ua)})`;
+  });
+
+  // 카드1: 시저 암호
+  $('c1arrow').style.opacity = seg(t, 8.5, 8.9);
+  [...$('c1out').children].forEach((tile, i) => { const p = easeOut(seg(t, 9.1 + i * .3, 9.1 + i * .3 + .45)); tile.style.opacity = p; tile.style.transform = `rotateX(${(1 - p) * 90}deg) translateY(${(1 - p) * -14}px)`; });
+  // 카드3: 수열
+  const q = $('c3q'); const flip = seg(t, 12.4, 12.9);
+  q.textContent = flip > .5 ? '48' : '?'; q.style.transform = `scaleX(${Math.abs(Math.cos(flip * Math.PI))})`;
+  q.style.boxShadow = flip > 0 ? `0 0 ${30 * Math.sin(flip * Math.PI) + (t > 12.9 ? 10 : 0)}px #fde047` : 'none';
+  if (flip === 0) q.style.transform = `scale(${1 + .08 * Math.sin(t * 7)})`;
+  $('c3rule').style.opacity = seg(t, 10.2, 10.7);
+  // 카드2: 구슬
+  balls.forEach((b, i) => { const p = ballPos(b, t); const el = ballEls[i]; if (!p) { el.setAttribute('cy', -20); return; } el.setAttribute('cx', p[0].toFixed(1)); el.setAttribute('cy', p[1].toFixed(1)); });
+
+  renderCaption(t);
+
+  // 금빛, 번쩍, 마지막 타이틀
+  $('gold').style.opacity = ign * (1 - seg(t, T_FINAL, T_FINAL + .6)) * .9;
+  $('flash').style.opacity = t >= T_IGNITE && t < T_IGNITE + .5 ? .85 * (1 - seg(t, T_IGNITE, T_IGNITE + .5)) : 0;
+  const fin = $('final'); const fa = seg(t, T_FINAL, T_FINAL + .7); fin.style.opacity = fa;
+  fin.children[0].style.transform = `scale(${lerp(.9, 1, easeBack(fa))})`;
+  fin.children[1].style.transform = `translateY(${Math.sin(t * 5) * 6}px) scale(${lerp(.6, 1, easeBack(seg(t, T_FINAL + .3, T_FINAL + 1)))})`;
+
+  // 캔버스: 배경 입자 + 꽃가루
+  fx.clearRect(0, 0, 1280, 720);
+  dots.forEach(d => { const y = (d.y - t * d.v + 720 * 10) % 720; fx.globalAlpha = d.a; fx.fillStyle = '#9ecbff'; fx.beginPath(); fx.arc(d.x, y, d.s * 2, 0, 7); fx.fill(); });
+  if (t >= T_IGNITE) {
+    const age = t - T_IGNITE; const ox = 640, oy = 128;
+    confetti.forEach(c => { const x = ox + c.vx * age, y = oy + c.vy * age + 700 * age * age * .5; if (y > 760) return; fx.save(); fx.translate(x, y); fx.rotate(c.rot + c.vr * age); fx.globalAlpha = 1 - seg(age, 2.2, 3.2); fx.fillStyle = c.c; fx.fillRect(-c.w / 2, -c.h / 2, c.w, c.h); fx.restore(); });
+    // 충격 링
+    const ra = seg(age, 0, 1.1); fx.globalAlpha = (1 - ra) * .8; fx.strokeStyle = '#fde68a'; fx.lineWidth = 8 * (1 - ra) + 1; fx.beginPath(); fx.arc(ox, oy, 40 + ra * 520, 0, 7); fx.stroke();
+  }
+  fx.globalAlpha = 1;
+}
+function mix(a, b, x) { const pa = hex(a), pb = hex(b); return '#' + pa.map((v, i) => Math.round(lerp(v, pb[i], clamp(x))).toString(16).padStart(2, '0')).join(''); }
+function hex(h) { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)); }
+window.render = render; window.DURATION = T; window.TIMES = { landTimes, T_CARD, T_UNLOCK, T_IGNITE, T_LOCK, T_ALARM, T_FINAL };
+render(0);
+// 미리보기: story.html?play 로 열면 실시간 재생
+if (/[?&]play\b/.test(location.search)) { const s = performance.now(); (function loop() { const t = ((performance.now() - s) / 1000) % T; render(t); requestAnimationFrame(loop); })(); }
+</script>
+</body>
+</html>

@@ -58,23 +58,32 @@
       </div>
     </section>
 
-    <!-- 2단계: 미션 이야기 (나중에 영상으로 바꿀 수 있게 왼쪽에 영상 자리를 둠) -->
+    <!-- 2단계: 미션 이야기 (짧은 모션 그래픽 영상. 영상을 못 불러오면 아래 글 장면으로 대신 보여 줌) -->
     <section class="stage stage-story" id="stage-story" aria-labelledby="story-title" hidden>
-      <div class="story-grid">
+      <h2 id="story-title" class="stage-title story-head"><span id="story-agent">요원</span>님, 미션 이야기예요</h2>
 
+      <div class="story-player" id="story-player">
+        <div class="player-frame">
+          <video id="story-video" playsinline preload="metadata" poster="media/intro-story-poster.jpg" aria-label="미션 이야기 영상 (자막이 들어 있어요)"></video>
+          <button type="button" class="player-big" id="btn-video-play" aria-label="영상 재생"><span id="player-big-icon">▶</span></button>
+        </div>
+        <div class="player-bar">
+          <button type="button" class="btn btn-secondary" id="btn-video-replay"><span>🔁 다시 보기</span></button>
+          <button type="button" class="btn btn-secondary" id="btn-video-sound" aria-pressed="false"><span>🔊 소리 끄기</span></button>
+          <button type="button" class="btn btn-primary" id="btn-video-start"><span>🚀 미션 시작</span></button>
+        </div>
+      </div>
+
+      <!-- 영상이 안 나올 때의 글 장면(대체) -->
+      <div class="story-grid" id="story-fallback" hidden>
         <div class="story-media" id="story-media">
-          <!-- 영상이 준비되면 intro.js 의 STORY_VIDEO_SRC 에 경로를 넣으면 이 자리에 나옵니다 -->
-          <video id="story-video" playsinline controls preload="none" hidden></video>
           <div class="story-scene" id="story-scene" data-scene="0" aria-hidden="true">
             <div class="scene-glow"></div>
             <div class="scene-main" id="scene-main">🚨</div>
             <div class="scene-sub" id="scene-sub">QUANTUM CORE LOCKED</div>
           </div>
         </div>
-
         <div class="story-text">
-          <h2 id="story-title" class="stage-title"><span id="story-agent">요원</span>님, 미션 이야기예요</h2>
-
           <div class="story-slides" id="story-slides">
             <article class="story-slide" data-slide="0" data-icon="🚨" data-sub="QUANTUM CORE LOCKED">
               <h3>긴급 상황 발생! 양자 코어 잠금</h3>
@@ -95,7 +104,6 @@
               <p class="story-secret">👑 세 개를 모두 마치면 <strong>히든 미션</strong>이 열려요.</p>
             </article>
           </div>
-
           <div class="story-controls">
             <div class="story-dots" id="story-dots" role="tablist" aria-label="이야기 장면">
               <button type="button" class="s-dot active" data-go="0" aria-label="1번 장면"></button>
@@ -107,11 +115,12 @@
               <button type="button" class="btn btn-primary" id="btn-story-next"><span>다음 ▶</span></button>
             </div>
           </div>
-          <div class="story-links">
-            <button type="button" class="link-btn" id="btn-story-skip">건너뛰고 바로 시작</button>
-            <button type="button" class="link-btn" id="btn-back-register">← 이름 고치기</button>
-          </div>
         </div>
+      </div>
+
+      <div class="story-links">
+        <button type="button" class="link-btn" id="btn-story-skip">건너뛰고 바로 시작</button>
+        <button type="button" class="link-btn" id="btn-back-register">← 이름 고치기</button>
       </div>
     </section>
 
