@@ -71,6 +71,7 @@ const btnQuickNormal = document.getElementById('btn-quick-normal');
 const btnQuickFlat = document.getElementById('btn-quick-flat');
 
 const btnStartDrop = document.getElementById('btn-start-drop');
+const startHintEl = document.getElementById('start-hint');
 const btnResetSim = document.getElementById('btn-reset-sim');
 
 const modalResult = document.getElementById('modal-result');
@@ -167,7 +168,8 @@ function initRealGeometry() {
 
 // 2. 16개 슬롯 UI 컨트롤 동적 생성
 function initControlsUI() {
-  const defaultPreds = [0, 0, 1, 2, 5, 9, 15, 18, 18, 15, 9, 5, 2, 1, 0, 0];
+  // 먼저 직접 예측해야 하므로 처음에는 모두 0%에서 시작
+  const defaultPreds = new Array(NUM_SLOTS).fill(0);
   simState.userPredictions = [...defaultPreds];
 
   predictSlidersGrid.innerHTML = '';
@@ -213,8 +215,31 @@ function updatePredictTotal() {
     predictWarnMsg.classList.add('hidden');
   } else {
     predictTotalPct.className = 'mono text-warn';
+    predictWarnMsg.textContent = sum < 100
+      ? `(${100 - sum}% 더 채우면 실험을 시작할 수 있어요)`
+      : `(${sum - 100}% 줄여야 실험을 시작할 수 있어요)`;
     predictWarnMsg.classList.remove('hidden');
   }
+  updateStartButtonState();
+}
+
+// 예측(합계 100%)을 마쳐야 실험을 시작할 수 있음. 실험 중에는 예측을 바꿀 수 없음.
+function isPredictionReady() {
+  return simState.userPredictions.reduce((a, b) => a + b, 0) === 100;
+}
+
+function updateStartButtonState() {
+  const ready = isPredictionReady();
+  if (!simState.isRunning) btnStartDrop.disabled = !ready;
+  btnStartDrop.title = ready ? '' : '먼저 아래에서 결과를 예측해 주세요 (합계 100%)';
+  if (startHintEl) startHintEl.classList.toggle('hidden', ready || simState.isRunning);
+}
+
+function setPredictionLocked(locked) {
+  predictSlidersGrid.querySelectorAll('.slider-v').forEach(sl => { sl.disabled = locked; });
+  btnQuickNormal.disabled = locked;
+  btnQuickFlat.disabled = locked;
+  predictSlidersGrid.classList.toggle('is-locked', locked);
 }
 
 // 3. 실버 크롬 쇠구슬 클래스 (자연스러운 템포 궤적)
@@ -523,12 +548,19 @@ let spawnSlotTracker = new Array(NUM_SLOTS).fill(0);
 
 // 시뮬레이션 시작
 function startSimulation() {
+  if (!isPredictionReady()) {
+    if (window.MathHubUI && window.MathHubUI.toast) window.MathHubUI.toast('먼저 결과를 예측해 주세요! 합계를 100%로 맞추면 실험을 시작할 수 있어요.', 'warn');
+    document.querySelector('.predict-main-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
   audio.init();
   resetSimulation();
 
   simState.isRunning = true;
   simState.isFinished = false;
   btnStartDrop.disabled = true;
+  setPredictionLocked(true);
+  if (startHintEl) startHintEl.classList.add('hidden');
 
   spawnSlotTracker = new Array(NUM_SLOTS).fill(0);
 
@@ -561,9 +593,10 @@ function resetSimulation() {
   simState.slotCounts = new Array(NUM_SLOTS).fill(0);
   spawnSlotTracker = new Array(NUM_SLOTS).fill(0);
   droppedCountEl.textContent = '0';
-  btnStartDrop.disabled = false;
+  setPredictionLocked(false);
   btnStartDrop.classList.remove('hidden');
   btnResetSim.classList.add('hidden');
+  updateStartButtonState();
 }
 
 // 프리셋 버튼
@@ -693,6 +726,11 @@ closeButtons.forEach(btn => {
 });
 
 btnStartDrop.addEventListener('click', startSimulation);
+// 다시 실험: 구슬을 비우고 예측을 고칠 수 있는 상태로 되돌림 (예측을 다시 확인해야 시작 가능)
+btnResetSim.addEventListener('click', () => {
+  resetSimulation();
+  document.querySelector('.predict-main-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
 // 초기화 실행
 initRealGeometry();
 initControlsUI();

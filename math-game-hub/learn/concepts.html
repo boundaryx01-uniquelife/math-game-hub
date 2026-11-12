@@ -109,13 +109,75 @@ table.seq td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
 .s .e{font-variant-numeric:tabular-nums;font-weight:700;display:block}
 .tipbox{border:1pt dashed var(--ink);border-radius:1.5mm;padding:.8mm 2mm;margin-top:.8mm}
 @media screen and (max-width:830px){.minis{grid-template-columns:1fr 1fr}.seqg{grid-template-columns:1fr 1fr}.flex{flex-wrap:wrap}.flex>*{flex:1 1 150px!important}table.seq td:last-child,table.seq td:first-child{white-space:normal}}
+
+/* ===== 컬러 + 형광펜 하이라이트 (색은 카드마다 달라요) ===== */
+:root{--hl:#fff176;--hl2:#ffd54f}
+.page{background:#fffdf7}
+.head{border:0;padding:3mm 4mm;border-radius:3mm;background:linear-gradient(95deg,#2563eb 0%,#7c3aed 55%,#db2777 100%);color:#fff;align-items:center}
+.head h1{font-size:18pt;color:#fff}
+.head h1 small{color:#fde047;font-size:12pt;font-weight:800}
+.head .lead{color:#fff;font-size:10.5pt}
+.head .lead b{background:linear-gradient(transparent 52%,rgba(253,224,71,.85) 52%);color:#fff;padding:0 1mm}
+.idline{display:none}
+.card{--c:#2563eb;--t:#eef4ff;border:1.5pt solid var(--c);background:var(--t);border-radius:3mm;overflow:hidden;padding:0 2.8mm 1.8mm}
+.card>h2{margin:0 -2.8mm 1.3mm;padding:1mm 2.8mm;background:var(--c);color:#fff;gap:2mm}
+.card>h2 .n{background:#fff;color:var(--c);font-weight:900}
+.card>h2 .t{color:rgba(255,255,255,.92);font-weight:600}
+.c1{--c:#2563eb;--t:#eef4ff}
+.c2{--c:#059669;--t:#ecfdf5}
+.c3{--c:#7c3aed;--t:#f5f0ff}
+.c4{--c:#ea580c;--t:#fff4ea}
+.c5{--c:#db2777;--t:#fff0f6}
+.c6{--c:#b45309;--t:#fffbe6}
+.card p b,.mini p b,.s b:first-child,.flex p b{background:linear-gradient(transparent 50%,var(--hl) 50%);padding:0 .6mm;border-radius:.6mm}
+.ex{background:#fff;border-left:2.4pt solid var(--c);border-radius:0 1.8mm 1.8mm 0;box-shadow:0 0 0 .6pt var(--c) inset}
+.ex b:first-child{background:var(--c);color:#fff;border-radius:1mm;padding:0 1.4mm;margin-right:.6mm}
+.ex b:not(:first-child){background:linear-gradient(transparent 38%,var(--hl2) 38%);padding:0 .8mm;border-radius:.6mm}
+table.t td,table.t th,table.seq td,table.seq th,.pas i,.s,.mini{border-color:var(--c)}
+table.t th,table.seq th{background:var(--c);color:#fff;border-color:var(--c)}
+table.strip th.lbl{background:var(--c);color:#fff}
+table.t td{background:#fff}
+table.strip td.sh{background:#bfdbfe;color:#1e3a8a}
+table.t td.hl{background:#fde047;color:#111;box-shadow:inset 0 0 0 1.2pt #059669}
+table.t td.on{background:#a78bfa;color:#fff}
+.pas i{background:#fff;border-color:var(--c);color:#9d174d}
+.pas i.g{background:#fbcfe8}
+.pas div:nth-child(odd) i{background:#ffe4f0}
+.pas .lb{color:var(--c);font-weight:700}
+.mini{background:#fff;border:1.1pt solid var(--c);border-top-width:3pt}
+.mini h3{color:var(--c)}
+.s{background:#fff;border:1pt solid var(--c);border-left:3.2pt solid var(--c)}
+.s .e{color:#111}
+.seqg .s:nth-child(1){--c:#2563eb}.seqg .s:nth-child(2){--c:#0891b2}.seqg .s:nth-child(3){--c:#059669}
+.seqg .s:nth-child(4){--c:#65a30d}.seqg .s:nth-child(5){--c:#ca8a04}.seqg .s:nth-child(6){--c:#ea580c}
+.seqg .s:nth-child(7){--c:#dc2626}.seqg .s:nth-child(8){--c:#db2777}.seqg .s:nth-child(9){--c:#7c3aed}
+.seqg .s b:first-child{color:var(--c);background:none;padding:0}
+.seqg .s{background:#fff}
+svg rect[fill="#bdbdbd"]{fill:#f9a8d4}
+svg rect[fill="#bdbdbd"]:nth-of-type(8),svg rect[fill="#bdbdbd"]:nth-of-type(9){fill:#db2777}
+svg rect[fill="#fff"]{fill:#ffe4f0}
+svg circle{fill:#db2777}
+svg path[fill="#fff"]{fill:#fde047}
+.card h2 + .flex, .card h2 + p{margin-top:.2mm}
+.toolbar .tip{color:#555}
+.head{padding:2mm 4mm}
+.head h1{font-size:16.5pt}
+.card>h2{padding:.5mm 2.8mm;margin-bottom:.9mm;font-size:11.5pt}
+.card>h2 .n{min-width:5.6mm;height:5.6mm;font-size:10pt}
+.card{margin-top:1.5mm!important;padding-bottom:1.2mm}
+.cols2 .card{margin-top:0!important}
+.cols2{margin-top:1.5mm!important}
+.page{padding:5mm 10mm}
+.card p{margin:.3mm 0}
+.ex{padding:.4mm 1.8mm}
+@media print{.page{background:#fffdf7}}
 </style>
 </head>
 <body>
 <div class="toolbar">
   <button type="button" onclick="window.print()">인쇄하기</button>
   <a href="../index.html">허브로 돌아가기</a>
-  <span class="tip">A4 세로 1장 · 흑백 인쇄 가능</span>
+  <span class="tip">A4 세로 1장 · 컬러 인쇄 추천 (흑백도 가능)</span>
 </div>
 <main class="page">
 
@@ -125,7 +187,7 @@ table.seq td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
     <p class="lead">게임 속 수학을 <b>그림 하나, 예 하나</b>로 정리했어요.</p>
   </div>
 </header>
-<section class="card" style="margin-top:2.4mm">
+<section class="card c1" style="margin-top:2.4mm">
   <h2><span class="n">1</span>시저 암호 <span class="t">암호 연구소 · ROOM 1</span></h2>
   <div class="flex" style="gap:4mm">
     <div style="flex:none"><table class="t strip"><tr><th class="lbl">원래</th><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td></tr><tr><th class="lbl">암호</th><td class="sh">D</td><td class="sh">E</td><td class="sh">F</td><td class="sh">G</td><td class="sh">H</td><td class="sh">I</td><td class="sh">J</td><td class="sh">K</td><td class="sh">L</td><td class="sh">M</td><td class="sh">N</td><td class="sh">O</td><td class="sh">P</td></tr><tr><th class="lbl">원래</th><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td></tr><tr><th class="lbl">암호</th><td class="sh">Q</td><td class="sh">R</td><td class="sh">S</td><td class="sh">T</td><td class="sh">U</td><td class="sh">V</td><td class="sh">W</td><td class="sh">X</td><td class="sh">Y</td><td class="sh">Z</td><td class="sh">A</td><td class="sh">B</td><td class="sh">C</td></tr></table></div>
@@ -136,7 +198,7 @@ table.seq td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
   </div>
 </section>
 <div class="cols2" style="margin-top:2.2mm;align-items:stretch">
-    <section class="card" style="margin-top:0">
+    <section class="card c2" style="margin-top:0">
       <h2><span class="n">2</span>좌표 암호 <span class="t">ROOM 2</span></h2>
       <div class="flex">
         <div style="flex:none"><table class="t sm5"><tr><th>Y＼X</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr><tr><th>1</th><td class="hl">A</td><td>B</td><td>C</td><td>D</td><td class="hl">E</td></tr><tr><th>2</th><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td></tr><tr><th>3</th><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td></tr><tr><th>4</th><td>P</td><td>Q</td><td>R</td><td>S</td><td class="hl">T</td></tr><tr><th>5</th><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td></tr></table></div>
@@ -147,21 +209,21 @@ table.seq td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
         </div>
       </div>
     </section>
-    <section class="card" style="margin-top:0">
+    <section class="card c3" style="margin-top:0">
       <h2><span class="n">3</span>이진수 <span class="t">ROOM 3</span></h2>
       <p>컴퓨터는 켜짐 <b>1</b>, 꺼짐 <b>0</b>만 써요. 왼쪽 자리로 갈수록 자리값이 <b>2배</b>!</p>
-      <table class="t sm5" style="width:100%"><tr><th>자리값</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr><tr><th>켜짐(1)</th><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td></tr></table>
+      <table class="t sm5" style="width:100%"><tr><th>자리값</th><th>16</th><th>8</th><th>4</th><th>2</th><th>1</th></tr><tr><th>켜짐(1)</th><td class="on">1</td><td>0</td><td class="on">1</td><td class="on">1</td><td>0</td></tr></table>
       <div class="ex"><b>예</b> 10110 ➜ 16 + 4 + 2 = <b>22</b></div>
     </section>
 </div>
-<section class="card" style="margin-top:1.8mm">
+<section class="card c4" style="margin-top:1.8mm">
   <h2><span class="n">4</span>수열의 규칙 <span class="t">수열 금고 · 먼저 이웃한 수의 차를 구해 보세요</span></h2>
   <div class="seqg">
     <div class="s"><b>등차수열</b> · 같은 수를 더해요<span class="e">5, 8, 11, 14 ➜ 17</span></div><div class="s"><b>감소 등차</b> · 같은 수를 빼요<span class="e">30, 26, 22, 18 ➜ 14</span></div><div class="s"><b>등비수열</b> · 같은 수를 곱해요<span class="e">1, 2, 4, 8 ➜ 16</span></div><div class="s"><b>계차수열</b> · 더하는 수가 1씩 늘어요<span class="e">1, 2, 4, 7, 11 ➜ 16</span></div><div class="s"><b>피보나치</b> · 앞의 두 수를 더해요<span class="e">2, 3, 5, 8, 13 ➜ 21</span></div><div class="s"><b>제곱수</b> · 같은 수를 두 번 곱해요<span class="e">4, 9, 16, 25 ➜ 36</span></div><div class="s"><b>세제곱수</b> · 같은 수를 세 번 곱해요<span class="e">2×2×2=8, 3×3×3=27</span></div><div class="s"><b>소수</b> · 1과 자기 자신만 약수<span class="e">2, 3, 5, 7, 11 ➜ 13</span></div><div class="s"><b>점화식</b> · 앞 수 ×2 + 1<span class="e">1, 3, 7, 15 ➜ 31</span></div>
   </div>
 </section>
 
-<section class="card" style="margin-top:1.8mm">
+<section class="card c5" style="margin-top:1.8mm">
   <h2><span class="n">5</span>갈톤보드와 파스칼 삼각형 <span class="t">확률 구슬 챌린지</span></h2>
   <div class="flex" style="gap:4mm;align-items:flex-end">
     <div style="flex:0 0 44mm"><svg viewBox="0 0 120 90" width="100%" role="img" aria-label="핀 4단 갈톤보드 그림"><polygon points="0,0 0,0" fill="none"/><circle cx="60" cy="14" r="2.3" fill="#111"/><circle cx="50" cy="27" r="2.3" fill="#111"/><circle cx="70" cy="27" r="2.3" fill="#111"/><circle cx="40" cy="40" r="2.3" fill="#111"/><circle cx="60" cy="40" r="2.3" fill="#111"/><circle cx="80" cy="40" r="2.3" fill="#111"/><circle cx="30" cy="53" r="2.3" fill="#111"/><circle cx="50" cy="53" r="2.3" fill="#111"/><circle cx="70" cy="53" r="2.3" fill="#111"/><circle cx="90" cy="53" r="2.3" fill="#111"/><path d="M52 2 L68 2 L60 9 Z" fill="#fff" stroke="#111" stroke-width="1"/><rect x="10" y="64" width="20" height="26" fill="#fff" stroke="#111" stroke-width="1.2"/><text x="20" y="81" font-size="13" text-anchor="middle" font-weight="800">1</text><rect x="30" y="64" width="20" height="26" fill="#fff" stroke="#111" stroke-width="1.2"/><text x="40" y="81" font-size="13" text-anchor="middle" font-weight="800">4</text><rect x="50" y="64" width="20" height="26" fill="#fff" stroke="#111" stroke-width="1.2"/><text x="60" y="81" font-size="13" text-anchor="middle" font-weight="800">6</text><rect x="70" y="64" width="20" height="26" fill="#fff" stroke="#111" stroke-width="1.2"/><text x="80" y="81" font-size="13" text-anchor="middle" font-weight="800">4</text><rect x="90" y="64" width="20" height="26" fill="#fff" stroke="#111" stroke-width="1.2"/><text x="100" y="81" font-size="13" text-anchor="middle" font-weight="800">1</text></svg><p class="sm" style="text-align:center;margin:0">4단 보드의 <b>길의 수</b></p></div>
@@ -172,7 +234,7 @@ table.seq td:last-child{white-space:nowrap;font-variant-numeric:tabular-nums}
   <div class="ex"><b>예</b> 4단 보드: 16가지 중 3번 칸 6가지 ➜ 6÷16 = <b>3/8</b> · 실제 보드(칸 16개)는 8·9번 칸이 각각 약 <b>19.6%</b></div>
 </section>
 
-<section class="card" style="margin-top:1.8mm">
+<section class="card c6" style="margin-top:1.8mm">
   <h2><span class="n">★</span>오메가 프로토콜 맛보기 <span class="t">3개 미션을 마치면 열리는 숨은 관문</span></h2>
   <div class="minis">
     <div class="mini"><h3>변형 시저 (비제네르)</h3>
