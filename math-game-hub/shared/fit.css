@@ -10,13 +10,13 @@ html, body { overflow-x: clip; }
 /* 배경 장식이 페이지 크기를 키워 불필요한 스크롤(가로·세로 100px)이 생기던 문제 */
 .bg-glow { position: fixed; }
 
-/* ---------- 가로 + 낮은 화면: 공통 압축 ---------- */
+/* ---------- 가로 태블릿(높이 ≤820px): 머리글을 접고, 남는 높이는 문제 칸이 채움 ---------- */
 @media screen and (orientation: landscape) and (max-height: 820px) {
   .game-nav-bar { padding: 6px 16px; max-width: none; }
   .btn-hub-back { padding: 4px 12px; font-size: 0.85rem; }
   .game-badge { font-size: 0.8rem; padding: 4px 10px; }
   .app-container { max-width: 1120px; padding: 0 14px; }
-  .card { padding: 14px 20px; }
+  .card { padding: 20px 26px; }
 
   /* 게임/결과 화면에서는 큰 제목 머리글을 숨기고, 시작 화면에서는 한 줄로 줄임 */
   .app-container:has(#screen-game:not(.hidden)) .app-header,
@@ -26,35 +26,59 @@ html, body { overflow-x: clip; }
   .app-header .mission-tag, .app-header .subtitle { display: none; }
   .app-header .main-title { font-size: 1.35rem; margin-bottom: 0; }
 
-  /* 암호 연구소 · 오메가: 상태 줄, 단계 표시, 문제 */
+  /* 암호 연구소 · 오메가: 문제 화면이 화면 높이를 채우고, 남는 높이는 문제 칸(암호 상자)이 가져감
+     → 아래가 텅 비고 문제 칸만 납작해 보이던 문제 해결 */
+  .app-container:has(#screen-game:not(.hidden) .answer-box) { flex: 1 0 auto; display: flex; flex-direction: column; min-height: calc(100dvh - 92px); padding-bottom: 12px; }
+  #screen-game:not(.hidden):has(.answer-box) { flex: 1 0 auto; display: flex; flex-direction: column; }
+  #screen-game .problem-container, #screen-game .omega-problem-card { flex: 1 0 auto; display: flex; flex-direction: column; }
+  #screen-game .cipher-display-box, #screen-game .gate-display-box { flex: 1 0 auto; min-height: 180px; display: flex; flex-direction: column; justify-content: center; }
+  #screen-game .answer-box { margin-top: 8px; }
+
+  /* 시작 화면 */
+  .story-box { padding: 12px 16px; margin-bottom: 12px; }
+  .btn-large { padding: 14px; }
+}
+
+/* 힌트 버튼: 둥근 버튼 안에 글자가 꽉 끼지 않도록 좌우 여백 확보 (모든 화면) */
+.btn-hint-toggle { padding: 8px 18px; white-space: nowrap; min-height: 44px; }
+
+/* ---------- 중간 높이(≤720px, 예: 1280×720): 조금만 줄임 ---------- */
+@media screen and (orientation: landscape) and (max-height: 720px) {
+  .card { padding: 14px 22px; }
+  .status-bar, .omega-status-bar { padding: 8px 14px; margin-bottom: 10px; }
+  .step-indicator { margin-bottom: 10px; }
+  .omega-stepper { margin-bottom: 10px; }
+  .room-desc, .gate-desc { margin-bottom: 10px; }
+  #screen-game .cipher-display-box, #screen-game .gate-display-box { min-height: 130px; margin-bottom: 10px; }
+  .hint-box { margin-bottom: 10px; }
+}
+
+/* ---------- 아주 낮은 화면(≤640px, 예: 1000×560): 한 화면에 들어오도록 강하게 줄임 ---------- */
+@media screen and (orientation: landscape) and (max-height: 640px) {
+  .card { padding: 10px 16px; }
   .status-bar, .omega-status-bar { padding: 6px 14px; margin-bottom: 8px; }
   .step-indicator { margin-bottom: 8px; padding: 0 6px; }
   .step-num { width: 24px; height: 24px; font-size: 0.8rem; }
-  .step-name { font-size: 0.7rem; }
-  .omega-stepper { margin-bottom: 8px; gap: 6px; }
-  .omega-step { padding: 4px 6px; font-size: 0.75rem; }
+  .step-name { display: none; }
+  .omega-stepper { display: none; }
   .room-header, .problem-header { margin-bottom: 2px; }
   .room-title, .gate-title { font-size: 1.1rem; }
   .room-desc, .gate-desc { margin-bottom: 8px; font-size: 0.85rem; line-height: 1.4; }
-  .cipher-display-box, .gate-display-box { padding: 12px 14px; margin-bottom: 8px; }
+  #screen-game .cipher-display-box, #screen-game .gate-display-box { padding: 12px 14px; margin-bottom: 8px; min-height: 100px; }
   .hint-box { margin-bottom: 8px; }
-  .btn-hint-toggle { padding: 2px 0; font-size: 0.8rem; }
-  .answer-box { margin-top: 4px; }
+  .btn-hint-toggle { padding: 4px 14px; min-height: 40px; font-size: 0.85rem; }
+  #screen-game .answer-box { margin-top: 4px; }
   .feedback-msg { margin-top: 4px; min-height: 18px; font-size: 0.85rem; }
   .input-with-btn .btn, .input-with-btn button { padding-top: 10px; padding-bottom: 10px; }
-
-  /* 시작 화면 */
   .story-box { padding: 10px 14px; margin-bottom: 10px; font-size: 0.9rem; }
   .btn-diff { padding: 8px 6px; }
   .btn-large { padding: 12px; font-size: 1rem; }
+  .app-container:has(#screen-game:not(.hidden) .answer-box) { min-height: calc(100dvh - 90px); padding-bottom: 6px; }
+  #screen-game:has(.vault-stage):not(.hidden) { gap: 8px 16px; min-height: calc(100dvh - 74px); }
+  .vault-dial-frame { width: 64px; height: 64px; }
+  .btn-num { min-height: 44px; font-size: 1.25rem; }
+  .numpad-grid { grid-auto-rows: minmax(44px, 1fr); }
 }
-
-@media screen and (orientation: landscape) and (max-height: 640px) {
-  .card { padding: 10px 16px; }
-  .step-name { display: none; }
-  .omega-stepper { display: none; }
-}
-
 
 /* ---------- 가로 + 낮은 화면: 시작 화면을 좌우 두 칸으로, 수열 스피드런을 문제|숫자패드로 ---------- */
 @media screen and (orientation: landscape) and (max-height: 820px) {
@@ -74,20 +98,24 @@ html, body { overflow-x: clip; }
   .vault-intro .action-row, .omega-intro .action-row { margin-top: 4px; }
 
   /* 수열 스피드런 문제 화면: 왼쪽 문제, 오른쪽 숫자패드 */
-  #screen-game:has(.vault-stage):not(.hidden) { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-areas: "status status" "timer timer" "stage pad"; gap: 8px 16px; align-items: start; }
+  #screen-game:has(.vault-stage):not(.hidden) { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr; grid-template-areas: "status status" "timer timer" "stage pad"; gap: 10px 18px; align-items: stretch; min-height: calc(100dvh - 86px); }
   .vault-status-bar { grid-area: status; padding: 6px 14px; margin: 0; }
   .timer-gauge-wrapper { grid-area: timer; margin: 0; }
   .timer-header { margin-bottom: 3px; }
   .gauge-track { height: 8px; }
   .vault-stage { grid-area: stage; margin: 0; padding: 12px; gap: 12px; align-self: stretch; }
-  .vault-dial-frame { width: 64px; height: 64px; flex: none; }
+  .vault-dial-frame { flex: none; }
   .dial-center-lock { font-size: 1.3rem; }
   .sequence-numbers { gap: 6px; }
   .input-keypad-container { grid-area: pad; gap: 6px; }
   .current-input-box { padding: 6px 12px; }
   .feedback-pop { min-height: 16px; font-size: 0.8rem; }
   .numpad-grid { gap: 6px; }
-  .btn-num { padding: 0; height: 48px; font-size: 1.25rem; border-radius: 10px; }
+  .numpad-grid { flex: 1; grid-auto-rows: minmax(48px, 1fr); }
+  .btn-num { padding: 0; height: auto; min-height: 48px; max-height: 80px; font-size: 1.5rem; border-radius: 12px; }
+  .input-keypad-container { display: flex; flex-direction: column; }
+  .vault-stage { justify-content: center; }
+  .vault-dial-frame { width: 88px; height: 88px; }
 }
 
 
@@ -135,13 +163,13 @@ html, body { overflow-x: clip; }
 @media screen and (orientation: landscape) and (max-height: 820px) {
   .app-container:has(.sim-main-card) { max-width: 1200px; }
   .app-container:has(.sim-main-card) .app-header { display: none; }
-  .sim-main-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "ctrl board" "pred board"; gap: 8px 16px; align-items: start; padding: 8px 14px; }
+  .sim-main-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "ctrl board" "pred board"; grid-template-rows: auto 1fr; gap: 10px 16px; align-items: start; padding: 10px 16px; }
   .sim-control-bar { grid-area: ctrl; padding: 8px 12px; gap: 6px 10px; margin: 0; }
   .predict-main-section { grid-area: pred; margin: 0; }
   .galton-stand-frame { grid-area: board; width: auto; padding: 0; }
   .stand-pillar { display: none; }
   .canvas-wrapper { max-width: none; width: auto; border-width: 4px; }
-  #galton-canvas { height: calc(100dvh - 120px); width: auto; max-width: 46vw; }
+  #galton-canvas { height: calc(100dvh - 126px); width: auto; max-width: 46vw; }
   .panel-guide { margin-bottom: 6px; padding: 6px 12px; font-size: 0.8rem; }
   .step-badge { margin-bottom: 4px; }
   .predict-sliders-container { --tw: 13px; --th: 78px; padding: 6px 4px; display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 2px; justify-items: center; }
