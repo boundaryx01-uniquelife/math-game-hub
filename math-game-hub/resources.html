@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+  <title>학습 자료 · 부스 운영 - 코드 브레이커 &amp; 갈톤 메이커</title>
+  <meta name="theme-color" content="#090d16" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="shared/theme.css" />
+  <link rel="stylesheet" href="shared/fit.css" />
+  <link rel="stylesheet" href="resources.css" />
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <div class="hub-container res-page">
+    <header class="res-header">
+      <a class="btn btn-sm btn-outline" href="index.html">← 시작 화면</a>
+      <h1 class="res-title">📚 학습 자료 · 부스 운영</h1>
+      <a class="btn btn-sm btn-outline" href="hub.html">미션 허브 ➔</a>
+    </header>
+    <p class="res-lead">참가자가 하는 게임과는 따로 둔 도우미·교사용 페이지예요. 인쇄물, 운영 도구, 부스 소개를 모았어요.</p>
+
+    <section class="res-section" aria-labelledby="h-learn">
+      <h2 class="section-heading" id="h-learn"><span class="icon" aria-hidden="true">📝</span> 학습 자료 <small>(인쇄용)</small></h2>
+      <div class="resource-grid">
+        <a class="resource-card" href="learn/worksheet.html">
+          <span class="r-icon" aria-hidden="true">📝</span>
+          <span class="r-body"><strong>체험 학습지</strong><span>체험 전후에 푸는 한 장 활동지</span></span>
+        </a>
+        <a class="resource-card" href="learn/concepts.html">
+          <span class="r-icon" aria-hidden="true">💡</span>
+          <span class="r-body"><strong>개념 정리 학습지</strong><span>암호·이진수·수열·확률 한 장 요약</span></span>
+        </a>
+        <a class="resource-card" href="learn/worksheet-answers.html">
+          <span class="r-icon" aria-hidden="true">✅</span>
+          <span class="r-body"><strong>학습지 정답 (교사용)</strong><span>체험 학습지 풀이와 정답</span></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="res-section" aria-labelledby="h-booth">
+      <h2 class="section-heading" id="h-booth"><span class="icon" aria-hidden="true">🖼️</span> 부스 게시물 <small>(큰 인쇄)</small></h2>
+      <div class="resource-grid">
+        <a class="resource-card" href="learn/booth-guide.html">
+          <span class="r-icon" aria-hidden="true">🗺️</span>
+          <span class="r-body"><strong>체험 방법 안내판</strong><span>부스에 세워 두는 인포그래픽 (A3/A4)</span></span>
+        </a>
+        <a class="resource-card" href="learn/galton-build.html">
+          <span class="r-icon" aria-hidden="true">🛠️</span>
+          <span class="r-body"><strong>갈톤 보드 만들기</strong><span>5단계 제작 포스터 (A1)</span></span>
+        </a>
+        <a class="resource-card" href="learn/galton-build-detail.html">
+          <span class="r-icon" aria-hidden="true">📄</span>
+          <span class="r-body"><strong>갈톤 보드 자세한 설명서</strong><span>모델 정보와 준비물 확인표</span></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="res-section" aria-labelledby="h-tools">
+      <h2 class="section-heading" id="h-tools"><span class="icon" aria-hidden="true">🛠️</span> 운영 도구 <small>(도우미 코드가 필요한 것은 🔑)</small></h2>
+      <div class="resource-grid">
+        <button class="resource-card" id="btn-staff-unlock" type="button">
+          <span class="r-icon" aria-hidden="true">🔓</span>
+          <span class="r-body"><strong id="staff-unlock-title">모든 미션 열기 🔑</strong><span id="staff-unlock-desc">시연용. 이 탭을 닫으면 원래대로 돌아가요</span></span>
+        </button>
+        <button class="resource-card" id="btn-clear-records" type="button">
+          <span class="r-icon" aria-hidden="true">🧹</span>
+          <span class="r-body"><strong>순위 기록 지우기 🔑</strong><span id="record-count-text">이 기기에 저장된 기록을 모두 지워요</span></span>
+        </button>
+        <a class="resource-card" href="offline.html">
+          <span class="r-icon" aria-hidden="true">📴</span>
+          <span class="r-body"><strong>인터넷 없이 쓰기</strong><span id="offline-status-text">설치·내려받기 방법과 기록 백업</span></span>
+        </a>
+        <div class="resource-card res-note">
+          <span class="r-icon" aria-hidden="true">📏</span>
+          <span class="r-body"><strong>화면 크기 확인</strong><span>게임 주소 끝에 <code>?size</code>를 붙이면 화면 크기가 왼쪽 아래에 보여요</span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="res-section" aria-labelledby="h-about">
+      <h2 class="section-heading" id="h-about"><span class="icon" aria-hidden="true">ℹ️</span> 부스 소개</h2>
+      <div class="res-about">
+
+        <div class="guide-section">
+          <h4>🎯 1. 부스 운영 방향</h4>
+          <p>
+            본 부스는 <strong>암호 방탈출 웹게임</strong>과 <strong>3D 프린터 갈톤보드 실물 제작/실험</strong>을 결합한 수학 체험 공간입니다.
+          </p>
+        </div>
+
+        <div class="guide-section">
+          <h4>🧩 2. 게임형 체험: 암호 연구소 탈출</h4>
+          <ul>
+            <li><strong>시저 암호</strong>: 글자들의 일정한 평행이동 규칙 탐구</li>
+            <li><strong>좌표 암호</strong>: 5×5 격자에서 (가로 X, 세로 Y) 위치 매핑</li>
+            <li><strong>이진수 암호</strong>: 컴퓨터 2진법 체계와 자리값 이해</li>
+            <li><strong>수열 암호</strong>: 수의 배열 속에서 숨은 규칙 찾아내기</li>
+          </ul>
+        </div>
+
+        <div class="guide-section">
+          <h4>🔮 3. 제작형 체험: 갈톤보드(Galton Board)</h4>
+          <p>
+            3D 프린터로 제작된 갈톤보드에 구슬 30~50개를 떨어뜨리면, 핀에 부딪히며 좌우로 갈라지다 결국 <strong>가운데에 가장 많이 모이는 완만한 산 모양의 분포</strong>를 형성합니다. 직접 구슬을 굴려보고 활동지에 기록해 보세요!
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="hub-footer">
+      <p>코드 브레이커 &amp; 갈톤 메이커 | 2026 수학체험전</p>
+      <p class="copyright">순위 기록은 이 기기에만 저장됩니다.</p>
+    </footer>
+  </div>
+
+  <script src="shared/ui.js"></script>
+  <script src="shared/pwa.js" defer></script>
+  <script src="resources.js"></script>
+  <script src="shared/fit.js"></script>
+</body>
+</html>

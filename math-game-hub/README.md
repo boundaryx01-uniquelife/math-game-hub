@@ -9,7 +9,10 @@
 
 ```text
 math-game-hub/
-├── index.html                   # 게임 허브 메인 포털 (게임 선택 및 전체 랭킹)
+├── index.html                   # 시작 화면(인트로): 요원 등록 → 미션 이야기 영상 → 게임
+├── hub.html                     # 미션 허브 (게임 선택, 진행 표시, 명예의 전당)
+├── resources.html               # 학습 자료 · 부스 운영 (도우미·교사용: 인쇄물, 운영 도구, 부스 소개)
+├── intro.html                   # 옛 주소 → index.html 로 안내
 ├── style.css                    # 허브 공통 스타일 및 테마 시스템
 ├── script.js                   # 허브 라우팅 및 통합 랭킹 관리자
 ├── data/

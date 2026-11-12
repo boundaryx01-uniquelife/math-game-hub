@@ -1,0 +1,19 @@
+/* 학습 자료 · 부스 운영 페이지 (도우미·교사용) */
+.res-page { max-width: 1000px; gap: 14px; }
+.res-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.res-header .btn { min-height: 44px; white-space: nowrap; }
+.res-title { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.03em; margin: 0; text-align: center; flex: 1 1 auto; }
+.res-lead { color: var(--text-muted, #94a3b8); font-size: 0.95rem; text-align: center; margin: 0; }
+.res-section .section-heading small { font-size: 0.8rem; color: var(--text-muted, #94a3b8); font-weight: 600; margin-left: 6px; }
+.res-note { cursor: default; }
+.res-note code, .res-about code { background: rgba(255, 255, 255, 0.1); padding: 1px 6px; border-radius: 6px; font-family: var(--font-mono, monospace); }
+.res-about { display: grid; gap: 10px; background: rgba(15, 23, 42, 0.72); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 14px 18px; }
+.res-about .guide-section h4 { margin: 0 0 4px; font-size: 1rem; }
+.res-about .guide-section p, .res-about .guide-section li { font-size: 0.92rem; line-height: 1.55; }
+.res-about .guide-section ul { margin: 0; padding-left: 1.2em; }
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .res-title { font-size: 1.25rem; }
+  .res-lead { display: none; }
+  .res-about { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+  .resource-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

@@ -183,3 +183,11 @@ html.kb-open .reg-card { padding: 10px 16px; }
   .story-head { display: none; }
   .intro-app[data-stage="story"] .intro-top { display: none; }
 }
+
+/* 첫 화면 아래의 작은 바로가기(도우미용) */
+.intro-foot { display: flex; justify-content: center; gap: 22px; }
+.intro-foot a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--text-muted, #94a3b8); font-size: 0.85rem; text-decoration: underline; }
+.intro-foot a:hover, .intro-foot a:focus-visible { color: #fff; }
+.intro-app:not([data-stage="register"]) .intro-foot { display: none; }
+html.kb-open .intro-foot { display: none; }
+@media screen and (orientation: landscape) and (max-height: 820px) { .intro-foot a { min-height: 40px; } }

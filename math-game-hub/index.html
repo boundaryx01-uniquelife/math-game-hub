@@ -3,365 +3,137 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
-  <title>수학 게임 허브 - 코드 브레이커 &amp; 갈톤 메이커</title>
+  <title>요원 등록과 미션 이야기: 코드 브레이커 & 갈톤 메이커</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="intro.css" />
+  <link rel="stylesheet" href="shared/theme.css" />
+  <link rel="stylesheet" href="shared/fit.css" />
   <meta name="theme-color" content="#090d16" />
-  <meta name="description" content="2026 수학체험전 부스용 수학 게임 허브: 암호, 확률, 수열 체험" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="shared/theme.css" />
-  <link rel="stylesheet" href="shared/fit.css" />
 </head>
-<body>
-  <!-- 배경 데코레이션 효과 -->
-  <div class="bg-glow bg-glow-1"></div>
-  <div class="bg-glow bg-glow-2"></div>
+<body class="intro-body">
+  <main class="intro-app" id="intro-app" data-stage="register">
 
-  <div class="hub-container">
-    <!-- 머리말 -->
-    <header class="hub-header">
-      <div class="badge-booth">2026 수학체험전 공식 부스</div>
-      <h1 class="hub-title">코드 브레이커 &amp; 갈톤 메이커</h1>
-      <p class="hub-subtitle">암호를 풀고, 구슬을 떨어뜨리고, 수열 금고를 열어 보세요!</p>
+    <header class="intro-top">
+      <div class="intro-badge">TOP SECRET · 2026 MATH SECURITY AGENCY</div>
+      <h1 class="intro-title">코드 브레이커 &amp; 갈톤 메이커</h1>
     </header>
 
-    <!-- 참가자 바: 지금 누가 체험 중인지 한눈에 -->
-    <section class="player-bar-card" aria-label="참가자">
-      <div class="player-now">
-        <div class="player-avatar" aria-hidden="true">👤</div>
-        <div class="player-now-text">
-          <span class="player-now-label">지금 체험 중인 요원</span>
-          <div class="player-input-group">
-            <label for="hub-player-name" class="sr-only">요원 이름</label>
-            <input type="text" id="hub-player-name" placeholder="이름을 입력하세요" maxlength="10" autocomplete="off" />
-            <button id="btn-save-player" class="btn btn-sm btn-outline" type="button">저장</button>
-          </div>
-          <div class="grade-switch" role="radiogroup" aria-label="학년(난이도) 선택">
-            <button type="button" class="grade-opt" role="radio" aria-checked="true" data-grade="elem" data-diff="easy">🌱 초등</button>
-            <button type="button" class="grade-opt" role="radio" aria-checked="false" data-grade="mid" data-diff="normal">⭐ 중등</button>
-            <button type="button" class="grade-opt" role="radio" aria-checked="false" data-grade="high" data-diff="hard">🔥 고등</button>
+    <!-- 진행 표시: 요원 등록 → 미션 이야기 → 게임 시작 -->
+    <ol class="intro-steps" aria-label="진행 순서">
+      <li class="is-step active" data-for="register"><span class="is-dot">1</span><span class="is-name">요원 등록</span></li>
+      <li class="is-step" data-for="story"><span class="is-dot">2</span><span class="is-name">미션 이야기</span></li>
+      <li class="is-step" data-for="play"><span class="is-dot">3</span><span class="is-name">게임 시작</span></li>
+    </ol>
+
+    <!-- 1단계: 요원 등록 -->
+    <section class="stage stage-register" id="stage-register" aria-labelledby="reg-title">
+      <div class="reg-card">
+        <h2 id="reg-title" class="stage-title">🕵️ 요원 등록</h2>
+        <p class="stage-lead">이름과 학년을 고르면 미션 이야기가 바로 시작돼요.</p>
+
+        <div class="reg-fields">
+          <label class="f-label" for="intro-player-name">요원 닉네임</label>
+          <input type="text" id="intro-player-name" placeholder="닉네임 (예: 수학탐정)" maxlength="10" autocomplete="off" enterkeyhint="go" />
+
+          <span class="f-label" id="grade-label">학년 레벨</span>
+          <div class="grade-button-row" role="radiogroup" aria-labelledby="grade-label">
+            <button type="button" class="btn-grade-opt active" role="radio" aria-checked="true" data-grade="elem" data-diff="easy">
+              <span class="g-emoji">🌱</span><span class="g-name">초등부</span><span class="g-desc">기초 연산 · 직관적 추론</span>
+            </button>
+            <button type="button" class="btn-grade-opt" role="radio" aria-checked="false" data-grade="mid" data-diff="normal">
+              <span class="g-emoji">⭐</span><span class="g-name">중등부</span><span class="g-desc">규칙 탐구 · 논리적 분석</span>
+            </button>
+            <button type="button" class="btn-grade-opt" role="radio" aria-checked="false" data-grade="high" data-diff="hard">
+              <span class="g-emoji">🔥</span><span class="g-name">고등부</span><span class="g-desc">심화 점화식 · 고난도 암호</span>
+            </button>
           </div>
         </div>
-      </div>
-      <div class="hub-action-buttons">
-        <button id="btn-new-player" class="btn btn-sm btn-accent" type="button">🙋 다음 친구 차례</button>
-        <button id="btn-open-rankings" class="btn btn-sm btn-outline" type="button">🏆 명예의 전당</button>
-        <a href="intro.html#story" class="btn btn-sm btn-outline">📖 미션 이야기</a>
-      </div>
-    </section>
 
-    <!-- 진행 상황 -->
-    <section class="progress-strip" aria-label="나의 진행 상황">
-      <ol class="progress-steps" id="progress-steps">
-        <li class="p-step" data-step="cipher"><span class="p-dot">1</span><span class="p-name">암호 탈출</span></li>
-        <li class="p-step" data-step="galton"><span class="p-dot">2</span><span class="p-name">확률 구슬</span></li>
-        <li class="p-step" data-step="sequence"><span class="p-dot">3</span><span class="p-name">수열 금고</span></li>
-        <li class="p-step p-step-omega" data-step="omega"><span class="p-dot">Ω</span><span class="p-name">히든 미션</span></li>
-      </ol>
-      <p class="progress-msg" id="progress-msg">1단계부터 차례로 도전해요. 하나를 끝내면 다음 미션이 열립니다.</p>
-    </section>
-
-    <!-- 게임 선택 섹션 -->
-    <main class="games-section">
-      <h2 class="section-heading">
-        <span class="icon" aria-hidden="true">🎮</span> 미션 고르기
-      </h2>
-
-      <div class="games-grid">
-        <!-- 게임 1: 암호 연구소 탈출 (1단계: 기본 활성화) -->
-        <div class="game-card card-active" id="card-game-cipher">
-          <div class="game-status-tag ready" id="badge-game-cipher">STEP 1 · 도전 가능</div>
-          <div class="game-icon">🕵️‍♂️</div>
-          <h3 class="game-name">암호 연구소 탈출</h3>
-          <p class="game-desc">
-            시저 암호, 좌표 암호, 이진수 암호, 수열 암호의 4단계 보안실을 차례로 해독하여 연구소를 탈출하세요!
-          </p>
-          <div class="game-tags">
-            <span class="tag">규칙과 대응</span>
-            <span class="tag">좌표</span>
-            <span class="tag">이진수</span>
-            <span class="tag">방탈출</span>
-          </div>
-          <div class="game-meta">
-            <span>⏱️ 소요 시간: 3~5분</span>
-            <span>📜 수학탐정 마스터 인증서</span>
-          </div>
-          <a href="games/cipher/index.html" class="btn btn-primary btn-play" id="btn-play-cipher">
-            <span>1단계 도전하기</span> ➔
-          </a>
-        </div>
-
-        <!-- 게임 2: 확률 구슬 챌린지 (2단계: 1단계 완료 시 해금) -->
-        <div class="game-card card-locked" id="card-game-galton">
-          <div class="game-status-tag locked" id="badge-game-galton">🔒 STEP 2 (1단계 완료 시 해금)</div>
-          <div class="game-icon" id="icon-game-galton">🔒</div>
-          <h3 class="game-name">확률 구슬 챌린지</h3>
-          <p class="game-desc">
-            구슬이 16개 칸 중 어디에 많이 쌓일까요? 먼저 예측하고, 갈톤보드에 구슬을 떨어뜨려 확인해 보세요!
-          </p>
-          <div class="game-tags">
-            <span class="tag">자료와 가능성</span>
-            <span class="tag">정규분포</span>
-            <span class="tag">3D 갈톤보드</span>
-          </div>
-          <div class="game-meta">
-            <span>⏱️ 소요 시간: 2~3분</span>
-            <span>🎯 100점 만점 예측 스코어</span>
-          </div>
-          <a href="games/probability/index.html" class="btn btn-secondary btn-play" id="btn-play-galton">
-            <span>🔒 2단계 잠김 (1단계 필요)</span>
-          </a>
-        </div>
-
-        <!-- 게임 3: 수열 금고 스피드런 (3단계: 2단계 완료 시 해금) -->
-        <div class="game-card card-locked" id="card-game-sequence">
-          <div class="game-status-tag locked" id="badge-game-sequence">🔒 STEP 3 (2단계 완료 시 해금)</div>
-          <div class="game-icon" id="icon-game-sequence">🔒</div>
-          <h3 class="game-name">수열 금고 스피드런</h3>
-          <p class="game-desc">
-            60초 동안 연속으로 주어지는 수열의 빈칸을 빠르게 맞혀 최고 연속 콤보를 달성하세요!
-          </p>
-          <div class="game-tags">
-            <span class="tag">수열</span>
-            <span class="tag">패턴 추론</span>
-            <span class="tag">스피드런</span>
-          </div>
-          <div class="game-meta">
-            <span>⏱️ 제한 시간: 60초</span>
-            <span>⚡ 연속 콤보 & 점수 랭킹</span>
-          </div>
-          <a href="games/sequence/index.html" class="btn btn-secondary btn-play" id="btn-play-sequence">
-            <span>🔒 3단계 잠김 (2단계 필요)</span>
-          </a>
-        </div>
-
-        <!-- 엑스트라 히든 챌린지: 오메가 프로토콜 (3개 미션 완료 전까지 완전 숨김) -->
-        <div class="game-card card-omega card-active hidden" id="card-game-omega">
-          <div class="game-status-tag omega" id="omega-status-badge">🔥 최고난도 히든 챌린지 (해금됨)</div>
-          <div class="game-icon" id="omega-icon">Ω</div>
-          <h3 class="game-name text-purple">오메가 프로토콜</h3>
-          <p class="game-desc">
-            비제네르 암호, 3D 공간 좌표, 논리 회로망, 파스칼 조합, 조건부 확률로 이어지는 5대 심층 관문!
-          </p>
-          <div class="game-tags">
-            <span class="tag tag-omega">비제네르</span>
-            <span class="tag tag-omega">3D 좌표</span>
-            <span class="tag tag-omega">논리 회로</span>
-            <span class="tag tag-omega">확률 역설</span>
-          </div>
-          <div class="game-meta">
-            <span>⏱️ 소요 시간: 5~10분</span>
-            <span>👑 골드 마스터 인증서</span>
-          </div>
-          <a href="games/hidden_omega/index.html" class="btn btn-omega btn-play" id="btn-play-omega">
-            <span>최고난도 도전</span> 👑
-          </a>
-        </div>
-      </div>
-    </main>
-
-    <!-- 학습 자료 · 부스 운영 -->
-    <section class="resources-section" aria-labelledby="res-heading">
-      <h2 class="section-heading" id="res-heading"><span class="icon" aria-hidden="true">📚</span> 학습 자료 · 부스 운영</h2>
-      <div class="resource-grid">
-        <a class="resource-card" href="learn/worksheet.html">
-          <span class="r-icon" aria-hidden="true">📝</span>
-          <span class="r-body"><strong>체험 학습지</strong><span>체험 전후에 푸는 한 장 활동지 (인쇄용)</span></span>
-        </a>
-        <a class="resource-card" href="learn/concepts.html">
-          <span class="r-icon" aria-hidden="true">💡</span>
-          <span class="r-body"><strong>개념 정리 학습지</strong><span>암호·이진수·수열·확률 한 장 요약</span></span>
-        </a>
-        <a class="resource-card" href="learn/booth-guide.html">
-          <span class="r-icon" aria-hidden="true">🗺️</span>
-          <span class="r-body"><strong>체험 방법 안내판</strong><span>부스에 세워 두는 인포그래픽 포스터</span></span>
-        </a>
-        <a class="resource-card" href="learn/galton-build.html">
-          <span class="r-icon" aria-hidden="true">🛠️</span>
-          <span class="r-body"><strong>갈톤 보드 만들기</strong><span>5단계 제작 포스터 (A1 인쇄용)</span></span>
-        </a>
-        <a class="resource-card" href="learn/worksheet-answers.html">
-          <span class="r-icon" aria-hidden="true">✅</span>
-          <span class="r-body"><strong>학습지 정답 (교사용)</strong><span>체험 학습지 풀이와 정답</span></span>
-        </a>
-        <a class="resource-card" href="offline.html">
-          <span class="r-icon" aria-hidden="true">📴</span>
-          <span class="r-body"><strong>인터넷 없이 쓰기</strong><span id="offline-status-text">설치·내려받기 방법과 기록 백업</span></span>
-        </a>
-        <button class="resource-card" id="btn-open-guide" type="button">
-          <span class="r-icon" aria-hidden="true">ℹ️</span>
-          <span class="r-body"><strong>부스 소개</strong><span>이 부스에서 배우는 수학</span></span>
+        <button id="btn-register-next" class="btn btn-primary btn-large" type="button">
+          <span>📖 미션 이야기 보기</span>
         </button>
       </div>
     </section>
 
-    <!-- 하단 푸터 -->
-    <footer class="hub-footer">
-      <p>코드 브레이커 &amp; 갈톤 메이커 | 2026 수학체험전</p>
-      <p class="copyright">초등 수학 교육과정 연계: 규칙 찾기 · 좌표와 위치 · 자료와 가능성</p>
-      <p class="copyright">순위 기록은 이 기기에만 저장됩니다.</p>
-      <button type="button" class="btn-staff-link" id="btn-staff-unlock">도우미: 모든 미션 열기</button>
-    </footer>
-  </div>
+    <!-- 2단계: 미션 이야기 (짧은 모션 그래픽 영상. 영상을 못 불러오면 아래 글 장면으로 대신 보여 줌) -->
+    <section class="stage stage-story" id="stage-story" aria-labelledby="story-title" hidden>
+      <h2 id="story-title" class="stage-title story-head"><span id="story-agent">요원</span>님, 미션 이야기예요</h2>
 
-  <!-- 🎖️ 3종 완료 공식 [코드 브레이커] 자격 증명 & 히든 도전 선택 모달 -->
-  <div id="modal-completion" class="modal hidden">
-    <div class="modal-backdrop"></div>
-    <div class="modal-content modal-completion-content">
-      <div class="comp-left">
-      <div class="completion-badge-icon">🎖️</div>
-      <span class="cert-subtitle">OFFICIAL CODEBREAKER CREDENTIAL</span>
-      <h2 class="completion-title">축하합니다! 공식 [코드 브레이커] 자격 획득</h2>
-      
-      <p class="completion-desc">
-        <strong>암호 연구소 탈출</strong>, <strong>확률 구슬 챌린지</strong>, <strong>수열 금고 스피드런</strong>의<br>
-        3대 수학 체험 코스를 모두 완수하여 <strong>공식 코드 브레이커(CODEBREAKER)</strong> 자격을 획득하셨습니다!
-      </p>
-
-      <div class="cleared-summary-box">
-        <div class="c-item">✅ 1. 암호 탈출 완료</div>
-        <div class="c-item">✅ 2. 갈톤 확률 완료</div>
-        <div class="c-item">✅ 3. 수열 금고 완료</div>
-      </div>
-      </div>
-
-      <div class="comp-right">
-      <!-- 🔥 히든 챌린지 도전 여부 선택 박스 -->
-      <div class="omega-challenge-invitation">
-        <div class="omega-inv-header">
-          <span class="fire-icon">🔥</span>
-          <h3>최상위 엘리트 히든 챌린지: [오메가 프로토콜]</h3>
+      <div class="story-player" id="story-player">
+        <div class="player-frame">
+          <video id="story-video" playsinline preload="metadata" poster="media/intro-story-poster.jpg" aria-label="미션 이야기 영상 (자막이 들어 있어요)"></video>
+          <button type="button" class="player-big" id="btn-video-play" aria-label="영상 재생"><span id="player-big-icon">▶</span></button>
         </div>
-        
-        <div class="omega-warning-box">
-          <div class="warn-header">⚠️ 도전 전 필수 주의사항</div>
-          <p class="warn-text">
-            • 본 미션은 수학체험전 최고 난이도의 <strong>5대 심층 수학 퍼즐</strong>로 구성되어 있습니다.<br>
-            • <strong>평균 소요 시간: 5분 ~ 10분 이상</strong> (깊은 수학적 사고력 필요)<br>
-            • 완주 시 최고 영예인 <strong>'오메가 마스터 골드 인증서'</strong>가 발급됩니다.
-          </p>
-        </div>
-
-        <p class="invitation-question">
-          지금 바로 최고난도 <strong>[오메가 프로토콜]</strong>에 도전하시겠습니까?
-        </p>
-
-        <div class="invitation-actions">
-          <a href="games/hidden_omega/index.html" class="btn btn-omega btn-large">
-            <span>🔥 최고난도 오메가 프로토콜 도전하기</span> ➔
-          </a>
-          <button type="button" class="btn btn-secondary" id="btn-close-completion">
-            <span>🏆 여기까지만 하고 수료 완료 (허브 머무르기)</span>
-          </button>
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🏆 통합 명예의 전당 (랭킹) 모달 -->
-  <div id="modal-rankings" class="modal hidden">
-    <div class="modal-backdrop"></div>
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="modal-icon">🏆</span>
-          <h3>명예의 전당 TOP 10</h3>
-        </div>
-        <button class="btn-modal-close" type="button" aria-label="닫기" data-close="modal-rankings"><span aria-hidden="true">&times;</span></button>
-      </div>
-
-      <!-- 게임 선택 탭 -->
-      <div class="rank-tabs game-filter-tabs">
-        <button class="rank-tab-btn active" data-filter-game="cipher_escape">🕵️ 암호 탈출</button>
-        <button class="rank-tab-btn" data-filter-game="galton_drop">🔮 갈톤 확률</button>
-        <button class="rank-tab-btn" data-filter-game="sequence_vault">🔐 수열 금고</button>
-        <button class="rank-tab-btn hidden" id="rank-tab-omega" data-filter-game="omega_protocol">👑 오메가</button>
-      </div>
-
-      <!-- 난이도 탭 필터 -->
-      <div class="rank-tabs diff-filter-tabs">
-        <button class="rank-tab-btn active" data-filter-diff="all">전체 난이도</button>
-        <button class="rank-tab-btn" data-filter-diff="easy">🌱 쉬움</button>
-        <button class="rank-tab-btn" data-filter-diff="normal">⭐ 보통</button>
-        <button class="rank-tab-btn" data-filter-diff="hard">🔥 어려움</button>
-      </div>
-
-      <div class="ranking-table-container">
-        <table class="ranking-table">
-          <thead>
-            <tr>
-              <th scope="col">순위</th>
-              <th scope="col">요원 이름</th>
-              <th scope="col">난이도</th>
-              <th scope="col" id="rank-col-record">기록</th>
-              <th scope="col">일시</th>
-            </tr>
-          </thead>
-          <tbody id="ranking-tbody">
-            <!-- JS 동적 렌더링 -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="modal-footer">
-        <p class="rank-note">이 기기에 저장된 기록입니다. 백업·옮기기는 <a href="offline.html">인터넷 없이 쓰기</a>에서 할 수 있어요.</p>
-        <div class="modal-footer-actions">
-          <button id="btn-clear-rankings" class="btn btn-danger-sm" type="button">기록 초기화 (도우미용)</button>
-          <button class="btn btn-secondary" data-close="modal-rankings" type="button">닫기</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 📖 부스 및 갈톤보드 안내 모달 -->
-  <div id="modal-guide" class="modal hidden">
-    <div class="modal-backdrop"></div>
-    <div class="modal-content modal-guide-content">
-      <div class="modal-header">
-        <div class="modal-title-group">
-          <span class="modal-icon">📖</span>
-          <h3>부스 소개</h3>
-        </div>
-        <button class="btn-modal-close" type="button" aria-label="닫기" data-close="modal-guide"><span aria-hidden="true">&times;</span></button>
-      </div>
-
-      <div class="guide-body">
-        <div class="guide-section">
-          <h4>🎯 1. 부스 운영 방향</h4>
-          <p>
-            본 부스는 <strong>암호 방탈출 웹게임</strong>과 <strong>3D 프린터 갈톤보드 실물 제작/실험</strong>을 결합한 수학 체험 공간입니다.
-          </p>
-        </div>
-
-        <div class="guide-section">
-          <h4>🧩 2. 게임형 체험: 암호 연구소 탈출</h4>
-          <ul>
-            <li><strong>시저 암호</strong>: 글자들의 일정한 평행이동 규칙 탐구</li>
-            <li><strong>좌표 암호</strong>: 5×5 격자에서 (가로 X, 세로 Y) 위치 매핑</li>
-            <li><strong>이진수 암호</strong>: 컴퓨터 2진법 체계와 자리값 이해</li>
-            <li><strong>수열 암호</strong>: 수의 배열 속에서 숨은 규칙 찾아내기</li>
-          </ul>
-        </div>
-
-        <div class="guide-section">
-          <h4>🔮 3. 제작형 체험: 갈톤보드(Galton Board)</h4>
-          <p>
-            3D 프린터로 제작된 갈톤보드에 구슬 30~50개를 떨어뜨리면, 핀에 부딪히며 좌우로 갈라지다 결국 <strong>가운데에 가장 많이 모이는 완만한 산 모양의 분포</strong>를 형성합니다. 직접 구슬을 굴려보고 활동지에 기록해 보세요!
-          </p>
+        <div class="player-bar">
+          <button type="button" class="btn btn-secondary" id="btn-video-replay"><span>🔁 다시 보기</span></button>
+          <button type="button" class="btn btn-secondary" id="btn-video-sound" aria-pressed="false"><span>🔊 소리 끄기</span></button>
+          <button type="button" class="btn btn-primary" id="btn-video-start"><span>🚀 미션 시작</span></button>
         </div>
       </div>
 
-      <div class="modal-footer">
-        <button class="btn btn-primary" data-close="modal-guide">확인했습니다</button>
+      <!-- 영상이 안 나올 때의 글 장면(대체) -->
+      <div class="story-grid" id="story-fallback" hidden>
+        <div class="story-media" id="story-media">
+          <div class="story-scene" id="story-scene" data-scene="0" aria-hidden="true">
+            <div class="scene-glow"></div>
+            <div class="scene-main" id="scene-main">🚨</div>
+            <div class="scene-sub" id="scene-sub">QUANTUM CORE LOCKED</div>
+          </div>
+        </div>
+        <div class="story-text">
+          <div class="story-slides" id="story-slides">
+            <article class="story-slide" data-slide="0" data-icon="🚨" data-sub="QUANTUM CORE LOCKED">
+              <h3>긴급 상황 발생! 양자 코어 잠금</h3>
+              <p>2026 미래 수학연구소의 <strong>중앙 양자 코어</strong>가 원인 모를 수학 오류로 완전히 잠겨 버렸어요!</p>
+            </article>
+            <article class="story-slide" data-slide="1" data-icon="🧩" data-sub="3 MATH LOCKS" hidden>
+              <h3>풀어야 할 보안 장치 3개</h3>
+              <p>연구소를 되살리려면 <strong>규칙·확률·수열</strong>로 잠긴 장치를 차례로 풀어야 해요.</p>
+              <ul class="mission-chips">
+                <li><span>🕵️</span><b>암호 연구소 탈출</b><em>3~5분</em></li>
+                <li><span>🔮</span><b>확률 구슬 챌린지</b><em>2~3분</em></li>
+                <li><span>🔐</span><b>수열 금고 스피드런</b><em>60초</em></li>
+              </ul>
+            </article>
+            <article class="story-slide" data-slide="2" data-icon="🎖️" data-sub="CODEBREAKER" hidden>
+              <h3>요원님의 임무</h3>
+              <p>3개의 미션을 차례로 끝내고 <strong>공식 [코드 브레이커] 자격</strong>을 얻으세요!</p>
+              <p class="story-secret">👑 세 개를 모두 마치면 <strong>히든 미션</strong>이 열려요.</p>
+            </article>
+          </div>
+          <div class="story-controls">
+            <div class="story-dots" id="story-dots" role="tablist" aria-label="이야기 장면">
+              <button type="button" class="s-dot active" data-go="0" aria-label="1번 장면"></button>
+              <button type="button" class="s-dot" data-go="1" aria-label="2번 장면"></button>
+              <button type="button" class="s-dot" data-go="2" aria-label="3번 장면"></button>
+            </div>
+            <div class="story-buttons">
+              <button type="button" class="btn btn-secondary" id="btn-story-prev" disabled><span>◀ 이전</span></button>
+              <button type="button" class="btn btn-primary" id="btn-story-next"><span>다음 ▶</span></button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+
+      <div class="story-links">
+        <button type="button" class="link-btn" id="btn-story-skip">건너뛰고 바로 시작</button>
+        <button type="button" class="link-btn" id="btn-back-register">← 이름 고치기</button>
+      </div>
+    </section>
+
+    <nav class="intro-foot" aria-label="바로가기">
+      <a href="resources.html">📚 학습 자료 · 부스 운영</a>
+      <a href="hub.html">미션 허브</a>
+    </nav>
+
+  </main>
 
   <script src="shared/ui.js"></script>
   <script src="shared/pwa.js" defer></script>
-  <script src="script.js"></script>
+  <script src="intro.js"></script>
   <script src="shared/fit.js"></script>
 </body>
 </html>

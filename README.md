@@ -18,8 +18,9 @@ math-game-hub/
 │   │   ├── cipher_bank.json     # 120개 검증된 문제 뱅크
 │   │   └── procedural_generator.js # 문제 자동 생성 로직
 │   ├── docs/                    # 운영 매뉴얼, 문제 해설지, 아카이브
-│   ├── index.html               # 메인 포털 & 실시간 대시보드
-│   └── intro.html               # 스토리 인트로 씬
+│   ├── index.html               # 시작 화면(요원 등록 → 미션 이야기 영상)
+│   ├── hub.html                 # 미션 허브 & 명예의 전당
+│   └── resources.html           # 학습 자료 · 부스 운영(도우미용)
 │
 └── math-cipher-escape/          # 수학 암호 탈출 게임 단독 버전 (v2)
     ├── index.html
@@ -34,7 +35,7 @@ math-game-hub/
 ### 로컬 실행
 별도의 빌드나 서버 설치 없이 최신 브라우저(Chrome, Edge, Safari 등)에서 `index.html` 파일을 더블 클릭하여 즉시 실행할 수 있습니다.
 
-- **종합 게임 허브 실행**: `math-game-hub/index.html`
+- **종합 게임 허브 실행**: `math-game-hub/index.html` (시작 화면에서 등록하면 게임으로, 허브는 `hub.html`)
 - **단독 암호 탈출 실행**: `math-cipher-escape/index.html`
 
 ### 인터넷 없이 사용 (부스 태블릿)

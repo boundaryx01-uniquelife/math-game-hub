@@ -16,11 +16,8 @@ const inputHubPlayerName = document.getElementById('hub-player-name');
 const btnSavePlayer = document.getElementById('btn-save-player');
 const btnNewPlayer = document.getElementById('btn-new-player');
 const btnOpenRankings = document.getElementById('btn-open-rankings');
-const btnOpenGuide = document.getElementById('btn-open-guide');
 const modalRankings = document.getElementById('modal-rankings');
-const modalGuide = document.getElementById('modal-guide');
 const rankingTbody = document.getElementById('ranking-tbody');
-const btnClearRankings = document.getElementById('btn-clear-rankings');
 
 let currentRankGame = 'cipher_escape';
 let currentRankDiff = 'all';
@@ -69,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initGradeSwitch();
 
   checkCourseCompletion();
-  initOfflineStatus();
 });
 
 /**
@@ -271,7 +267,7 @@ btnNewPlayer.addEventListener('click', () => {
   }).then(ok => {
     if (!ok) return;
     localStorage.removeItem(KEY_PLAYER);
-    window.location.href = 'intro.html';
+    window.location.href = 'index.html';
   });
 });
 
@@ -282,7 +278,6 @@ function openModal(modal) {
   if (closer) closer.focus();
 }
 btnOpenRankings.addEventListener('click', () => { renderRankings(); openModal(modalRankings); });
-btnOpenGuide.addEventListener('click', () => openModal(modalGuide));
 
 document.querySelectorAll('[data-close]').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -290,7 +285,7 @@ document.querySelectorAll('[data-close]').forEach(btn => {
     if (modal) modal.classList.add('hidden');
   });
 });
-[modalRankings, modalGuide].forEach(modal => {
+[modalRankings].forEach(modal => {
   const backdrop = modal.querySelector('.modal-backdrop');
   if (backdrop) backdrop.addEventListener('click', () => modal.classList.add('hidden'));
 });
@@ -374,54 +369,4 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>'"]/g, tag => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
   }[tag] || tag));
-}
-
-// 기록 초기화: 학생이 실수로 지우지 않도록 도우미 코드 확인
-btnClearRankings.addEventListener('click', () => {
-  UI.askCode({
-    title: '순위 기록 초기화',
-    message: '이 기기의 모든 순위 기록이 지워지고 되돌릴 수 없습니다. 도우미 코드를 입력해 주세요.',
-    okText: '모두 지우기',
-    danger: true
-  }).then(ok => {
-    if (!ok) return;
-    localStorage.removeItem(KEY_RECORDS);
-    renderRankings();
-    checkCourseCompletion();
-    UI.toast('순위 기록을 초기화했습니다.', 'ok');
-  });
-});
-
-// 도우미용: 시연을 위해 모든 미션 열기 (이 탭을 닫으면 원래대로)
-const btnStaffUnlock = document.getElementById('btn-staff-unlock');
-if (btnStaffUnlock) {
-  const syncLabel = () => {
-    btnStaffUnlock.textContent = staffUnlocked() ? '도우미: 미션 잠금 되돌리기' : '도우미: 모든 미션 열기';
-  };
-  syncLabel();
-  btnStaffUnlock.addEventListener('click', () => {
-    if (staffUnlocked()) {
-      sessionStorage.removeItem(KEY_STAFF_UNLOCK);
-      syncLabel(); checkCourseCompletion();
-      return;
-    }
-    UI.askCode({ message: '모든 미션을 잠금 없이 엽니다. 도우미 코드를 입력해 주세요.' }).then(ok => {
-      if (!ok) return;
-      sessionStorage.setItem(KEY_STAFF_UNLOCK, '1');
-      syncLabel(); checkCourseCompletion();
-      UI.toast('모든 미션을 열었습니다.', 'ok');
-    });
-  });
-}
-
-// 오프라인 준비 상태 표시 (shared/pwa.js 가 있을 때만)
-function initOfflineStatus() {
-  const text = document.getElementById('offline-status-text');
-  if (!text) return;
-  const show = () => {
-    const pwa = window.MathHubPWA;
-    if (pwa && pwa.ready) text.textContent = '✅ 오프라인 준비 완료 · 설치 방법과 기록 백업';
-  };
-  window.addEventListener('mathhub:ready', show);
-  window.addEventListener('load', () => setTimeout(show, 1000));
 }
