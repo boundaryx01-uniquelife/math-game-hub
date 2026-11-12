@@ -1,0 +1,244 @@
+/* ==========================================================================
+ * 태블릿(가로) 한 화면 맞춤 + 키보드가 올라올 때 압축
+ * - 가로 태블릿(뮤패드 K11 등)에서 스크롤 없이 한 화면에 들어오도록 간격·크기를 줄임
+ * - 화면 높이가 낮을수록(≤820px, ≤640px) 더 줄임. 세로 화면은 거의 건드리지 않음
+ * - 글자 입력 키보드가 올라오면(html.kb-open, shared/fit.js) 문제와 입력창만 남김
+ * 각 페이지의 CSS 뒤에 불러오므로 같은 우선순위에서 이 파일이 이김.
+ * ========================================================================== */
+
+html, body { overflow-x: clip; }
+
+/* ---------- 가로 + 낮은 화면: 공통 압축 ---------- */
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .game-nav-bar { padding: 6px 16px; max-width: none; }
+  .btn-hub-back { padding: 4px 12px; font-size: 0.85rem; }
+  .game-badge { font-size: 0.8rem; padding: 4px 10px; }
+  .app-container { max-width: 1120px; padding: 0 14px; }
+  .card { padding: 14px 20px; }
+
+  /* 게임/결과 화면에서는 큰 제목 머리글을 숨기고, 시작 화면에서는 한 줄로 줄임 */
+  .app-container:has(#screen-game:not(.hidden)) .app-header,
+  .app-container:has(#screen-result:not(.hidden)) .app-header { display: none; }
+  .app-header { margin-bottom: 8px; }
+  .app-header .mission-tag, .app-header .subtitle { display: none; }
+  .app-header .main-title { font-size: 1.35rem; margin-bottom: 0; }
+
+  /* 암호 연구소 · 오메가: 상태 줄, 단계 표시, 문제 */
+  .status-bar, .omega-status-bar { padding: 6px 14px; margin-bottom: 8px; }
+  .step-indicator { margin-bottom: 8px; padding: 0 6px; }
+  .step-num { width: 24px; height: 24px; font-size: 0.8rem; }
+  .step-name { font-size: 0.7rem; }
+  .omega-stepper { margin-bottom: 8px; gap: 6px; }
+  .omega-step { padding: 4px 6px; font-size: 0.75rem; }
+  .room-header, .problem-header { margin-bottom: 2px; }
+  .room-title, .gate-title { font-size: 1.1rem; }
+  .room-desc, .gate-desc { margin-bottom: 8px; font-size: 0.85rem; line-height: 1.4; }
+  .cipher-display-box, .gate-display-box { padding: 12px 14px; margin-bottom: 8px; }
+  .hint-box { margin-bottom: 8px; }
+  .btn-hint-toggle { padding: 2px 0; font-size: 0.8rem; }
+  .answer-box { margin-top: 4px; }
+  .feedback-msg { margin-top: 4px; min-height: 18px; font-size: 0.85rem; }
+  .input-with-btn .btn, .input-with-btn button { padding-top: 10px; padding-bottom: 10px; }
+
+  /* 시작 화면 */
+  .story-box { padding: 10px 14px; margin-bottom: 10px; font-size: 0.9rem; }
+  .btn-diff { padding: 8px 6px; }
+  .btn-large { padding: 12px; font-size: 1rem; }
+}
+
+@media screen and (orientation: landscape) and (max-height: 640px) {
+  .card { padding: 10px 16px; }
+  .step-name { display: none; }
+  .omega-stepper { display: none; }
+}
+
+
+/* ---------- 가로 + 낮은 화면: 시작 화면을 좌우 두 칸으로, 수열 스피드런을 문제|숫자패드로 ---------- */
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .omega-intro, .vault-intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 26px; align-items: center; text-align: left; }
+  .omega-intro .intro-left, .vault-intro .intro-left { text-align: center; }
+  .omega-symbol, .vault-icon-large { font-size: 2.4rem; margin: 0 0 4px; line-height: 1.1; }
+  .omega-intro h2, .vault-intro h2 { font-size: 1.25rem; margin: 0 0 6px; }
+  .omega-intro .intro-desc, .vault-intro .intro-desc { font-size: 0.85rem; line-height: 1.5; margin: 0; }
+  .omega-intro .input-group, .vault-intro .input-group { margin-bottom: 8px; }
+  .omega-intro .input-group input, .vault-intro .input-group input { padding: 8px 12px; }
+  .gate-preview-list { display: grid; grid-template-columns: 1fr; gap: 3px; margin-bottom: 8px; padding: 0; }
+  .gate-preview-item { padding: 3px 8px; font-size: 0.78rem; gap: 8px; align-items: center; }
+  .gate-preview-item .g-num { white-space: nowrap; flex: none; padding: 1px 6px; }
+  .gate-preview-item .g-name { font-size: 0.78rem; white-space: nowrap; }
+  .difficulty-group { margin-bottom: 8px; }
+  .difficulty-group > label { font-size: 0.85rem; margin-bottom: 4px; display: block; }
+  .vault-intro .action-row, .omega-intro .action-row { margin-top: 4px; }
+
+  /* 수열 스피드런 문제 화면: 왼쪽 문제, 오른쪽 숫자패드 */
+  #screen-game:has(.vault-stage):not(.hidden) { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); grid-template-areas: "status status" "timer timer" "stage pad"; gap: 8px 16px; align-items: start; }
+  .vault-status-bar { grid-area: status; padding: 6px 14px; margin: 0; }
+  .timer-gauge-wrapper { grid-area: timer; margin: 0; }
+  .timer-header { margin-bottom: 3px; }
+  .gauge-track { height: 8px; }
+  .vault-stage { grid-area: stage; margin: 0; padding: 12px; gap: 12px; align-self: stretch; }
+  .vault-dial-frame { width: 64px; height: 64px; flex: none; }
+  .dial-center-lock { font-size: 1.3rem; }
+  .sequence-numbers { gap: 6px; }
+  .input-keypad-container { grid-area: pad; gap: 6px; }
+  .current-input-box { padding: 6px 12px; }
+  .feedback-pop { min-height: 16px; font-size: 0.8rem; }
+  .numpad-grid { gap: 6px; }
+  .btn-num { padding: 0; height: 48px; font-size: 1.25rem; border-radius: 10px; }
+}
+
+
+
+/* ---------- 허브: 가로 화면에서 미션 카드 4장이 첫 화면에 보이게 ---------- */
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .hub-container { max-width: 1200px; padding-top: 8px; padding-bottom: 12px; gap: 8px; }
+  .hub-header { margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .hub-header .badge-booth { margin: 0; padding: 3px 10px; font-size: 0.75rem; }
+  .hub-title { font-size: 1.5rem; margin: 0; }
+  .hub-subtitle { display: none; }
+  .player-bar-card { padding: 8px 14px; margin-bottom: 0; gap: 8px 12px; }
+  .player-avatar { display: none; }
+  .player-now-label { display: none; }
+  .player-now { flex: 1 1 520px; }
+  .player-now-text { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+  .player-input-group { flex: 0 1 300px; flex-wrap: nowrap; }
+  .grade-switch { margin-top: 0; }
+  .grade-opt { min-height: 48px; min-width: 64px; padding: 0 10px; }
+  .hub-action-buttons { gap: 6px; }
+  .hub-action-buttons .btn, .hub-action-buttons a.btn { padding: 8px 12px; min-height: 48px; white-space: nowrap; }
+  .progress-strip { padding: 6px 16px; margin-bottom: 0; }
+  .progress-msg { display: none; }
+  .progress-strip .p-dot { width: 26px; height: 26px; font-size: 0.8rem; }
+  .progress-strip .p-name { font-size: 0.75rem; }
+  .section-heading { font-size: 1.05rem; margin: 6px 0; }
+  .games-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .games-section { margin: 0; }
+  .game-card { padding: 12px 14px; gap: 6px; }
+  .game-card .game-icon { font-size: 1.8rem; margin: 0; }
+  .game-card .game-name { font-size: 1rem; margin: 0; }
+  .game-card .game-desc { font-size: 0.78rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: 0; }
+  .game-card .game-tags, .game-card .game-meta { display: none; }
+  .game-card .game-status-tag { font-size: 0.7rem; padding: 2px 8px; white-space: nowrap; }
+  .game-card .btn-play { padding: 8px 10px; font-size: 0.9rem; white-space: nowrap; }
+  .resource-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .resource-card { padding: 8px 10px; }
+}
+
+/* ---------- 확률 구슬 챌린지: 왼쪽 컨트롤·예측, 오른쪽 보드 ---------- */
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .app-container:has(.sim-main-card) { max-width: 1200px; }
+  .app-container:has(.sim-main-card) .app-header { display: none; }
+  .sim-main-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "ctrl board" "pred board"; gap: 8px 16px; align-items: start; padding: 8px 14px; }
+  .sim-control-bar { grid-area: ctrl; padding: 8px 12px; gap: 6px 10px; margin: 0; }
+  .predict-main-section { grid-area: pred; margin: 0; }
+  .galton-stand-frame { grid-area: board; width: auto; padding: 0; }
+  .stand-pillar { display: none; }
+  .canvas-wrapper { max-width: none; width: auto; border-width: 4px; }
+  #galton-canvas { height: calc(100dvh - 120px); width: auto; max-width: 46vw; }
+  .panel-guide { margin-bottom: 6px; padding: 6px 12px; font-size: 0.8rem; }
+  .step-badge { margin-bottom: 4px; }
+  .predict-sliders-container { --tw: 13px; --th: 78px; padding: 6px 4px; display: grid; grid-template-columns: repeat(16, minmax(0, 1fr)); gap: 2px; justify-items: center; }
+  .predict-slot-col { min-width: 0; width: 100%; }
+  .predict-slot-col .slot-label, .predict-slot-col .pred-val { font-size: 0.7rem; }
+  .predict-summary-row { margin-top: 4px; gap: 8px; flex-wrap: wrap; }
+  .preset-btn-group .btn { padding: 5px 10px; font-size: 0.8rem; }
+  .sum-status { font-size: 0.85rem; }
+  .start-hint { margin-top: 0; font-size: 0.8rem; }
+}
+
+/* ---------- 팝업(모달): 화면 높이에 맞추고, 가로 화면에서는 두 칸으로 ---------- */
+.modal-content { max-height: calc(100dvh - 16px); }
+@media screen and (max-height: 820px) {
+  .modal-content { padding: 14px 18px; gap: 10px; }
+  .modal-header { padding-bottom: 8px; }
+  .modal-footer { padding-top: 8px; }
+}
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .modal-result-content { max-width: 960px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); grid-template-areas: "head head" "score comp" "math comp" "foot foot"; gap: 8px 16px; align-items: start; }
+  .modal-result-content > .modal-header { grid-area: head; }
+  .modal-result-content > .result-score-box { grid-area: score; padding: 10px; }
+  .modal-result-content > .comparison-container { grid-area: comp; }
+  .modal-result-content > .math-explain-box { grid-area: math; padding: 8px 12px; font-size: 0.8rem; }
+  .modal-result-content > .modal-footer { grid-area: foot; flex-direction: row !important; gap: 8px; }
+  .modal-result-content .chart-bars-wrapper { height: 110px; }
+  .modal-result-content .modal-footer { align-items: stretch; }
+  .modal-result-content .modal-footer > a { flex: 1 1 42%; }
+  .modal-result-content .modal-footer > div { flex: 1 1 58%; }
+  .modal-result-content .modal-footer .btn { white-space: nowrap; padding: 8px 10px; font-size: 0.85rem; }
+  .modal-result-content .modal-footer .btn-large { padding: 10px 12px; font-size: 0.9rem; }
+}
+
+
+/* ---------- 결과(인증서) 화면 · 수료 팝업: 가로 화면에서 두 칸으로 ---------- */
+@media screen and (orientation: landscape) and (max-height: 820px) {
+  .result-container { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); grid-template-areas: "cert banner" "cert actions"; gap: 8px 18px; align-items: start; }
+  .success-banner, .gold-banner { grid-area: banner; margin: 0; padding: 6px 0; text-align: center; }
+  .success-banner .banner-icon, .gold-banner .banner-icon { font-size: 2rem; margin: 0; }
+  .success-banner h2, .gold-banner h2 { font-size: 1.25rem; margin: 2px 0; }
+  .success-banner p, .gold-banner p { font-size: 0.85rem; margin: 0; }
+  .certificate-card, .certificate-gold { grid-area: cert; margin: 0; padding: 8px; }
+  .cert-border, .cert-gold-border { padding: 10px 16px; }
+  .cert-header { margin-bottom: 6px; }
+  .cert-title, .cert-title-gold { font-size: 1.3rem; margin: 2px 0; }
+  .cert-text { font-size: 0.8rem; line-height: 1.4; margin: 0 0 6px; }
+  .cert-details, .cert-details-gold { padding: 6px 10px; gap: 2px 14px; }
+  .cert-row { font-size: 0.85rem; }
+  .cert-footer { padding-top: 6px; margin-top: 6px; }
+  .cert-stamp, .cert-stamp-gold { transform: scale(.8); transform-origin: left center; }
+  .result-actions { grid-area: actions; display: flex; flex-direction: column; gap: 6px; margin: 0; }
+  .result-actions .btn { padding: 10px 12px; font-size: 0.9rem; white-space: normal; }
+
+  /* 수열 스피드런 결과 */
+  .result-box { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px 18px; align-items: center; text-align: center; }
+  .result-box .res-icon { grid-column: 1; font-size: 2.2rem; margin: 0; }
+  .result-box h2 { grid-column: 1; margin: 0; font-size: 1.3rem; }
+  .result-box .res-desc { grid-column: 1; margin: 0; font-size: 0.85rem; }
+  .result-box .final-score-card { grid-column: 1; padding: 8px; }
+  .result-box .stats-grid { grid-column: 2; grid-row: 1 / span 3; gap: 6px; }
+  .result-box .result-actions { grid-column: 2; grid-row: 4; flex-direction: row; }
+  .result-box .stat-card { padding: 8px; }
+
+  /* 허브 수료 팝업: 왼쪽 축하, 오른쪽 오메가 초대 */
+  .modal-completion-content { max-width: 960px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 0 18px; align-items: center; }
+  .comp-left, .comp-right { display: flex; flex-direction: column; gap: 6px; min-width: 0; text-align: center; }
+  .completion-badge-icon { font-size: 2.2rem; margin: 0; line-height: 1.1; }
+  .completion-title { font-size: 1.25rem; margin: 0; }
+  .completion-desc { font-size: 0.82rem; line-height: 1.45; margin: 0; }
+  .cleared-summary-box { padding: 6px 10px; margin: 0; }
+  .omega-challenge-invitation { padding: 10px 12px; margin: 0; }
+  .omega-inv-header h3 { font-size: 0.95rem; }
+  .omega-warning-box { padding: 6px 10px; }
+  .warn-text { font-size: 0.78rem; line-height: 1.4; }
+  .invitation-question { font-size: 0.85rem; margin: 4px 0; }
+  .invitation-actions .btn { padding: 8px 10px; font-size: 0.85rem; white-space: normal; }
+}
+}
+
+/* ---------- 키보드가 올라온 상태(보이는 높이가 확 줄어듦) ---------- */
+html.kb-open .game-nav-bar,
+html.kb-open .step-indicator,
+html.kb-open .omega-stepper,
+html.kb-open .room-desc,
+html.kb-open .gate-desc,
+html.kb-open .hint-box,
+html.kb-open .app-header { display: none !important; }
+html.kb-open .card { padding: 8px 14px; }
+html.kb-open .cipher-display-box, html.kb-open .gate-display-box { padding: 8px 12px; margin-bottom: 6px; }
+html.kb-open .status-bar, html.kb-open .omega-status-bar { padding: 4px 12px; margin-bottom: 6px; }
+@media screen and (max-height: 420px) {
+  html.kb-open .gate-display-box, html.kb-open .cipher-display-box { font-size: 0.8rem; line-height: 1.3; }
+  html.kb-open .gate-display-box *, html.kb-open .cipher-display-box * { margin-top: 2px !important; margin-bottom: 2px !important; }
+  html.kb-open .gate-display-box [class*="text"], html.kb-open .cipher-display-box [class*="text"] { font-size: 1.4rem; }
+  html.kb-open .answer-box { margin-top: 2px; }
+  html.kb-open .feedback-msg { min-height: 0; margin-top: 2px; }
+}
+
+/* 줄바꿈: 한 단어만 덜렁 남지 않게 고르게 나눔(지원하는 브라우저에서) */
+h1, h2, h3, h4, p, li, .btn span, .game-desc, .progress-msg { text-wrap: balance; }
+
+/* 세로 화면: 확률 보드가 너무 커서 스크롤이 길어지지 않게 */
+@media screen and (orientation: portrait) {
+  #galton-canvas { height: 42dvh; width: auto; max-width: 100%; }
+  .canvas-wrapper { width: fit-content; margin: 0 auto; max-width: 100%; }
+  .modal-result-content { max-height: calc(100dvh - 16px); }
+}

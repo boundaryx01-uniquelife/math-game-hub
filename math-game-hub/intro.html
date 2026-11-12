@@ -2,188 +2,133 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>미션 브리핑: 코드 브레이커 & 갈톤 메이커</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+  <title>요원 등록과 미션 이야기: 코드 브레이커 & 갈톤 메이커</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="intro.css" />
   <link rel="stylesheet" href="shared/theme.css" />
+  <link rel="stylesheet" href="shared/fit.css" />
   <meta name="theme-color" content="#090d16" />
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icons/icon-192.png" />
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
 </head>
 <body class="intro-body">
-  <div class="intro-container">
-    <!-- 상단 극비 미션 헤더 -->
-    <header class="intro-header">
-      <div class="intro-badge">TOP SECRET : 2026 MATH SECURITY AGENCY</div>
+  <main class="intro-app" id="intro-app" data-stage="register">
+
+    <header class="intro-top">
+      <div class="intro-badge">TOP SECRET · 2026 MATH SECURITY AGENCY</div>
       <h1 class="intro-title">코드 브레이커 &amp; 갈톤 메이커</h1>
-      <p class="intro-lead">2026 미래 수학연구소 양자 코어 해제 작전 브리핑</p>
     </header>
 
-    <!-- 1. 미션 세계관 스토리 섹션 -->
-    <section class="intro-story-card">
-      <div class="story-header">
-        <span class="story-icon">🚨</span>
-        <h2>긴급 상황 발생 : 양자 코어 시스템 잠금</h2>
-      </div>
-      <div class="story-body">
-        <p>
-          2026 미래 수학연구소의 <strong>중앙 양자 코어</strong>가 원인 불명의 수학적 오류로 완전 잠금 상태에 빠졌습니다!<br>
-          연구소 시스템을 복구하기 위해서는 <strong>규칙, 확률, 수열</strong>로 이루어진 <strong>3대 수학 보안 장치</strong>를 단계별로 해독해야 합니다.
-        </p>
-        <div class="mission-callout">
-          <strong>요원님의 임무 :</strong><br>
-          3대 수학 미션을 차례로 완수하여 연구소를 구하고, <strong>공식 [코드 브레이커(CODEBREAKER)] 자격</strong>을 획득하십시오!
-        </div>
-      </div>
-    </section>
+    <!-- 진행 표시: 요원 등록 → 미션 이야기 → 게임 시작 -->
+    <ol class="intro-steps" aria-label="진행 순서">
+      <li class="is-step active" data-for="register"><span class="is-dot">1</span><span class="is-name">요원 등록</span></li>
+      <li class="is-step" data-for="story"><span class="is-dot">2</span><span class="is-name">미션 이야기</span></li>
+      <li class="is-step" data-for="play"><span class="is-dot">3</span><span class="is-name">게임 시작</span></li>
+    </ol>
 
-    <!-- 3. 요원 등록 및 학년 난이도 선택 폼 -->
-    <section class="intro-start-section">
-      <div class="agent-register-card">
-        <h3>요원 닉네임과 학년을 선택하고 작전을 시작하세요</h3>
-        
-        <!-- 학년 선택 버튼 -->
-        <div class="grade-select-group">
-          <label class="g-label">🎓 참가자 학년 레벨</label>
-          <div class="grade-button-row">
-            <button type="button" class="btn-grade-opt active" data-grade="elem" data-diff="easy">
-              <span class="g-emoji">🌱</span>
-              <span class="g-name">초등부</span>
-              <span class="g-desc">기초 연산 · 직관적 추론</span>
+    <!-- 1단계: 요원 등록 -->
+    <section class="stage stage-register" id="stage-register" aria-labelledby="reg-title">
+      <div class="reg-card">
+        <h2 id="reg-title" class="stage-title">🕵️ 요원 등록</h2>
+        <p class="stage-lead">이름과 학년을 고르면 미션 이야기가 바로 시작돼요.</p>
+
+        <div class="reg-fields">
+          <label class="f-label" for="intro-player-name">요원 닉네임</label>
+          <input type="text" id="intro-player-name" placeholder="닉네임 (예: 수학탐정)" maxlength="10" autocomplete="off" enterkeyhint="go" />
+
+          <span class="f-label" id="grade-label">학년 레벨</span>
+          <div class="grade-button-row" role="radiogroup" aria-labelledby="grade-label">
+            <button type="button" class="btn-grade-opt active" role="radio" aria-checked="true" data-grade="elem" data-diff="easy">
+              <span class="g-emoji">🌱</span><span class="g-name">초등부</span><span class="g-desc">기초 연산 · 직관적 추론</span>
             </button>
-            <button type="button" class="btn-grade-opt" data-grade="mid" data-diff="normal">
-              <span class="g-emoji">⭐</span>
-              <span class="g-name">중등부</span>
-              <span class="g-desc">규칙 탐구 · 논리적 분석</span>
+            <button type="button" class="btn-grade-opt" role="radio" aria-checked="false" data-grade="mid" data-diff="normal">
+              <span class="g-emoji">⭐</span><span class="g-name">중등부</span><span class="g-desc">규칙 탐구 · 논리적 분석</span>
             </button>
-            <button type="button" class="btn-grade-opt" data-grade="high" data-diff="hard">
-              <span class="g-emoji">🔥</span>
-              <span class="g-name">고등부</span>
-              <span class="g-desc">심화 점화식 · 고난도 암호</span>
+            <button type="button" class="btn-grade-opt" role="radio" aria-checked="false" data-grade="high" data-diff="hard">
+              <span class="g-emoji">🔥</span><span class="g-name">고등부</span><span class="g-desc">심화 점화식 · 고난도 암호</span>
             </button>
           </div>
         </div>
 
-        <div class="input-row">
-          <input type="text" id="intro-player-name" placeholder="닉네임 (예: 수학탐정)" aria-label="요원 닉네임" maxlength="10" autocomplete="off" />
-          <button id="btn-enter-hub" class="btn btn-primary btn-large">
-            <span>🚀 작전 개시</span>
-          </button>
-        </div>
-      </div>
-    </section>
-    <!-- 2. 인터랙티브 작전 순서도 (Mission Flowchart) -->
-    <section class="intro-flowchart-section">
-      <div class="section-title-group">
-        <span class="sec-icon">🗺️</span>
-        <h2>미션 순서 한눈에 보기</h2>
-      </div>
-      <p class="flow-desc">각 단계를 순서대로 클리어하며 수학적 직관과 논리력을 증명하세요.</p>
-
-      <div class="flowchart-track">
-        <!-- Step 0 -->
-        <div class="flow-step-node completed-node" id="node-step-0">
-          <div class="node-number">STEP 0</div>
-          <div class="node-content">
-            <div class="node-icon">👤</div>
-            <h3 class="node-title">요원 등록</h3>
-            <p class="node-desc">닉네임과 학년을 고르면 준비 끝!</p>
-            <span class="node-tag ready">필수 시작</span>
-          </div>
-        </div>
-
-        <div class="flow-connector"><span class="arrow-down">▼</span></div>
-
-        <!-- Step 1 -->
-        <div class="flow-step-node" id="node-step-1">
-          <div class="node-number">STEP 1</div>
-          <div class="node-content">
-            <div class="node-icon">🕵️‍♂️</div>
-            <h3 class="node-title">암호 연구소 탈출</h3>
-            <p class="node-desc">시저 · 좌표 · 이진수 · 수열 4개 방탈출</p>
-            <div class="node-meta">
-              <span>수학 개념: 규칙과 대응, 좌표</span>
-              <span class="badge-time">⏱️ 3~5분</span>
-            </div>
-            <span class="node-status" id="status-step-1">도전 대기</span>
-          </div>
-        </div>
-
-        <div class="flow-connector"><span class="arrow-down">▼</span></div>
-
-        <!-- Step 2 -->
-        <div class="flow-step-node" id="node-step-2">
-          <div class="node-number">STEP 2</div>
-          <div class="node-content">
-            <div class="node-icon">🔮</div>
-            <h3 class="node-title">확률 구슬 챌린지</h3>
-            <p class="node-desc">구슬이 16칸 중 어디에 쌓일지 예측하기</p>
-            <div class="node-meta">
-              <span>수학 개념: 자료와 가능성, 이항분포</span>
-              <span class="badge-time">⏱️ 2~3분</span>
-            </div>
-            <span class="node-status" id="status-step-2">도전 대기</span>
-          </div>
-        </div>
-
-        <div class="flow-connector"><span class="arrow-down">▼</span></div>
-
-        <!-- Step 3 -->
-        <div class="flow-step-node" id="node-step-3">
-          <div class="node-number">STEP 3</div>
-          <div class="node-content">
-            <div class="node-icon">🔐</div>
-            <h3 class="node-title">수열 금고 스피드런</h3>
-            <p class="node-desc">60초 타임어택 연속 콤보 수열 퀴즈</p>
-            <div class="node-meta">
-              <span>수학 개념: 수열 추론, 등차/등비/피보나치</span>
-              <span class="badge-time">⏱️ 60초</span>
-            </div>
-            <span class="node-status" id="status-step-3">도전 대기</span>
-          </div>
-        </div>
-
-        <div class="flow-connector"><span class="arrow-down">▼</span></div>
-
-        <!-- Step 4 -->
-        <div class="flow-step-node highlight-node" id="node-step-4">
-          <div class="node-number">STEP 4</div>
-          <div class="node-content">
-            <div class="node-icon">🎖️</div>
-            <h3 class="node-title">공식 [코드 브레이커] 수료</h3>
-            <p class="node-desc">3대 미션 완주 공식 자격 증명서 발급</p>
-            <span class="node-tag success">기본 코스 완료</span>
-          </div>
-        </div>
-
-        <div class="flow-connector branch-connector">
-          <span class="branch-label">🔥 3종 완료 시 특별 개방</span>
-          <span class="arrow-down">▼</span>
-        </div>
-
-        <!-- Hidden Step -->
-        <div class="flow-step-node hidden-omega-node" id="node-step-omega">
-          <div class="node-number">EXTRA HIDDEN</div>
-          <div class="node-content">
-            <div class="node-icon">👑</div>
-            <h3 class="node-title text-purple">오메가 프로토콜</h3>
-            <p class="node-desc">최상위 엘리트를 위한 5대 심층 수학 관문</p>
-            <div class="node-meta">
-              <span>비제네르 · 3D 좌표 · 논리회로 · 파스칼 · 몬티홀</span>
-              <span class="badge-time text-danger">⚠️ 5~10분 소요</span>
-            </div>
-            <span class="node-tag omega">골드 마스터 인증서</span>
-          </div>
-        </div>
+        <button id="btn-register-next" class="btn btn-primary btn-large" type="button">
+          <span>📖 미션 이야기 보기</span>
+        </button>
       </div>
     </section>
 
-  </div>
+    <!-- 2단계: 미션 이야기 (짧은 모션 그래픽 영상. 영상을 못 불러오면 아래 글 장면으로 대신 보여 줌) -->
+    <section class="stage stage-story" id="stage-story" aria-labelledby="story-title" hidden>
+      <h2 id="story-title" class="stage-title story-head"><span id="story-agent">요원</span>님, 미션 이야기예요</h2>
+
+      <div class="story-player" id="story-player">
+        <div class="player-frame">
+          <video id="story-video" playsinline preload="metadata" poster="media/intro-story-poster.jpg" aria-label="미션 이야기 영상 (자막이 들어 있어요)"></video>
+          <button type="button" class="player-big" id="btn-video-play" aria-label="영상 재생"><span id="player-big-icon">▶</span></button>
+        </div>
+        <div class="player-bar">
+          <button type="button" class="btn btn-secondary" id="btn-video-replay"><span>🔁 다시 보기</span></button>
+          <button type="button" class="btn btn-secondary" id="btn-video-sound" aria-pressed="false"><span>🔊 소리 끄기</span></button>
+          <button type="button" class="btn btn-primary" id="btn-video-start"><span>🚀 미션 시작</span></button>
+        </div>
+      </div>
+
+      <!-- 영상이 안 나올 때의 글 장면(대체) -->
+      <div class="story-grid" id="story-fallback" hidden>
+        <div class="story-media" id="story-media">
+          <div class="story-scene" id="story-scene" data-scene="0" aria-hidden="true">
+            <div class="scene-glow"></div>
+            <div class="scene-main" id="scene-main">🚨</div>
+            <div class="scene-sub" id="scene-sub">QUANTUM CORE LOCKED</div>
+          </div>
+        </div>
+        <div class="story-text">
+          <div class="story-slides" id="story-slides">
+            <article class="story-slide" data-slide="0" data-icon="🚨" data-sub="QUANTUM CORE LOCKED">
+              <h3>긴급 상황 발생! 양자 코어 잠금</h3>
+              <p>2026 미래 수학연구소의 <strong>중앙 양자 코어</strong>가 원인 모를 수학 오류로 완전히 잠겨 버렸어요!</p>
+            </article>
+            <article class="story-slide" data-slide="1" data-icon="🧩" data-sub="3 MATH LOCKS" hidden>
+              <h3>풀어야 할 보안 장치 3개</h3>
+              <p>연구소를 되살리려면 <strong>규칙·확률·수열</strong>로 잠긴 장치를 차례로 풀어야 해요.</p>
+              <ul class="mission-chips">
+                <li><span>🕵️</span><b>암호 연구소 탈출</b><em>3~5분</em></li>
+                <li><span>🔮</span><b>확률 구슬 챌린지</b><em>2~3분</em></li>
+                <li><span>🔐</span><b>수열 금고 스피드런</b><em>60초</em></li>
+              </ul>
+            </article>
+            <article class="story-slide" data-slide="2" data-icon="🎖️" data-sub="CODEBREAKER" hidden>
+              <h3>요원님의 임무</h3>
+              <p>3개의 미션을 차례로 끝내고 <strong>공식 [코드 브레이커] 자격</strong>을 얻으세요!</p>
+              <p class="story-secret">👑 세 개를 모두 마치면 <strong>히든 미션</strong>이 열려요.</p>
+            </article>
+          </div>
+          <div class="story-controls">
+            <div class="story-dots" id="story-dots" role="tablist" aria-label="이야기 장면">
+              <button type="button" class="s-dot active" data-go="0" aria-label="1번 장면"></button>
+              <button type="button" class="s-dot" data-go="1" aria-label="2번 장면"></button>
+              <button type="button" class="s-dot" data-go="2" aria-label="3번 장면"></button>
+            </div>
+            <div class="story-buttons">
+              <button type="button" class="btn btn-secondary" id="btn-story-prev" disabled><span>◀ 이전</span></button>
+              <button type="button" class="btn btn-primary" id="btn-story-next"><span>다음 ▶</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-links">
+        <button type="button" class="link-btn" id="btn-story-skip">건너뛰고 바로 시작</button>
+        <button type="button" class="link-btn" id="btn-back-register">← 이름 고치기</button>
+      </div>
+    </section>
+
+  </main>
 
   <script src="shared/ui.js"></script>
   <script src="shared/pwa.js" defer></script>
   <script src="intro.js"></script>
+  <script src="shared/fit.js"></script>
 </body>
 </html>
