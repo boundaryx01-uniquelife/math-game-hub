@@ -11,7 +11,7 @@
  * ========================================================================== */
 
 // 배포할 때마다 이 값을 올리세요. (예: '2026-11-12-3')
-const CACHE_VERSION = '2026-11-12-3';
+const CACHE_VERSION = '2026-11-12-4';
 
 // 사이트 루트(이 sw.js가 있는 폴더) 기준 상대 경로. 없는 파일은 건너뜁니다(설치 실패 아님).
 const PRECACHE_URLS = [
@@ -62,6 +62,9 @@ const PRECACHE_URLS = [
   'learn/booth-guide.html',
   'learn/galton-build.html',
   'learn/galton-build-detail.html',
+  'learn/img/galton-parts.jpg',
+  'learn/img/galton-done.jpg',
+  'learn/img/galton-scale.jpg',
 
   // 아이콘
   'icons/icon.svg',
