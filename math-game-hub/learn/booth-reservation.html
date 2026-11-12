@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>갈톤보드 부스 안내와 현장 예약 명부 - 2026 수학체험전</title>
+<style>
+@font-face { font-family:"JuaKids"; src:url("../kids/fonts/Jua-kids.woff2") format("woff2"); }
+@page { size:A4 portrait; margin:0; }
+@page land { size:A4 landscape; margin:0; }
+:root { --ink:#111a44; --soft:#46507f; --paper:#fff; --blue:#0b5fd6; --blue-d:#073f93; --blue-t:#dcebff; --orange:#d25200; --orange-d:#9b3a00; --orange-t:#ffe6cf; --red:#d6162f; --red-t:#ffe3e6; --yellow:#ffc61a; --line:#111a44;
+  --font:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR","WenQuanYi Zen Hei",system-ui,sans-serif; --head:"JuaKids","Jua",var(--font); }
+* { box-sizing:border-box; margin:0; padding:0; }
+html,body { background:#dfe4f0; }
+body { font-family:var(--font); color:var(--ink); word-break:keep-all; overflow-wrap:break-word; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.toolbar { position:sticky; top:0; z-index:5; display:flex; gap:10px; align-items:center; justify-content:center; flex-wrap:wrap; padding:10px 16px; background:#111a44; color:#fff; font-size:14px; }
+.toolbar button,.toolbar a { font:700 16px/1 var(--font); color:#111a44; background:#ffc61a; border:0; border-radius:999px; padding:12px 22px; cursor:pointer; text-decoration:none; min-height:44px; display:inline-flex; align-items:center; }
+.toolbar a { background:#fff; }
+.page { width:210mm; height:297mm; margin:14px auto; background:var(--paper); box-shadow:0 10px 40px rgba(17,26,68,.3); position:relative; overflow:hidden; padding:6mm 10mm 5mm; display:flex; flex-direction:column; }
+.page.land { width:297mm; height:210mm; page:land; padding:7mm 9mm; }
+@media print { html,body { background:none; } .toolbar { display:none; } .page { margin:0; box-shadow:none; break-after:page; } }
+
+/* ===== 1쪽 ===== */
+.hero { background:var(--ink); color:#fff; border-radius:4mm; padding:2.6mm 6mm 3mm; text-align:center; }
+.hero small { display:block; font-weight:800; font-size:10.5pt; letter-spacing:.04em; color:var(--yellow); }
+.hero h1 { font-family:var(--head); font-weight:400; font-size:25pt; line-height:1.15; margin:.6mm 0; }
+.hero p { font-size:10.5pt; font-weight:600; opacity:.92; }
+.missions { display:grid; grid-template-columns:1fr 1fr; gap:4mm; margin-top:4mm; }
+.m { border:2.6px solid var(--line); border-radius:4mm; overflow:hidden; }
+.m .mh { color:#fff; padding:1.6mm 4mm; }
+.m .mh b { display:block; font-family:var(--head); font-weight:400; font-size:15pt; line-height:1.2; }
+.m .mh span { font-size:9.5pt; font-weight:800; opacity:.95; }
+.m.a .mh { background:var(--blue); } .m.b .mh { background:var(--orange); }
+.m ul { list-style:none; padding:2mm 4mm 2.2mm; display:grid; gap:1mm; flex:1; }
+.m { display:flex; flex-direction:column; }
+.m.a ul { background:var(--blue-t); } .m.b ul { background:var(--orange-t); }
+.m li { font-size:10pt; line-height:1.28; font-weight:600; padding-left:4mm; position:relative; }
+.m li::before { content:"■"; position:absolute; left:0; top:.12em; font-size:6.5pt; }
+.m.a li::before { color:var(--blue); } .m.b li::before { color:var(--orange); }
+.m li b { font-weight:900; }
+.must-box { margin-top:4mm; border:3.2px solid var(--red); background:var(--red-t); border-radius:4mm; padding:2.2mm 5mm 2.4mm; position:relative; }
+.must-box h3 { font-family:var(--head); font-weight:400; font-size:14.5pt; color:var(--red); margin-bottom:1.2mm; }
+.must-box ol { list-style:none; display:grid; gap:.9mm; counter-reset:q; }
+.must-box li { counter-increment:q; font-size:10.4pt; line-height:1.28; font-weight:600; padding-left:7mm; position:relative; }
+.must-box li::before { content:counter(q); position:absolute; left:0; top:0; width:5mm; height:5mm; border-radius:50%; background:var(--red); color:#fff; font-size:8.5pt; font-weight:900; display:grid; place-items:center; }
+.must-box li b { color:var(--red); font-weight:900; }
+.how { margin-top:4mm; border:2.6px solid var(--line); border-radius:4mm; display:grid; grid-template-columns:auto 1fr; }
+.how h3 { background:var(--ink); color:#fff; font-family:var(--head); font-weight:400; font-size:13pt; line-height:1.3; padding:2mm 4mm; display:flex; flex-direction:column; justify-content:center; border-radius:1.4mm 0 0 1.4mm; }
+.how h3 small { font-family:var(--font); font-weight:700; font-size:8.5pt; opacity:.85; }
+.how ul { list-style:none; padding:1.8mm 4.5mm; display:grid; gap:.8mm; }
+.how li { font-size:10pt; line-height:1.28; font-weight:600; padding-left:4mm; position:relative; }
+.how li::before { content:"▶"; position:absolute; left:0; top:.15em; font-size:6.5pt; color:var(--blue); }
+.how li.sub { font-weight:600; color:var(--soft); font-size:9.3pt; margin-left:4mm; }
+.how li.sub::before { content:"※"; color:var(--soft); font-size:8pt; top:.05em; left:-4mm; }
+.how b { font-weight:900; }
+table.tt { width:100%; border-collapse:collapse; margin-top:4mm; border:2.6px solid var(--line); font-size:10pt; }
+.tt th { background:var(--ink); color:#fff; font-weight:800; padding:1mm 1mm; font-size:9.5pt; border:1px solid #3a4378; }
+.tt td { text-align:center; padding:0 1.5mm; height:6.2mm; border:1px solid #9aa3c9; font-weight:600; }
+.tt tr.am td { background:#f1f7ff; } .tt tr.pm td { background:#fff4e8; }
+.tt td.n { font-weight:900; } .tt td.t { font-weight:900; letter-spacing:.01em; } .tt td.c { font-weight:900; color:var(--red); } .tt td.r { font-size:9.5pt; }
+.tt td.grp { width:19mm; color:#fff; border-color:var(--line); line-height:1.25; }
+.tt td.grp b { display:block; font-family:var(--head); font-weight:400; font-size:13pt; } .tt td.grp span { font-size:8.5pt; font-weight:800; }
+.tt td.grp.am { background:var(--blue); } .tt td.grp.pm { background:var(--orange); }
+.tt tr.rest td { background:#e6e8f2; color:var(--soft); font-weight:800; height:5.8mm; font-size:9.2pt; }
+.note { margin-top:auto; border-top:3px dashed var(--ink); padding-top:1.8mm; font-size:9.6pt; font-weight:700; line-height:1.35; }
+.note b { color:var(--red); }
+
+/* ===== 명부 (가로) ===== */
+.lh { display:grid; grid-template-columns:auto 1fr auto; gap:6mm; align-items:center; margin-bottom:3mm; }
+.lday { background:var(--ink); color:#fff; border-radius:3mm; padding:1.5mm 6mm; text-align:center; }
+.lday b { display:block; font-family:var(--head); font-weight:400; font-size:21pt; line-height:1.1; } .lday span { font-weight:800; font-size:10.5pt; color:var(--yellow); }
+.lt h2 { font-family:var(--head); font-weight:400; font-size:20pt; line-height:1.15; }
+.lt p { font-size:10.5pt; font-weight:600; color:var(--soft); margin-top:.8mm; } .lt p b { color:var(--ink); font-weight:900; }
+.must { border:2.6px solid var(--red); background:var(--red-t); color:var(--red); border-radius:3mm; padding:1.2mm 4mm; font-weight:900; font-size:9.5pt; line-height:1.3; text-align:center; }
+.cols { flex:1; display:grid; grid-template-columns:1fr 1fr; gap:5mm; min-height:0; }
+table.grid { width:100%; height:100%; border-collapse:collapse; border:2.6px solid var(--line); table-layout:fixed; }
+.grid th { background:var(--ink); color:#fff; font-size:8.2pt; font-weight:800; line-height:1.15; padding:1mm 0; border:1px solid #3a4378; height:8mm; }
+.grid td { border:1px solid #98a1c8; height:auto; padding:0; text-align:center; }
+.grid tr.top td { border-top:2.6px solid var(--line); }
+.grid tbody tr:first-child td { border-top:1px solid #98a1c8; }
+.grid col { }
+.grid td.sn { width:19mm; color:#fff; border:2px solid var(--line); line-height:1.25; }
+.grid td.sn.am { background:var(--blue); } .grid td.sn.pm { background:var(--orange); }
+.grid td.sn b { display:block; font-family:var(--head); font-weight:400; font-size:13pt; } .grid td.sn span { font-size:8pt; font-weight:800; }
+.grid td.tn { width:7mm; font-weight:900; font-size:9.5pt; background:#eef1fb; }
+.grid td.ck { width:11mm; } .grid td.ck i { display:block; width:4.6mm; height:4.6mm; border:1.8px solid var(--ink); border-radius:1mm; margin:0 auto; }
+.grid th:nth-child(1) { width:19mm; } .grid th:nth-child(2) { width:7mm; } .grid th:nth-child(3) { width:auto; } .grid th:nth-child(4) { width:21mm; } .grid th:nth-child(5) { width:16mm; } .grid th:nth-child(6) { width:11mm; } .grid th:nth-child(7) { width:23mm; }
+tr.memo td { border:2.6px solid var(--line); border-top:2.6px solid var(--line); background:#f3f5fc; text-align:left; vertical-align:top; }
+.memo-in { padding:2mm 3mm; } .memo-in h4 { font-family:var(--head); font-weight:400; font-size:12pt; background:var(--ink); color:#fff; margin:-2mm -3mm 1.5mm; padding:1.2mm 3mm; }
+.memo-in p { font-size:9pt; font-weight:700; line-height:1.4; } .memo-in p.ln { border-bottom:1.5px solid var(--ink); height:5mm; margin-bottom:1mm; }
+.memo-in .cb { display:inline-block; width:3.6mm; height:3.6mm; border:1.6px solid var(--ink); border-radius:.8mm; vertical-align:-.7mm; }
+.memo-in .sig { display:inline-block; width:42mm; border-bottom:1.5px solid var(--ink); height:4mm; vertical-align:bottom; }
+</style>
+</head>
+<body>
+<div class="toolbar"><span>A4 3쪽 · 컬러 인쇄 (1쪽 안내판 세로, 2~3쪽 날짜별 예약 명부 가로)</span><button type="button" onclick="window.print()">🖨️ 인쇄하기</button><a href="../resources.html">← 운영 페이지로</a></div>
+
+<section class="page">
+  <div class="hero"><small>★ 2026 수학체험전 공식 부스 안내 ★</small><h1>코드 브레이커 &amp; 갈톤 메이커</h1><p>부스 이용 안내 및 실물 갈톤보드 만들기 체험 현장 예약 안내</p></div>
+
+  <div class="missions">
+    <div class="m a"><div class="mh"><b>미션 1. 암호 연구소 탈출</b><span>상시 자율 체험 · 예약 불필요</span></div>
+      <ul>
+        <li><b>체험 대상</b> : 부스 방문객 누구나 자유롭게 즉시 참여</li>
+        <li><b>체험 방식</b> : 태블릿 웹앱 디지털 미션 (개인별 진행)</li>
+        <li><b>미션 구성</b> : 시저·좌표·이진수·수열 암호 4개 방 탈출</li>
+        <li><b>랭킹 도전</b> : 미션 완료 시 실시간 TOP 10 랭킹 등록</li>
+        <li><b>운영 안내</b> : 비예약자는 태블릿 암호 연구소 상시 체험에 참여하실 수 있습니다.</li>
+      </ul></div>
+    <div class="m b"><div class="mh"><b>미션 2. 실물 갈톤보드 만들기</b><span>현장 선착순 사전 예약제 · 회차당 4팀</span></div>
+      <ul>
+        <li><b>체험 대상</b> : 현장 사전 예약자 한정 (회차당 4팀 정원)</li>
+        <li><b>소요 시간</b> : 회차당 약 25분 집중 체험</li>
+        <li><b>체험 내용</b> : 3D 프린터 부품 6종 직접 조립 &amp; 정규분포 구슬 실험</li>
+        <li><b>배우는 수학</b> : 이항분포, 파스칼 삼각형, 정규분포 종 모양 곡선</li>
+        <li><b>운영 안내</b> : 안전하고 원활한 조립을 위해 100% 현장 예약제로 운영됩니다.</li>
+      </ul></div>
+  </div>
+
+  <div class="must-box">
+    <h3>⚠ [필수 선행 조건] 갈톤보드 만들기 예약 체험객 필독!</h3>
+    <ol>
+      <li><b>필수 코스</b> : 갈톤보드 만들기 예약자는 체험 시작 시간 전까지, 반드시 태블릿으로 「암호 연구소 탈출」 미션을 <b>먼저 완료</b>하셔야 합니다!</li>
+      <li><b>체험 자격</b> : 암호 연구소 탈출을 완료하지 않은 경우 실물 갈톤보드 만들기 체험 참여가 제한될 수 있습니다.</li>
+      <li><b>비예약자 안내</b> : 예약을 하지 못한 체험객은 태블릿 「암호 연구소 탈출」 상시 미션에 자유롭게 도전하실 수 있습니다.</li>
+    </ol>
+  </div>
+
+  <div class="how">
+    <h3>갈톤보드 만들기<br>현장 예약 접수 방법<small>하루 2회 분할 접수 · 선착순 마감</small></h3>
+    <ul>
+      <li><b>운영 일자</b> : 2026년 11월 13일(금), 11월 14일(토) | 매일 10:00 ~ 16:00</li>
+      <li><b>1차 오전 접수 (10:30 시작)</b> : 10:35 ~ 13:00 체험 타임 예약 (회차당 4팀 선착순 마감)</li>
+      <li class="sub">10:05~10:30 체험은 오전 10:00 부스 개장 직후 현장에서 즉시 접수받습니다.</li>
+      <li><b>2차 오후 접수 (13:30 시작)</b> : 13:35 ~ 16:00 체험 타임 예약 (회차당 4팀 선착순 마감)</li>
+      <li><b>접수 장소</b> : 부스 입구 예약 접수대 (정원 마감 시 해당 타임 접수 즉시 종료)</li>
+    </ul>
+  </div>
+
+  <table class="tt">
+    <thead><tr><th>구분</th><th>회차</th><th>체험 시간</th><th>소요</th><th>정원</th><th>예약 접수 시간</th></tr></thead>
+    <tbody>
+<tr class="am"><td class="grp am" rowspan="6"><b>오전</b><span>1차 접수</span></td><td class="n">1회차</td><td class="t">10:05 ~ 10:30</td><td>25분</td><td class="c">4팀</td><td class="r">10:00 현장 즉시 접수</td></tr>
+<tr class="am"><td class="n">2회차</td><td class="t">10:35 ~ 11:00</td><td>25분</td><td class="c">4팀</td><td class="r">10:30 접수 오픈 (선착순)</td></tr>
+<tr class="am"><td class="n">3회차</td><td class="t">11:05 ~ 11:30</td><td>25분</td><td class="c">4팀</td><td class="r">10:30 접수 오픈 (선착순)</td></tr>
+<tr class="am"><td class="n">4회차</td><td class="t">11:35 ~ 12:00</td><td>25분</td><td class="c">4팀</td><td class="r">10:30 접수 오픈 (선착순)</td></tr>
+<tr class="am"><td class="n">5회차</td><td class="t">12:05 ~ 12:30</td><td>25분</td><td class="c">4팀</td><td class="r">10:30 접수 오픈 (선착순)</td></tr>
+<tr class="am"><td class="n">6회차</td><td class="t">12:35 ~ 13:00</td><td>25분</td><td class="c">4팀</td><td class="r">10:30 접수 오픈 (선착순)</td></tr>
+<tr class="rest"><td class="grp pm" rowspan="6"><b>오후</b><span>2차 접수</span></td><td colspan="1">정비</td><td colspan="3">13:00 ~ 13:35 &nbsp;교구 재정비 및 점검</td><td>13:30 오후 접수 시작</td></tr>
+<tr class="pm"><td class="n">7회차</td><td class="t">13:35 ~ 14:00</td><td>25분</td><td class="c">4팀</td><td class="r">13:30 접수 오픈 (선착순)</td></tr>
+<tr class="pm"><td class="n">8회차</td><td class="t">14:05 ~ 14:30</td><td>25분</td><td class="c">4팀</td><td class="r">13:30 접수 오픈 (선착순)</td></tr>
+<tr class="pm"><td class="n">9회차</td><td class="t">14:35 ~ 15:00</td><td>25분</td><td class="c">4팀</td><td class="r">13:30 접수 오픈 (선착순)</td></tr>
+<tr class="pm"><td class="n">10회차</td><td class="t">15:05 ~ 15:30</td><td>25분</td><td class="c">4팀</td><td class="r">13:30 접수 오픈 (선착순)</td></tr>
+<tr class="pm"><td class="n">11회차</td><td class="t">15:35 ~ 16:00</td><td>25분</td><td class="c">4팀</td><td class="r">13:30 접수 오픈 (선착순)</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note"><b>※ 주의사항</b> : 원활한 진행을 위해 예약 시작 5분 전까지 부스에 대기해 주세요. (5분 이상 지각 시 현장 대기자에게 순서가 양보될 수 있습니다.)</p>
+</section>
+
+<section class="page land">
+<header class="lh"><div class="lday"><b>11월 13일</b><span>금요일</span></div>
+<div class="lt"><h2>갈톤보드 만들기 체험 현장 예약 명부</h2>
+<p>1차 접수(10:30~) <b>1~6회차</b> &nbsp;|&nbsp; 2차 접수(13:30~) <b>7~11회차</b> &nbsp;|&nbsp; 회차당 <b>4팀</b> 선착순 마감</p></div>
+<div class="must">★ 필수<br>암호 연구소 탈출<br>완료 확인</div></header>
+<div class="cols"><table class="grid"><thead><tr><th>회차 / 시간</th><th>팀</th><th>대표 참가자</th><th>학년 / 소속</th><th>연락처<br>(뒷4자리)</th><th>암호<br>완료</th><th>출석 / 비고</th></tr></thead><tbody>
+<tr class="top"><td class="sn am" rowspan="4"><b>1회차</b><span>10:05~10:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>2회차</b><span>10:35~11:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>3회차</b><span>11:05~11:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>4회차</b><span>11:35~12:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>5회차</b><span>12:05~12:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>6회차</b><span>12:35~13:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+</tbody></table><table class="grid"><thead><tr><th>회차 / 시간</th><th>팀</th><th>대표 참가자</th><th>학년 / 소속</th><th>연락처<br>(뒷4자리)</th><th>암호<br>완료</th><th>출석 / 비고</th></tr></thead><tbody>
+<tr class="top"><td class="sn pm" rowspan="4"><b>7회차</b><span>13:35~14:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>8회차</b><span>14:05~14:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>9회차</b><span>14:35~15:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>10회차</b><span>15:05~15:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>11회차</b><span>15:35~16:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr><tr class="memo"><td colspan="7"><div class="memo-in"><h4>부스 운영 메모 &amp; 인계 사항</h4>
+<p>교구·정밀 부품(볼트/구슬) 수량 점검 &nbsp;<i class="cb"></i> 정상</p>
+<p>특이사항 / 노쇼(No-Show) 발생 팀 기록 :</p><p class="ln"></p>
+<p>부스 운영 도우미 확인 서명 : <span class="sig"></span></p></div></td></tr>
+</tbody></table></div>
+</section>
+<section class="page land">
+<header class="lh"><div class="lday"><b>11월 14일</b><span>토요일</span></div>
+<div class="lt"><h2>갈톤보드 만들기 체험 현장 예약 명부</h2>
+<p>1차 접수(10:30~) <b>1~6회차</b> &nbsp;|&nbsp; 2차 접수(13:30~) <b>7~11회차</b> &nbsp;|&nbsp; 회차당 <b>4팀</b> 선착순 마감</p></div>
+<div class="must">★ 필수<br>암호 연구소 탈출<br>완료 확인</div></header>
+<div class="cols"><table class="grid"><thead><tr><th>회차 / 시간</th><th>팀</th><th>대표 참가자</th><th>학년 / 소속</th><th>연락처<br>(뒷4자리)</th><th>암호<br>완료</th><th>출석 / 비고</th></tr></thead><tbody>
+<tr class="top"><td class="sn am" rowspan="4"><b>1회차</b><span>10:05~10:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>2회차</b><span>10:35~11:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>3회차</b><span>11:05~11:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>4회차</b><span>11:35~12:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>5회차</b><span>12:05~12:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn am" rowspan="4"><b>6회차</b><span>12:35~13:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+</tbody></table><table class="grid"><thead><tr><th>회차 / 시간</th><th>팀</th><th>대표 참가자</th><th>학년 / 소속</th><th>연락처<br>(뒷4자리)</th><th>암호<br>완료</th><th>출석 / 비고</th></tr></thead><tbody>
+<tr class="top"><td class="sn pm" rowspan="4"><b>7회차</b><span>13:35~14:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>8회차</b><span>14:05~14:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>9회차</b><span>14:35~15:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>10회차</b><span>15:05~15:30</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class="top"><td class="sn pm" rowspan="4"><b>11회차</b><span>15:35~16:00</span></td><td class="tn">1</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">2</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">3</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr>
+<tr class=""><td class="tn">4</td><td></td><td></td><td></td><td class="ck"><i></i></td><td></td></tr><tr class="memo"><td colspan="7"><div class="memo-in"><h4>부스 운영 메모 &amp; 인계 사항</h4>
+<p>교구·정밀 부품(볼트/구슬) 수량 점검 &nbsp;<i class="cb"></i> 정상</p>
+<p>특이사항 / 노쇼(No-Show) 발생 팀 기록 :</p><p class="ln"></p>
+<p>부스 운영 도우미 확인 서명 : <span class="sig"></span></p></div></td></tr>
+</tbody></table></div>
+</section>
+</body>
+</html>
