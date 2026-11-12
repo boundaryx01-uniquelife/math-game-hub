@@ -191,3 +191,11 @@ html.kb-open .reg-card { padding: 10px 16px; }
 .intro-app:not([data-stage="register"]) .intro-foot { display: none; }
 html.kb-open .intro-foot { display: none; }
 @media screen and (orientation: landscape) and (max-height: 820px) { .intro-foot a { min-height: 40px; } }
+
+/* 유아·초등 저학년용 '꼬마 요원' 들어가는 곳 */
+.kids-link { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; min-height: 48px; padding: 8px 16px; border-radius: 999px; background: #fff3d6; color: #35307a; font-weight: 700; font-size: 0.98rem; text-decoration: none; border: 2px solid #ffd84d; }
+.kids-link .kl-emoji { font-size: 1.4rem; line-height: 1; }
+.kids-link b { color: #e0558a; }
+.kids-link:hover, .kids-link:focus-visible { background: #ffe9a8; }
+html.kb-open .kids-link { display: none; }
+@media screen and (orientation: landscape) and (max-height: 820px) { .kids-link { margin-top: 8px; min-height: 44px; padding: 4px 14px; font-size: 0.92rem; } }

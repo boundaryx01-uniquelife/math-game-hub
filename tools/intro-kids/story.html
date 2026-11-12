@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>꼬마 요원 미션 이야기 (render.js 로 mp4 로 만듦)</title>
+<style>
+  @font-face { font-family: "Jua"; src: url("../../math-game-hub/kids/fonts/Jua-kids.woff2") format("woff2"); }
+  * { margin: 0; padding: 0; }
+  html, body { background: #000; }
+  canvas { display: block; width: 1280px; height: 720px; }
+  .pre { font-family: "Jua"; position: absolute; left: -999px; }
+</style>
+</head>
+<body>
+<span class="pre">꼬마 요원 123</span>
+<canvas id="c" width="1280" height="720"></canvas>
+<script>
+/* 시간 t(초)를 넣으면 그 순간의 화면을 그리는 render(t) 하나로 되어 있습니다.
+   이야기: 수학 마을의 별님 넷 → 심술 구름이 상자에 숨김 → 꼬마 요원 콩이 출동 → 열쇠 4개 → 별님 구출 → 출동! */
+const W = 1280, H = 720;
+const cv = document.getElementById('c'), g = cv.getContext('2d');
+const FONT = '"Jua","Noto Color Emoji",sans-serif';
+
+// ---------- 타임라인 ----------
+const DURATION = 32;
+const T_STAR = [0.9, 1.5, 2.1, 2.7];          // 별님이 하나씩 나타남 (하나, 둘, 셋, 넷)
+const T_CLOUD = 6.6;                           // 심술 구름 등장
+const T_SUCK = [8.6, 9.15, 9.7, 10.25];        // 별님이 빨려 들어감
+const T_LOCK = 11.0;                           // 찰칵
+const T_DROP = 12.0;                           // 상자가 언덕에 쿵
+const T_HERO = 13.2;                           // 콩이 등장
+const T_HOP = [13.2, 13.7, 14.2, 15.4, 15.9];  // 콩이 깡충
+const T_KEY = [16.9, 17.6, 18.3, 19.0];        // 열쇠 4개
+const T_FLY = [21.4, 22.0, 22.6, 23.2];        // 열쇠가 상자로
+const T_OPEN = 24.2;                           // 상자 활짝
+const T_FREE = [24.5, 24.8, 25.1, 25.4];       // 별님 하늘로
+const T_TITLE = 27.6;                          // 마지막 제목
+const T_GO = 29.6;
+window.DURATION = DURATION;
+window.TIMES = { T_STAR, T_CLOUD, T_SUCK, T_LOCK, T_DROP, T_HERO, T_HOP, T_KEY, T_FLY, T_OPEN, T_FREE, T_TITLE, T_GO };
+
+const CAPS = [
+  [0.5, 6.2, ['반짝반짝 수학 마을에', '별님 넷이 살았어요']],
+  [6.9, 9.6, ['앗! 심술 구름이 나타났어요!']],
+  [9.9, 13.0, ['별님들을 상자에', '꼭꼭 숨겨 버렸어요']],
+  [13.6, 16.5, ['걱정 마요!', '꼬마 요원이 출동해요!']],
+  [16.8, 20.9, ['열쇠 네 개를 찾으면', '상자가 열려요']],
+  [21.2, 24.0, ['수학 놀이를 하고', '열쇠를 모아요!']],
+  [24.4, 27.3, ['별님을 모두 구해 줄래요?']],
+];
+const STAR_COL = ['#ffd84d', '#ff9ec4', '#8ee7c8', '#8fd3ff'];
+const STAR_POS = [[250, 150], [500, 105], [780, 120], [1030, 165]];
+const KEY_INFO = [
+  { c: '#ff8a5c', label: '세기', icon: '123' },
+  { c: '#a78bfa', label: '모양', icon: 'shape' },
+  { c: '#38bdf8', label: '구슬', icon: 'ball' },
+  { c: '#fb7185', label: '짝꿍', icon: 'heart' },
+];
+const CHEST = { x: 640, y: 440 };
+
+// ---------- 도우미 ----------
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, k) => a + (b - a) * k;
+const seg = (t, a, b) => cl((t - a) / (b - a));
+const eio = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+const eout = k => 1 - Math.pow(1 - k, 3);
+const back = k => { const c = 1.70158; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+const elastic = k => k <= 0 ? 0 : k >= 1 ? 1 : Math.pow(2, -10 * k) * Math.sin((k * 10 - .75) * 2 * Math.PI / 3) + 1;
+const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+function mix(c1, c2, k) {
+  const p = c => [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)];
+  const a = p(c1), b = p(c2);
+  return `rgb(${a.map((v, i) => Math.round(lerp(v, b[i], k))).join(',')})`;
+}
+function rr(x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function circle(x, y, r) { g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); }
+
+function starPath(r) {
+  g.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const a = -Math.PI / 2 + i * Math.PI / 5, rad = i % 2 ? r * .52 : r;
+    g[i ? 'lineTo' : 'moveTo'](Math.cos(a) * rad, Math.sin(a) * rad);
+  }
+  g.closePath();
+}
+// 얼굴 있는 별님. mood: 'happy' | 'scared'
+function drawStar(x, y, r, col, t, i, mood = 'happy', alpha = 1, rot = 0) {
+  if (alpha <= 0 || r <= 0) return;
+  g.save(); g.globalAlpha = alpha; g.translate(x, y); g.rotate(rot);
+  // 빛
+  const glow = g.createRadialGradient(0, 0, r * .3, 0, 0, r * 1.9);
+  glow.addColorStop(0, col + 'aa'); glow.addColorStop(1, col + '00');
+  g.fillStyle = glow; circle(0, 0, r * 1.9); g.fill();
+  g.lineJoin = 'round'; g.lineWidth = r * .34; g.strokeStyle = col; g.fillStyle = col;
+  starPath(r); g.stroke(); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.35)'; g.beginPath(); g.ellipse(-r * .22, -r * .32, r * .22, r * .12, -.5, 0, 7); g.fill();
+  // 얼굴
+  const blink = (Math.sin(t * 1.3 + i * 2.1) > .97) ? .15 : 1;
+  g.fillStyle = '#4a3320';
+  if (mood === 'scared') {
+    circle(-r * .26, -r * .02, r * .11); g.fill(); circle(r * .26, -r * .02, r * .11); g.fill();
+    g.beginPath(); g.ellipse(0, r * .3, r * .1, r * .13, 0, 0, 7); g.fill();
+  } else {
+    g.beginPath(); g.ellipse(-r * .26, -r * .02, r * .09, r * .12 * blink, 0, 0, 7); g.fill();
+    g.beginPath(); g.ellipse(r * .26, -r * .02, r * .09, r * .12 * blink, 0, 0, 7); g.fill();
+    g.lineWidth = r * .07; g.strokeStyle = '#4a3320'; g.lineCap = 'round';
+    g.beginPath(); g.arc(0, r * .14, r * .2, .15 * Math.PI, .85 * Math.PI); g.stroke();
+    g.fillStyle = 'rgba(255,120,120,.45)'; circle(-r * .5, r * .2, r * .11); g.fill(); circle(r * .5, r * .2, r * .11); g.fill();
+  }
+  g.restore();
+}
+
+// ---------- 배경 ----------
+function drawSky(bright) {   // bright 1 = 포근한 저녁, 0 = 별 없는 어두운 밤
+  const top = mix('#232450', '#4a47b8', bright), midc = mix('#3a3566', '#9a78e0', bright), bot = mix('#55496f', '#ffb7cf', bright);
+  const sky = g.createLinearGradient(0, 0, 0, H);
+  sky.addColorStop(0, top); sky.addColorStop(.55, midc); sky.addColorStop(1, bot);
+  g.fillStyle = sky; g.fillRect(0, 0, W, H);
+}
+function drawTiny(t, bright) {  // 작은 배경 별
+  for (let i = 0; i < 46; i++) {
+    const x = rnd(i) * W, y = rnd(i + 50) * 380, tw = .5 + .5 * Math.sin(t * (1.5 + rnd(i + 9) * 2) + i);
+    g.globalAlpha = (.25 + .6 * tw) * (.25 + .75 * bright); g.fillStyle = '#fff';
+    circle(x, y, 1.6 + rnd(i + 3) * 2.2); g.fill();
+  }
+  g.globalAlpha = 1;
+}
+function hill(y0, amp, col, ph) {
+  g.fillStyle = col; g.beginPath(); g.moveTo(0, H);
+  for (let x = 0; x <= W; x += 20) g.lineTo(x, y0 - Math.sin(x / W * Math.PI * 2 + ph) * amp - Math.sin(x / 170 + ph * 2) * 8);
+  g.lineTo(W, H); g.closePath(); g.fill();
+}
+function house(x, y, s, wall, roof, lit) {
+  g.save(); g.translate(x, y); g.scale(s, s);
+  g.fillStyle = wall; rr(-50, -70, 100, 70, 10); g.fill();
+  g.fillStyle = roof; g.beginPath(); g.moveTo(-66, -62); g.lineTo(0, -122); g.lineTo(66, -62); g.closePath(); g.lineJoin = 'round'; g.lineWidth = 12; g.strokeStyle = roof; g.stroke(); g.fill();
+  g.fillStyle = mix('#3b3559', '#fff3a6', lit); rr(-34, -52, 28, 28, 6); g.fill();
+  if (lit > .1) { g.globalAlpha = lit * .35; g.fillStyle = '#fff3a6'; circle(-20, -38, 34); g.fill(); g.globalAlpha = 1; }
+  g.fillStyle = mix('#4d3c33', '#8a5a3c', lit); rr(8, -44, 26, 44, [10, 10, 0, 0]); g.fill();
+  g.restore();
+}
+function tree(x, y, s, bright) {
+  g.fillStyle = mix('#4a3a35', '#8a5a3c', bright); rr(x - 6 * s, y - 40 * s, 12 * s, 40 * s, 4); g.fill();
+  g.fillStyle = mix('#2c5a4c', '#4cc38a', bright); circle(x, y - 62 * s, 34 * s); g.fill();
+  g.fillStyle = mix('#346a58', '#6cd9a2', bright); circle(x - 10 * s, y - 72 * s, 16 * s); g.fill();
+}
+function drawGround(bright) {
+  hill(408, 30, mix('#2b4a52', '#7fd6a8', bright), .6);
+  house(150, 432, .95, mix('#6d5f7a', '#ffe1ec', bright), mix('#7a4658', '#ff7a9a', bright), bright);
+  house(1110, 428, 1.0, mix('#5f6a82', '#dff1ff', bright), mix('#3f5d86', '#4aa8ff', bright), bright);
+  tree(60, 440, .8, bright); tree(960, 436, .85, bright);
+  hill(500, 26, mix('#24424a', '#5cc98f', bright), 2.2);
+  tree(860, 628, 1.1, bright); tree(70, 640, 1.2, bright); tree(1210, 640, 1.2, bright);
+  hill(690, 16, mix('#1d3840', '#44b57c', bright), 4.1);
+}
+
+// ---------- 심술 구름 ----------
+function drawCloud(x, y, s, t, mouthOpen) {
+  g.save(); g.translate(x, y); g.scale(s, s);
+  const bob = Math.sin(t * 3) * 5; g.translate(0, bob);
+  g.fillStyle = '#6b6f9c';
+  [[-90, 14, 54], [-36, -26, 66], [40, -22, 62], [96, 14, 52], [0, 26, 70]].forEach(([cx, cy, r]) => { circle(cx, cy, r); g.fill(); });
+  g.fillStyle = '#8589b8';
+  [[-46, -38, 40], [30, -36, 36]].forEach(([cx, cy, r]) => { circle(cx, cy, r); g.fill(); });
+  // 눈과 눈썹
+  g.fillStyle = '#fff'; circle(-34, 0, 17); g.fill(); circle(34, 0, 17); g.fill();
+  g.fillStyle = '#2b2d4a'; circle(-30, 3, 8); g.fill(); circle(38, 3, 8); g.fill();
+  g.strokeStyle = '#2b2d4a'; g.lineWidth = 8; g.lineCap = 'round';
+  g.beginPath(); g.moveTo(-58, -24); g.lineTo(-18, -12); g.stroke();
+  g.beginPath(); g.moveTo(58, -24); g.lineTo(18, -12); g.stroke();
+  // 입
+  if (mouthOpen > .05) { g.fillStyle = '#2b2d4a'; g.beginPath(); g.ellipse(0, 42, 20, 6 + 16 * mouthOpen, 0, 0, 7); g.fill(); }
+  else { g.lineWidth = 6; g.beginPath(); g.arc(0, 30, 20, .1 * Math.PI, .9 * Math.PI); g.stroke(); g.beginPath(); g.moveTo(16, 40); g.lineTo(26, 32); g.stroke(); }
+  g.restore();
+}
+
+// ---------- 보물 상자 ----------
+function drawChest(x, y, s, open, locked, shake, glowA) {
+  g.save(); g.translate(x + shake, y); g.scale(s, s);
+  if (glowA > 0) {
+    g.save(); g.globalAlpha = glowA;
+    const gl = g.createRadialGradient(0, -40, 10, 0, -40, 330); gl.addColorStop(0, '#fff7b0'); gl.addColorStop(1, 'rgba(255,247,176,0)');
+    g.fillStyle = gl; circle(0, -40, 330); g.fill();
+    g.fillStyle = 'rgba(255,244,160,.5)';
+    for (let i = 0; i < 9; i++) { const a = -Math.PI / 2 + (i - 4) * .3; g.beginPath(); g.moveTo(-14, -36); g.lineTo(Math.cos(a - .05) * 420, -36 + Math.sin(a - .05) * 420); g.lineTo(Math.cos(a + .05) * 420, -36 + Math.sin(a + .05) * 420); g.lineTo(14, -36); g.fill(); }
+    g.restore();
+  }
+  g.fillStyle = 'rgba(0,0,0,.22)'; g.beginPath(); g.ellipse(0, 46, 100, 14, 0, 0, 7); g.fill();
+  // 몸통
+  g.fillStyle = '#b86a32'; rr(-86, -36, 172, 80, 12); g.fill();
+  g.fillStyle = '#d98a44'; rr(-86, -36, 172, 22, [12, 12, 0, 0]); g.fill();
+  g.fillStyle = '#ffd24d'; rr(-86, -8, 172, 12, 0); g.fill(); rr(-62, -36, 14, 80, 0); g.fill(); rr(48, -36, 14, 80, 0); g.fill();
+  if (open > 0) { g.fillStyle = '#3a2416'; rr(-78, -40, 156, 14, 6); g.fill(); g.fillStyle = `rgba(255,244,160,${open})`; rr(-78, -40, 156, 14, 6); g.fill(); }
+  // 뚜껑 (뒤쪽 모서리를 축으로 열림)
+  g.save(); g.translate(0, -36); g.transform(1, 0, 0, lerp(1, -.75, open), 0, 0);
+  g.fillStyle = '#c97a3a'; g.beginPath(); g.moveTo(-90, 0); g.lineTo(-90, -24); g.quadraticCurveTo(-90, -62, 0, -62); g.quadraticCurveTo(90, -62, 90, -24); g.lineTo(90, 0); g.closePath(); g.fill();
+  g.fillStyle = '#e09a52'; g.beginPath(); g.moveTo(-70, -40); g.quadraticCurveTo(0, -60, 70, -40); g.quadraticCurveTo(0, -50, -70, -40); g.fill();
+  g.fillStyle = '#ffd24d'; rr(-62, -60, 14, 60, 0); g.fill(); rr(48, -60, 14, 60, 0); g.fill(); rr(-90, -8, 180, 10, 0); g.fill();
+  g.restore();
+  // 자물쇠
+  if (locked > 0) {
+    g.save(); g.translate(0, -8); g.scale(locked, locked);
+    g.strokeStyle = '#8a8fa6'; g.lineWidth = 9; g.beginPath(); g.arc(0, -12, 14, Math.PI, 0); g.stroke();
+    g.fillStyle = '#ffc928'; rr(-22, -12, 44, 38, 8); g.fill();
+    g.fillStyle = '#7a5200'; circle(0, 4, 6); g.fill(); rr(-3, 4, 6, 12, 2); g.fill();
+    g.restore();
+  }
+  g.restore();
+}
+
+// ---------- 꼬마 요원 콩이 (병아리) ----------
+function drawHero(x, y, s, t, hop, wave, face = 1) {
+  g.save(); g.translate(x, y - hop); g.scale(s * face, s);
+  const sq = 1 - cl(hop / 300) * .0;
+  g.fillStyle = 'rgba(0,0,0,.2)'; g.save(); g.translate(0, hop / s); g.beginPath(); g.ellipse(0, 86, 62 - hop * .1, 12, 0, 0, 7); g.fill(); g.restore();
+  // 발
+  g.fillStyle = '#ff9a3c'; g.beginPath(); g.ellipse(-26, 82, 20, 9, 0, 0, 7); g.fill(); g.beginPath(); g.ellipse(26, 82, 20, 9, 0, 0, 7); g.fill();
+  // 몸
+  g.fillStyle = '#ffd84d'; g.beginPath(); g.ellipse(0, 8, 76, 78 * sq, 0, 0, 7); g.fill();
+  g.fillStyle = '#ffe98a'; g.beginPath(); g.ellipse(0, 34, 46, 40, 0, 0, 7); g.fill();
+  // 날개
+  g.fillStyle = '#ffc928';
+  g.save(); g.translate(-70, 10); g.rotate(.5); g.beginPath(); g.ellipse(0, 0, 18, 32, 0, 0, 7); g.fill(); g.restore();
+  g.save(); g.translate(70, 6); g.rotate(-.6 - wave * 1.5 - Math.sin(t * 14) * .25 * wave); g.beginPath(); g.ellipse(0, -10, 18, 34, 0, 0, 7); g.fill(); g.restore();
+  // 얼굴
+  const blink = Math.sin(t * 1.7) > .96 ? .12 : 1;
+  g.fillStyle = '#3d2a1c'; g.beginPath(); g.ellipse(-26, -14, 9, 12 * blink, 0, 0, 7); g.fill(); g.beginPath(); g.ellipse(26, -14, 9, 12 * blink, 0, 0, 7); g.fill();
+  g.fillStyle = '#fff'; circle(-23, -19, 3.5); g.fill(); circle(29, -19, 3.5); g.fill();
+  g.fillStyle = '#ff8a3c'; g.beginPath(); g.moveTo(-13, -2); g.quadraticCurveTo(0, -10, 13, -2); g.quadraticCurveTo(0, 16, -13, -2); g.fill();
+  g.fillStyle = 'rgba(255,110,110,.5)'; circle(-46, 4, 11); g.fill(); circle(46, 4, 11); g.fill();
+  // 요원 모자 (파란 모자 + 별 배지)
+  g.fillStyle = '#3d6df2'; g.beginPath(); g.moveTo(-60, -52); g.quadraticCurveTo(-56, -112, 0, -112); g.quadraticCurveTo(56, -112, 60, -52); g.closePath(); g.fill();
+  g.fillStyle = '#2a4fc4'; g.beginPath(); g.ellipse(14, -52, 78, 13, -.04, 0, 7); g.fill();
+  g.save(); g.translate(0, -82); g.fillStyle = '#ffd84d'; g.lineJoin = 'round'; g.lineWidth = 5; g.strokeStyle = '#ffd84d'; starPath(15); g.stroke(); g.fill(); g.restore();
+  g.restore();
+}
+
+// ---------- 열쇠 배지 ----------
+function drawKey(x, y, s, info, t, i, alpha = 1) {
+  if (s <= 0 || alpha <= 0) return;
+  g.save(); g.globalAlpha = alpha; g.translate(x, y); g.scale(s, s); g.rotate(Math.sin(t * 2.2 + i) * .06);
+  g.fillStyle = 'rgba(0,0,0,.18)'; circle(4, 8, 76); g.fill();
+  g.fillStyle = '#fff'; circle(0, 0, 76); g.fill();
+  g.fillStyle = info.c; circle(0, 0, 66); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.25)'; g.beginPath(); g.ellipse(-20, -34, 30, 14, -.5, 0, 7); g.fill();
+  g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  if (info.icon === '123') { g.font = `46px ${FONT}`; g.fillText('1 2 3', 0, -10); }
+  if (info.icon === 'shape') { circle(-34, -10, 15); g.fill(); g.beginPath(); g.moveTo(0, -27); g.lineTo(17, 4); g.lineTo(-17, 4); g.closePath(); g.fill(); rr(20, -25, 29, 29, 5); g.fill(); }
+  if (info.icon === 'ball') { [[-24, -22], [24, -22], [0, -4], [-24, 12 - 6], [24, 6]].forEach(([a, b], k) => { circle(a, b - 2, k === 2 ? 13 : 8); g.fill(); }); }
+  if (info.icon === 'heart') { g.beginPath(); g.moveTo(0, 12); g.bezierCurveTo(-46, -18, -22, -50, 0, -26); g.bezierCurveTo(22, -50, 46, -18, 0, 12); g.fill(); }
+  g.font = `30px ${FONT}`; g.fillText(info.label, 0, 38);
+  // 열쇠 그림 (아래에 달림)
+  g.translate(0, 104); g.fillStyle = '#ffc928'; g.strokeStyle = '#ffc928'; g.lineWidth = 9;
+  g.beginPath(); g.arc(-22, 0, 13, 0, 7); g.stroke(); rr(-10, -4.5, 46, 9, 4); g.fill(); rr(20, 0, 7, 14, 2); g.fill(); rr(31, 0, 7, 10, 2); g.fill();
+  g.restore();
+}
+
+// ---------- 글자 ----------
+function caption(t) {
+  for (const [a, b, lines] of CAPS) {
+    if (t < a || t > b) continue;
+    const k = back(seg(t, a, a + .35)), o = seg(t, a, a + .2) * (1 - seg(t, b - .25, b));
+    g.save(); g.globalAlpha = o; g.font = `54px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+    const w = Math.max(...lines.map(s => g.measureText(s).width)) + 90, h = lines.length * 66 + 34;
+    g.translate(W / 2, H - 36 - h / 2); g.scale(lerp(.8, 1, k), lerp(.8, 1, k));
+    g.fillStyle = 'rgba(40,30,90,.25)'; rr(-w / 2 + 4, -h / 2 + 8, w, h, 36); g.fill();
+    g.fillStyle = '#fff'; rr(-w / 2, -h / 2, w, h, 36); g.fill();
+    g.fillStyle = '#35307a';
+    lines.forEach((s, i) => g.fillText(s, 0, (i - (lines.length - 1) / 2) * 66 + 3));
+    g.restore();
+  }
+}
+function bubble(x, y, text, k, col = '#fff', tc = '#35307a', size = 44) {
+  if (k <= 0) return;
+  g.save(); g.translate(x, y); g.scale(k, k); g.font = `${size}px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  const w = g.measureText(text).width + 50, h = size + 34;
+  g.fillStyle = col; rr(-w / 2, -h / 2, w, h, h / 2); g.fill();
+  g.beginPath(); g.moveTo(-14, h / 2 - 2); g.lineTo(0, h / 2 + 18); g.lineTo(14, h / 2 - 2); g.fill();
+  g.fillStyle = tc; g.fillText(text, 0, 3);
+  g.restore();
+}
+function sparkle(x, y, r, a) {
+  if (a <= 0) return;
+  g.save(); g.globalAlpha = a; g.translate(x, y); g.fillStyle = '#fff';
+  g.beginPath(); g.moveTo(0, -r); g.quadraticCurveTo(0, 0, r, 0); g.quadraticCurveTo(0, 0, 0, r); g.quadraticCurveTo(0, 0, -r, 0); g.quadraticCurveTo(0, 0, 0, -r); g.fill();
+  g.restore();
+}
+function confetti(t, t0) {
+  const dt = t - t0; if (dt < 0) return;
+  const cols = ['#ffd84d', '#ff9ec4', '#8ee7c8', '#8fd3ff', '#ff8a5c', '#a78bfa'];
+  for (let i = 0; i < 90; i++) {
+    const x0 = rnd(i + 200) * W, sp = 150 + rnd(i + 300) * 190, y = -40 - rnd(i + 400) * 500 + sp * dt;
+    if (y > H + 30) continue;
+    const x = x0 + Math.sin(dt * 2 + i) * 30;
+    g.save(); g.translate(x, y); g.rotate(dt * (2 + rnd(i) * 4) + i); g.fillStyle = cols[i % 6];
+    g.globalAlpha = cl(dt * 3) * (1 - seg(t, DURATION - .6, DURATION));
+    rr(-8, -5, 16, 10, 3); g.fill(); g.restore();
+  }
+}
+
+// ---------- 한 프레임 ----------
+function render(t) {
+  g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = 1;
+  // 하늘 밝기: 별이 있으면 밝고, 숨겨지면 어둡고, 구하면 다시 밝아짐
+  let bright = 1;
+  if (t >= T_SUCK[0]) bright = lerp(1, .12, eio(seg(t, T_SUCK[0], T_LOCK + .4)));
+  if (t >= T_HERO) bright = lerp(.12, .42, seg(t, T_HERO, T_HERO + 1));
+  if (t >= T_OPEN) bright = lerp(.42, 1, eout(seg(t, T_OPEN, T_OPEN + 1.6)));
+  drawSky(bright); drawTiny(t, bright);
+
+  // 달
+  g.fillStyle = mix('#8d8fb0', '#fff6c9', bright); circle(1150, 86, 46); g.fill();
+  g.fillStyle = mix('#7d7fa2', '#ffe98a', bright); circle(1138, 76, 9); g.fill(); circle(1166, 98, 6); g.fill();
+
+  drawGround(bright);
+
+  // --- 별님 넷 ---
+  for (let i = 0; i < 4; i++) {
+    const [sx, sy] = STAR_POS[i];
+    let x = sx, y = sy + Math.sin(t * 2 + i * 1.4) * 9, r = 52, a = 1, mood = 'happy', rot = Math.sin(t * 1.6 + i) * .08;
+    if (t < T_STAR[i]) continue;
+    r *= elastic(seg(t, T_STAR[i], T_STAR[i] + .8));
+    if (t >= T_CLOUD + .8 && t < T_SUCK[i]) { mood = 'scared'; x += Math.sin(t * 40 + i) * 3; }
+    if (t >= T_SUCK[i] && t < T_FREE[i]) {
+      const k = eio(seg(t, T_SUCK[i], T_SUCK[i] + .6));
+      const cx = cloudPos(t).x, cy = cloudPos(t).y + 60;
+      x = lerp(sx, cx, k) + Math.sin(k * Math.PI * 3) * 40 * (1 - k); y = lerp(sy, cy, k); r *= 1 - k * .85; rot = k * 6; mood = 'scared';
+      if (k >= 1) continue;
+    }
+    if (t >= T_FREE[i]) {
+      const k = eout(seg(t, T_FREE[i], T_FREE[i] + 1.1));
+      x = lerp(CHEST.x, sx, k) + Math.sin(k * Math.PI) * (i - 1.5) * 60; y = lerp(CHEST.y - 60, sy, k) + (k >= 1 ? Math.sin(t * 2 + i * 1.4) * 9 : 0);
+      r = 52 * lerp(.3, 1, k) * (1 + .25 * Math.sin(seg(t, T_FREE[i] + 1.1, T_FREE[i] + 1.6) * Math.PI)); rot = (1 - k) * -5;
+    }
+    drawStar(x, y, r, STAR_COL[i], t, i, mood, a, rot);
+    // 하나, 둘, 셋, 넷
+    const nk = seg(t, T_STAR[i] + .1, T_STAR[i] + .45), no = 1 - seg(t, 4.6, 5.2);
+    if (t < 5.3 && nk > 0) {
+      g.save(); g.globalAlpha = no; g.translate(sx, sy + 96); g.scale(back(nk), back(nk));
+      g.fillStyle = '#fff'; circle(0, 0, 30); g.fill(); g.fillStyle = '#4a47b8'; g.font = `40px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(i + 1), 0, 3);
+      g.restore();
+    }
+  }
+
+  // --- 상자 (구름에 매달려 있다가 언덕에 떨어짐) ---
+  const cp = cloudPos(t);
+  if (t >= T_CLOUD && t < T_DROP + .01) {
+    // 구름 아래 매달린 상자
+    const k = seg(t, T_CLOUD, T_CLOUD + 1);
+    if (k > 0) {
+      g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 4; g.beginPath(); g.moveTo(cp.x, cp.y + 40); g.lineTo(cp.x, cp.y + 96); g.stroke();
+      drawChest(cp.x, cp.y + 132, .62, t < T_LOCK ? .9 : lerp(.9, 0, eout(seg(t, T_LOCK - .25, T_LOCK))), seg(t, T_LOCK - .05, T_LOCK + .01) * back(seg(t, T_LOCK - .05, T_LOCK + .3)), 0, 0);
+    }
+  }
+  if (t > T_DROP) {
+    const k = seg(t, T_DROP, T_DROP + .55), fall = k * k;
+    const bounce = k >= 1 ? Math.abs(Math.sin(seg(t, T_DROP + .55, T_DROP + 1.1) * Math.PI)) * -22 * (1 - seg(t, T_DROP + .55, T_DROP + 1.1)) : 0;
+    const from = cloudAt(T_DROP);
+    const x = lerp(from.x, CHEST.x, k), y = lerp(from.y + 132, CHEST.y, fall) + bounce;
+    let shake = 0, open = 0, locked = 1, glow = 0;
+    for (let i = 0; i < 4; i++) { const d = t - (T_FLY[i] + .5); if (d > 0 && d < .35) shake = Math.sin(d * 60) * 7 * (1 - d / .35); }
+    if (t > T_FLY[3] + .5) { locked = 1 - back(seg(t, T_FLY[3] + .6, T_FLY[3] + .95)); if (t < T_OPEN) shake += Math.sin(t * 50) * 4 * seg(t, T_FLY[3] + .6, T_OPEN); }
+    if (t >= T_OPEN) { open = back(seg(t, T_OPEN, T_OPEN + .5)); locked = 0; glow = seg(t, T_OPEN, T_OPEN + .4) * (1 - seg(t, T_OPEN + 2.2, T_OPEN + 3.2) * .6); }
+    drawChest(x, y, lerp(.62, 1.15, eout(k)), cl(open, 0, 1.1), cl(locked), shake, glow);
+    // 쿵! 먼지
+    const dk = seg(t, T_DROP + .55, T_DROP + 1.0);
+    if (dk > 0 && dk < 1) { g.fillStyle = `rgba(255,255,255,${.5 * (1 - dk)})`; circle(CHEST.x - 110 - dk * 50, CHEST.y + 40, 16 + dk * 16); g.fill(); circle(CHEST.x + 110 + dk * 50, CHEST.y + 40, 16 + dk * 16); g.fill(); }
+  }
+
+  // --- 심술 구름 ---
+  if (t >= T_CLOUD - .1 && t < T_DROP + 2.2) {
+    let mouth = 0; for (let i = 0; i < 4; i++) { const d = t - T_SUCK[i]; if (d > -.15 && d < .7) mouth = Math.max(mouth, Math.sin(seg(d, -.15, .7) * Math.PI)); }
+    drawCloud(cp.x, cp.y, 1.25, t, mouth);
+    // 빨아들이는 바람 줄
+    if (mouth > .1) { g.strokeStyle = `rgba(255,255,255,${.35 * mouth})`; g.lineWidth = 5; g.lineCap = 'round';
+      for (let i = 0; i < 5; i++) { const a = Math.PI * (.2 + i * .15), ph = (t * 3 + i * .37) % 1, r0 = 240 - ph * 150; g.beginPath(); g.moveTo(cp.x + Math.cos(a) * r0, cp.y + 70 + Math.sin(a) * r0 * .6 - 150); g.lineTo(cp.x + Math.cos(a) * (r0 - 40), cp.y + 70 + Math.sin(a) * (r0 - 40) * .6 - 150); g.stroke(); } }
+    if (t > T_CLOUD + .9 && t < T_SUCK[0] - .1) bubble(cp.x - 30, cp.y - 130, '히히히!', back(seg(t, T_CLOUD + .9, T_CLOUD + 1.25)) * (1 - seg(t, T_SUCK[0] - .4, T_SUCK[0] - .1)), '#3a3566', '#fff');
+    if (t > T_LOCK && t < T_LOCK + .9) bubble(cp.x + 130, cp.y + 110, '찰칵!', back(seg(t, T_LOCK, T_LOCK + .25)) * (1 - seg(t, T_LOCK + .65, T_LOCK + .9)), '#ffc928', '#5a3b00');
+  }
+
+  // --- 콩이 ---
+  if (t >= T_HERO && t < T_TITLE + .3) {
+    const enter = eout(seg(t, T_HERO, T_HERO + 1.2));
+    let hx = lerp(-120, 330, enter), hop = 0, wave = 0;
+    for (const h of T_HOP) { const d = seg(t, h, h + .45); if (d > 0 && d < 1) hop = Math.sin(d * Math.PI) * 70; }
+    for (const f of T_FLY) { const d = seg(t, f + .45, f + .85); if (d > 0 && d < 1) hop = Math.sin(d * Math.PI) * 36; }
+    if (t > T_OPEN) { const d = (t - T_OPEN) * 2.2; hop = Math.abs(Math.sin(d * Math.PI)) * 60 * (1 - seg(t, T_TITLE - .4, T_TITLE + .2)); wave = 1; }
+    if (t > 14.4 && t < 16.6) wave = 1;
+    if (t > T_KEY[0] && t < T_FLY[0]) wave = .0;
+    const out = seg(t, T_TITLE - .1, T_TITLE + .3);
+    g.globalAlpha = 1 - out;
+    drawHero(hx, 398, 1.0, t, hop, wave);
+    g.globalAlpha = 1;
+    if (t > 14.5 && t < 16.5) bubble(hx + 70, 398 - 175, '내가 도와줄게!', back(seg(t, 14.5, 14.85)) * (1 - seg(t, 16.2, 16.5)));
+  }
+
+  // --- 열쇠 4개 ---
+  for (let i = 0; i < 4; i++) {
+    if (t < T_KEY[i]) continue;
+    const kx = 520 + i * 180, ky = 150 + (i % 2) * 30 + Math.sin(t * 2.4 + i) * 8;
+    let x = kx, y = ky, s = .85 * elastic(seg(t, T_KEY[i], T_KEY[i] + .7)), a = 1;
+    if (t >= T_FLY[i]) {
+      const k = eio(seg(t, T_FLY[i], T_FLY[i] + .5));
+      x = lerp(kx, CHEST.x, k); y = lerp(ky, CHEST.y - 20, k) - Math.sin(k * Math.PI) * 90; s = lerp(.85, .15, k); a = k >= 1 ? 0 : 1;
+    }
+    drawKey(x, y, s, KEY_INFO[i], t, i, a);
+    const pk = seg(t, T_KEY[i], T_KEY[i] + .5);
+    if (pk < 1) for (let j = 0; j < 6; j++) { const an = j * Math.PI / 3; sparkle(kx + Math.cos(an) * (70 + pk * 60), ky + Math.sin(an) * (70 + pk * 60), 14, 1 - pk); }
+    const fk = seg(t, T_FLY[i] + .5, T_FLY[i] + .9);
+    if (fk > 0 && fk < 1) for (let j = 0; j < 6; j++) { const an = j * Math.PI / 3 + i; sparkle(CHEST.x + Math.cos(an) * (40 + fk * 90), CHEST.y - 20 + Math.sin(an) * (40 + fk * 70), 16, 1 - fk); }
+  }
+
+  // --- 구출 뒤 반짝임과 색종이 ---
+  if (t >= T_OPEN) {
+    for (let i = 0; i < 14; i++) { const ph = (t * .6 + rnd(i + 70)) % 1; sparkle(rnd(i + 80) * W, rnd(i + 90) * 420, 10 + rnd(i) * 14, Math.sin(ph * Math.PI) * .9 * seg(t, T_OPEN, T_OPEN + .6)); }
+    confetti(t, T_OPEN + .3);
+  }
+
+  caption(t);
+
+  // --- 마지막 제목 ---
+  if (t >= T_TITLE) {
+    const k = seg(t, T_TITLE, T_TITLE + .5);
+    g.fillStyle = `rgba(255,248,225,${.93 * k})`; g.fillRect(0, 0, W, H);
+    // 햇살 무늬
+    g.save(); g.globalAlpha = .5 * k; g.translate(W / 2, 380); g.rotate(t * .12);
+    for (let i = 0; i < 12; i++) { g.fillStyle = i % 2 ? '#ffe9a8' : '#ffd9e6'; g.beginPath(); g.moveTo(0, 0); g.arc(0, 0, 1000, i * Math.PI / 6, (i + 1) * Math.PI / 6); g.fill(); }
+    g.restore();
+    confetti(t, T_OPEN + .3);
+    // 별 4개
+    for (let i = 0; i < 4; i++) { const sk = elastic(seg(t, T_TITLE + .5 + i * .18, T_TITLE + 1.2 + i * .18)); drawStar(370 + i * 180, 120 + Math.sin(t * 2.5 + i) * 6, 46 * sk, STAR_COL[i], t, i); }
+    // 제목 (글자마다 통통)
+    const title = '꼬마 요원 출동!'; g.font = `132px ${FONT}`; g.textAlign = 'left'; g.textBaseline = 'middle';
+    const tw = g.measureText(title).width; let x = W / 2 - tw / 2 - 150 * 0;
+    [...title].forEach((ch, i) => {
+      const cw = g.measureText(ch).width, lk = seg(t, T_TITLE + .25 + i * .07, T_TITLE + .7 + i * .07);
+      if (lk > 0) { const sc = back(lk), yo = Math.sin((t - T_TITLE) * 4 - i * .5) * 8 * seg(t, T_TITLE + 1.2, T_TITLE + 1.6);
+        g.save(); g.translate(x + cw / 2, 300 + yo); g.scale(sc, sc);
+        g.lineJoin = 'round'; g.lineWidth = 26; g.strokeStyle = '#fff'; g.strokeText(ch, -cw / 2, 0);
+        g.lineWidth = 10; g.strokeStyle = '#35307a'; g.strokeText(ch, -cw / 2, 0);
+        g.fillStyle = ['#ff7a9a', '#ffb14a', '#3d6df2', '#22b07d', '#a78bfa'][i % 5]; g.fillText(ch, -cw / 2, 0); g.restore(); }
+      x += cw;
+    });
+    // 콩이가 통통
+    const hk = eout(seg(t, T_TITLE + .3, T_TITLE + 1));
+    drawHero(W / 2, lerp(900, 560, hk), 1.0, t, Math.abs(Math.sin((t - T_TITLE) * 3.2)) * 44 * hk, 1);
+    // 시작 안내
+    const gk = back(seg(t, T_GO, T_GO + .4));
+    if (gk > 0) { g.save(); g.translate(W / 2 + 330, 520); g.rotate(-.08); g.scale(gk * (1 + Math.sin(t * 7) * .04), gk * (1 + Math.sin(t * 7) * .04));
+      g.font = `52px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle'; const w = g.measureText('별 네 개를 찾아라!').width + 70;
+      g.fillStyle = '#3d6df2'; rr(-w / 2, -48, w, 96, 48); g.fill(); g.fillStyle = '#fff'; g.fillText('별 네 개를 찾아라!', 0, 4); g.restore(); }
+  }
+
+  // 처음과 끝은 부드럽게
+  const fin = 1 - seg(t, 0, .5), fout = seg(t, DURATION - .5, DURATION);
+  if (fin > 0) { g.fillStyle = `rgba(35,36,80,${fin})`; g.fillRect(0, 0, W, H); }
+  if (fout > 0) { g.fillStyle = `rgba(255,248,225,${fout})`; g.fillRect(0, 0, W, H); }
+}
+// 구름 위치: 오른쪽에서 들어와 가운데 위에 머물다, 상자를 떨어뜨리고 왼쪽 위로 사라짐
+function cloudAt(t) {
+  const inK = eout(seg(t, T_CLOUD, T_CLOUD + 1.3));
+  let x = lerp(1500, 640, inK), y = 250 + Math.sin(t * 1.4) * 10;
+  return { x, y };
+}
+function cloudPos(t) {
+  const p = cloudAt(Math.min(t, T_DROP));
+  if (t > T_DROP + .5) { const k = eio(seg(t, T_DROP + .5, T_DROP + 2.1)); p.x = lerp(p.x, -260, k); p.y = lerp(p.y, 90, k); }
+  return p;
+}
+window.render = render;
+document.fonts.load('40px "Jua"', '꼬마').then(() => {
+  render(0);
+  if (location.search.includes('play')) { const t0 = performance.now(); (function loop() { render(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); })(); }
+});
+</script>
+</body>
+</html>
